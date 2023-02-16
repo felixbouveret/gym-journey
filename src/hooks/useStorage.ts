@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function useStorage() {
   const getStorageData = async (path: string) => {
     const data = await AsyncStorage.getItem(path);
-    console.log(data?.length);
 
     return data ? JSON.parse(data) : null;
   };
@@ -14,6 +13,6 @@ export default function useStorage() {
 
   return {
     getStorageData,
-    setStorageData,
+    setStorageData
   };
 }
