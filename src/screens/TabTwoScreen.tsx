@@ -1,13 +1,9 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 
 export default function TabTwoScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-    </View>
-  );
+  return <View style={styles.container} />;
 }
 
 const styles = StyleSheet.create({
