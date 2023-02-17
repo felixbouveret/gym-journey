@@ -12,10 +12,12 @@ import { Pressable } from "react-native";
 
 import Colors from "@/constants/Colors";
 import useColorScheme from "@/hooks/useColorScheme";
+import ExerciceModalScreen from "@/screens/ExerciceModalScreen";
+import ExercicesScreen from "@/screens/ExercicesScreen";
+import HistoryScreen from "@/screens/HistoryScreen";
 import ModalScreen from "@/screens/ModalScreen";
 import NotFoundScreen from "@/screens/NotFoundScreen";
-import TabOneScreen from "@/screens/TabOneScreen";
-import TabTwoScreen from "@/screens/TabTwoScreen";
+import ProgramsScreen from "@/screens/ProgramsScreen";
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from "@/types";
 
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -41,6 +43,11 @@ function RootNavigator() {
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen
+          name="ExerciceModal"
+          component={ExerciceModalScreen}
+          options={{ title: "Nouvel exercice" }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -57,17 +64,17 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Programs"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="Programs"
+        component={ProgramsScreen}
+        options={({ navigation }: RootTabScreenProps<"Programs">) => ({
+          title: "Programmes",
+          tabBarIcon: ({ color }) => <TabBarIcon name="fire" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate("Modal")}
@@ -86,11 +93,19 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="History"
+        component={HistoryScreen}
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
+          title: "Historique",
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />
+        }}
+      />
+      <BottomTab.Screen
+        name="Exercices"
+        component={ExercicesScreen}
+        options={{
+          title: "Exercices",
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />
         }}
       />
     </BottomTab.Navigator>
