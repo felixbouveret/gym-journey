@@ -63,13 +63,13 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Programs"
+      initialRouteName="ProgramsScreen"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint
       }}
     >
       <BottomTab.Screen
-        name="Programs"
+        name="ProgramsScreen"
         component={ProgramsScreen}
         options={{
           headerShown: false,

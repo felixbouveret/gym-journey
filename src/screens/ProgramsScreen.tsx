@@ -8,7 +8,7 @@ import { ProgramsTabParamList, RootTabScreenProps } from "@/types";
 
 const Stack = createNativeStackNavigator<ProgramsTabParamList>();
 
-export default function ProgramsScreen({}: RootTabScreenProps<"Programs">) {
+export default function ProgramsScreen({}: RootTabScreenProps<"ProgramsScreen">) {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Programs" component={Programs} options={{}} />
