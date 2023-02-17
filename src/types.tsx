@@ -35,3 +35,16 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+export type ProgramsTabParamList = {
+  Programs: undefined;
+  ProgramsCreation: { name?: string };
+  ProgramsSession: { sessionName?: string };
+  ProgramsExerciceModal: undefined;
+};
+
+export type ProgramsTabScreenProps<Screen extends keyof ProgramsTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<ProgramsTabParamList, Screen>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
