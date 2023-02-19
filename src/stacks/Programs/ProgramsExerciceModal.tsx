@@ -1,28 +1,24 @@
+import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'native-base';
-import { Platform, StyleSheet } from 'react-native';
+import { Button, FormControl, Icon, Input, VStack } from 'native-base';
+import { Platform } from 'react-native';
 
 import { ProgramsTabScreenProps } from '@/types';
 
 export default function ProgramsExerciceModal({}: ProgramsTabScreenProps<'ProgramsExerciceModal'>) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>ExerciceModal</Text>
+    <VStack w="full" h={'full'} p="4" pb={46}>
+      <VStack flex={1} w="full" space="4">
+        <FormControl>
+          <Input />
+        </FormControl>
+      </VStack>
 
+      <Button w="full" leftIcon={<Icon as={Ionicons} name="add" size="md" />} onPress={() => null}>
+        Ajouter une séance
+      </Button>
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+    </VStack>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold'
-  }
-});
