@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'native-base';
 import { Platform, StyleSheet } from 'react-native';
 
-export default function ProgramsExerciceModal() {
+import { ProgramsTabScreenProps } from '@/types';
+
+export default function ProgramsExerciceModal({}: ProgramsTabScreenProps<'ProgramsExerciceModal'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ExerciceModal</Text>

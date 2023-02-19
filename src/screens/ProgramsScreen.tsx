@@ -7,7 +7,7 @@ import ProgramsCreation from '@/stacks/Programs/ProgramsCreation';
 import ProgramsExerciceModal from '@/stacks/Programs/ProgramsExerciceModal';
 import ProgramsList from '@/stacks/Programs/ProgramsList';
 import ProgramsSession from '@/stacks/Programs/ProgramsSession';
-import { ProgramsTabParamList, ProgramsTabScreenProps, RootTabScreenProps } from '@/types';
+import { ProgramsTabParamList, RootTabScreenProps } from '@/types';
 
 const Stack = createNativeStackNavigator<ProgramsTabParamList>();
 
@@ -19,12 +19,12 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
       <Stack.Screen
         name="Programs"
         component={ProgramsList}
-        options={({ navigation }: ProgramsTabScreenProps<'Programs'>) => ({
+        options={() => ({
           headerRight: () => (
             <IconButton
               size="sm"
               variant={'solid'}
-              onPress={() => onCreateProgram(navigation)}
+              onPress={onCreateProgram}
               _icon={{
                 as: Ionicons,
                 name: 'add'

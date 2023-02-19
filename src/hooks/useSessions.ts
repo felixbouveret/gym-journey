@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { createProgram, deleteProgram, renameProgram } from '@/store/Programs';
+import { createSession, deleteSession, renameSession, UID_V4 } from '@/store/Programs';
 
 export default function useSessions() {
   const dispatch = useDispatch();
 
-  const onCreateSession = () => {
-    Alert.prompt('Nouveau programme', 'Nom du programme', [
+  const onCreateSession = (programId: UID_V4) => {
+    Alert.prompt('Nouvelle séance', 'Nom de la séance', [
       {
         text: 'Annuler',
         style: 'cancel'
@@ -15,31 +15,28 @@ export default function useSessions() {
       {
         text: 'Créer',
         onPress: (name) => {
-          const programName = name ? name.trim() : 'Programme sans nom';
-          dispatch(createProgram(programName));
+          const sessionName = name ? name.trim() : 'Séance sans nom';
+          dispatch(createSession(programId, sessionName));
         }
       }
     ]);
   };
 
-  const onDeleteSession = async (id: string) => {
-    Alert.alert(
-      'Supprimer ?',
-      'Êtes vous sûr de vouloir supprimer ce programme ainsi que toutes les séances associées?',
-      [
-        {
-          text: 'Non annuler',
-          style: 'cancel'
-        },
-        {
-          text: 'Oui supprimer',
-          style: 'destructive',
-          onPress: () => dispatch(deleteProgram(id))
-        }
-      ]
-    );
+  const onDeleteSession = async (programId: UID_V4, id: UID_V4) => {
+    Alert.alert('Supprimer ?', 'Êtes vous sûr de vouloir supprimer cette séance ?', [
+      {
+        text: 'Non annuler',
+        style: 'cancel'
+      },
+      {
+        text: 'Oui supprimer',
+        style: 'destructive',
+        onPress: () => dispatch(deleteSession(programId, id))
+      }
+    ]);
   };
-  const onUpdateSession = async (id: string) => {
+
+  const onUpdateSession = async (programId: UID_V4, id: UID_V4) => {
     Alert.prompt('Renommer le programme', 'Nom du programme', [
       {
         text: 'Annuler',
@@ -48,7 +45,7 @@ export default function useSessions() {
       {
         text: 'Renommer',
         onPress: (newName) => {
-          if (newName) dispatch(renameProgram(id, newName.trim()));
+          if (newName) dispatch(renameSession(programId, id, newName.trim()));
         }
       }
     ]);

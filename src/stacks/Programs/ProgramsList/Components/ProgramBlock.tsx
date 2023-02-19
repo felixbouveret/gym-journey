@@ -48,7 +48,9 @@ export default function ProgramBlock({
         <VStack p={2} space="2">
           {program.sessions.length ? (
             program.sessions.map((session, sIndex) => (
-              <Text key={`${key}-${sIndex}`}>{session.name}</Text>
+              <Text key={`${key}-${sIndex}`}>
+                {session.name} - {session.steps.length} exercice
+              </Text>
             ))
           ) : (
             <Text>Pas encore de séance</Text>

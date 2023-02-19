@@ -45,7 +45,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 export type ProgramsTabParamList = {
   Programs: undefined;
   ProgramsCreation: { id: UID_V4; editing?: boolean };
-  ProgramsSession: { sessionId?: UID_V4; editing?: boolean };
+  ProgramsSession: { programId: UID_V4; sessionId: UID_V4; editing?: boolean };
   ProgramsExerciceModal: { editing?: boolean };
 };
 

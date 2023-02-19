@@ -21,13 +21,13 @@ export default function SessionBlock({
       <Box w="full" backgroundColor="gray.200" rounded={4} overflow="hidden">
         <HStack backgroundColor={'gray.400'} px={2} py="2" justifyContent={'space-between'}>
           <HStack space={2}>
-            <Badge p={1} />
+            {!!session.steps.length && <Badge p={1} />}
             <Text fontSize={'lg'}>{session.name}</Text>
           </HStack>
           <IconButton
             size="sm"
             p={1}
-            onPress={() => onOptionsPress(session.name)}
+            onPress={() => onOptionsPress(session.id)}
             _icon={{
               as: Ionicons,
               color: 'gray.700',
@@ -43,7 +43,7 @@ export default function SessionBlock({
           )}
         </VStack>
         <Box p={2}>
-          <Button onPress={() => onEditPress(session.name)}> Éditer la séance </Button>
+          <Button onPress={() => onEditPress(session.id)}> Éditer la séance </Button>
         </Box>
       </Box>
     </Pressable>
