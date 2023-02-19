@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Badge, Box, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
 
-import { Program, ProgramStatus } from '@/store/Programs';
+import { Program, ProgramStatus, UID_V4 } from '@/store/Programs';
 
 interface ProgramBlockProps {
   program: Program;
-  onOptionsPress: (name: string) => void;
-  onEditPress: (name: string) => void;
+  onOptionsPress: (id: UID_V4) => void;
+  onEditPress: (id: UID_V4) => void;
   key: number | string;
 }
 
@@ -37,7 +37,7 @@ export default function ProgramBlock({
           <IconButton
             size="sm"
             p={1}
-            onPress={() => onOptionsPress(program.name)}
+            onPress={() => onOptionsPress(program.id)}
             _icon={{
               as: Ionicons,
               color: 'gray.700',
@@ -56,7 +56,7 @@ export default function ProgramBlock({
         </VStack>
         {program.status === ProgramStatus.DRAFT && (
           <Box p={2}>
-            <Button onPress={() => onEditPress(program.name)}> Éditer le programme </Button>
+            <Button onPress={() => onEditPress(program.id)}> Éditer le programme </Button>
           </Box>
         )}
       </Box>

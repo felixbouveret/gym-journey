@@ -1,12 +1,12 @@
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { createProgram, deleteProgram, renameProgram, UID_V4 } from '@/store/Programs';
+import { createProgram, deleteProgram, renameProgram } from '@/store/Programs';
 
-export default function usePrograms() {
+export default function useSessions() {
   const dispatch = useDispatch();
 
-  const onCreateProgram = () => {
+  const onCreateSession = () => {
     Alert.prompt('Nouveau programme', 'Nom du programme', [
       {
         text: 'Annuler',
@@ -22,7 +22,7 @@ export default function usePrograms() {
     ]);
   };
 
-  const onDeleteProgram = async (id: UID_V4) => {
+  const onDeleteSession = async (id: string) => {
     Alert.alert(
       'Supprimer ?',
       'Êtes vous sûr de vouloir supprimer ce programme ainsi que toutes les séances associées?',
@@ -39,7 +39,7 @@ export default function usePrograms() {
       ]
     );
   };
-  const onUpdateProgram = async (id: UID_V4) => {
+  const onUpdateSession = async (id: string) => {
     Alert.prompt('Renommer le programme', 'Nom du programme', [
       {
         text: 'Annuler',
@@ -55,8 +55,8 @@ export default function usePrograms() {
   };
 
   return {
-    onCreateProgram,
-    onDeleteProgram,
-    onUpdateProgram
+    onCreateSession,
+    onDeleteSession,
+    onUpdateSession
   };
 }

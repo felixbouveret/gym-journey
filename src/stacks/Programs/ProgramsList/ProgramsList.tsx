@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
+import { UID_V4 } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 
 import ProgramBlock from './Components/ProgramBlock';
@@ -13,7 +14,7 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
   const { programs } = useSelector((state: RootState) => state.programs);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram } = usePrograms();
 
-  const onProgramOptionsPress = (programName: string) =>
+  const onProgramOptionsPress = (id: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Annuler', 'Modifier', 'Renommer', 'Supprimer'],
@@ -22,10 +23,9 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
       },
       (buttonIndex) => {
         if (buttonIndex === 0) return;
-        if (buttonIndex === 1)
-          return navigation.navigate('ProgramsCreation', { name: programName });
-        if (buttonIndex === 2) return onUpdateProgram(programName);
-        if (buttonIndex === 3) return onDeleteProgram(programName);
+        if (buttonIndex === 1) return navigation.navigate('ProgramsCreation', { id: id });
+        if (buttonIndex === 2) return onUpdateProgram(id);
+        if (buttonIndex === 3) return onDeleteProgram(id);
       }
     );
 
@@ -44,11 +44,11 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
             program={program}
             key={index}
             onOptionsPress={onProgramOptionsPress}
-            onEditPress={(name) => navigation.navigate('ProgramsCreation', { name })}
+            onEditPress={(id) => navigation.navigate('ProgramsCreation', { id })}
           />
         ))
       ) : (
-        <ProgramBlockPlaceholder onPress={() => onCreateProgram(navigation)} />
+        <ProgramBlockPlaceholder onPress={onCreateProgram} />
       )}
     </VStack>
   );

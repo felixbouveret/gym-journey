@@ -3,9 +3,15 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  CompositeScreenProps,
+  NavigatorScreenParams
+} from '@react-navigation/native';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { UID_V4 } from './store/Programs';
 
 declare global {
   namespace ReactNavigation {
@@ -38,8 +44,8 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type ProgramsTabParamList = {
   Programs: undefined;
-  ProgramsCreation: { name: string; editing?: boolean };
-  ProgramsSession: { sessionName?: string; editing?: boolean };
+  ProgramsCreation: { id: UID_V4; editing?: boolean };
+  ProgramsSession: { sessionId?: UID_V4; editing?: boolean };
   ProgramsExerciceModal: { editing?: boolean };
 };
 
@@ -48,3 +54,8 @@ export type ProgramsTabScreenProps<Screen extends keyof ProgramsTabParamList> =
     BottomTabScreenProps<ProgramsTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type navigationProgramsProps = CompositeNavigationProp<
+  BottomTabNavigationProp<ProgramsTabParamList, 'Programs'>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
