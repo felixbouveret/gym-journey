@@ -3,23 +3,23 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as React from "react";
+import { FontAwesome } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as React from 'react';
 
-import Colors from "@/constants/Colors";
-import useColorScheme from "@/hooks/useColorScheme";
-import ExerciceModalScreen from "@/screens/ExerciceModalScreen";
-import ExercicesScreen from "@/screens/ExercicesScreen";
-import HistoryScreen from "@/screens/HistoryScreen";
-import ModalScreen from "@/screens/ModalScreen";
-import NotFoundScreen from "@/screens/NotFoundScreen";
-import ProgramsScreen from "@/screens/ProgramsScreen";
-import { RootStackParamList, RootTabParamList } from "@/types";
+import Colors from '@/constants/Colors';
+import useColorScheme from '@/hooks/useColorScheme';
+import ExerciceModalScreen from '@/screens/ExerciceModalScreen';
+import ExercicesScreen from '@/screens/ExercicesScreen';
+import HistoryScreen from '@/screens/HistoryScreen';
+import ModalScreen from '@/screens/ModalScreen';
+import NotFoundScreen from '@/screens/NotFoundScreen';
+import ProgramsScreen from '@/screens/ProgramsScreen';
+import { RootStackParamList, RootTabParamList } from '@/types';
 
-import LinkingConfiguration from "./LinkingConfiguration";
+import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation() {
   return (
@@ -39,13 +39,13 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen
           name="ExerciceModal"
           component={ExerciceModalScreen}
-          options={{ title: "Nouvel exercice" }}
+          options={{ title: 'Nouvel exercice' }}
         />
       </Stack.Group>
     </Stack.Navigator>
@@ -73,7 +73,7 @@ function BottomTabNavigator() {
         component={ProgramsScreen}
         options={{
           headerShown: false,
-          title: "Programmes",
+          title: 'Programmes',
           tabBarIcon: ({ color }) => <TabBarIcon name="fire" color={color} />
         }}
       />
@@ -82,7 +82,7 @@ function BottomTabNavigator() {
         component={HistoryScreen}
         options={{
           headerShown: false,
-          title: "Historique",
+          title: 'Historique',
           tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />
         }}
       />
@@ -91,7 +91,7 @@ function BottomTabNavigator() {
         component={ExercicesScreen}
         options={{
           headerShown: false,
-          title: "Exercices",
+          title: 'Exercices',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />
         }}
       />
@@ -103,7 +103,7 @@ function BottomTabNavigator() {
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;

@@ -1,12 +1,13 @@
-import { StatusBar } from "expo-status-bar";
-import { NativeBaseProvider } from "native-base";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Provider } from "react-redux";
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { StatusBar } from 'expo-status-bar';
+import { NativeBaseProvider } from 'native-base';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 
-import useCachedResources from "@/hooks/useCachedResources";
-import Navigation from "@/navigation";
+import useCachedResources from '@/hooks/useCachedResources';
+import Navigation from '@/navigation';
 
-import store from "./src/store";
+import store from './src/store';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -17,10 +18,12 @@ export default function App() {
     return (
       <Provider store={store}>
         <NativeBaseProvider>
-          <SafeAreaProvider>
-            <Navigation />
-            <StatusBar />
-          </SafeAreaProvider>
+          <BottomSheetModalProvider>
+            <SafeAreaProvider>
+              <Navigation />
+              <StatusBar />
+            </SafeAreaProvider>
+          </BottomSheetModalProvider>
         </NativeBaseProvider>
       </Provider>
     );
