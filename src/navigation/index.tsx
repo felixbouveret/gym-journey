@@ -3,10 +3,11 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Icon } from 'native-base';
 import * as React from 'react';
 
 import Colors from '@/constants/Colors';
@@ -74,7 +75,7 @@ function BottomTabNavigator() {
         options={{
           headerShown: false,
           title: 'Programmes',
-          tabBarIcon: ({ color }) => <TabBarIcon name="fire" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="barbell" color={color} />
         }}
       />
       <BottomTab.Screen
@@ -102,9 +103,6 @@ function BottomTabNavigator() {
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
+  return <Icon size={30} as={Ionicons} style={{ marginBottom: -3 }} {...props} />;
 }

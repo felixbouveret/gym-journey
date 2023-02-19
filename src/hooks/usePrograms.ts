@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import { createProgram, deleteProgram } from '@/store/Programs';
+import { createProgram, deleteProgram, renameProgram } from '@/store/Programs';
 import { ProgramsTabParamList, RootStackParamList } from '@/types';
 
 export default function usePrograms() {
@@ -49,9 +49,24 @@ export default function usePrograms() {
       ]
     );
   };
+  const onUpdateProgram = async (name: string) => {
+    Alert.prompt('Renommer le programme', 'Nom du programme', [
+      {
+        text: 'Annuler',
+        style: 'cancel'
+      },
+      {
+        text: 'Renommer',
+        onPress: (newName) => {
+          if (newName) dispatch(renameProgram(name, newName.trim()));
+        }
+      }
+    ]);
+  };
 
   return {
     onCreateProgram,
-    onDeleteProgram
+    onDeleteProgram,
+    onUpdateProgram
   };
 }

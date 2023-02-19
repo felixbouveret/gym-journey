@@ -1,11 +1,11 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { IconButton } from 'native-base';
 
 import usePrograms from '@/hooks/usePrograms';
-import Programs from '@/stacks/Programs/Programs';
 import ProgramsCreation from '@/stacks/Programs/ProgramsCreation';
 import ProgramsExerciceModal from '@/stacks/Programs/ProgramsExerciceModal';
+import ProgramsList from '@/stacks/Programs/ProgramsList';
 import ProgramsSession from '@/stacks/Programs/ProgramsSession';
 import { ProgramsTabParamList, ProgramsTabScreenProps, RootTabScreenProps } from '@/types';
 
@@ -18,7 +18,7 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
     <Stack.Navigator>
       <Stack.Screen
         name="Programs"
-        component={Programs}
+        component={ProgramsList}
         options={({ navigation }: ProgramsTabScreenProps<'Programs'>) => ({
           headerRight: () => (
             <IconButton
@@ -26,7 +26,7 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
               variant={'solid'}
               onPress={() => onCreateProgram(navigation)}
               _icon={{
-                as: MaterialIcons,
+                as: Ionicons,
                 name: 'add'
               }}
             />

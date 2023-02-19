@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Box, Button, Icon, Pressable, Text } from 'native-base';
 
 interface ProgramBlockPlaceholderProps {
@@ -15,7 +15,7 @@ export default function ProgramBlockPlaceholder({ onPress }: ProgramBlockPlaceho
         <Box p={2}>
           <Button
             variant={'outline'}
-            leftIcon={<Icon as={MaterialIcons} name="add" size="md" />}
+            leftIcon={<Icon as={Ionicons} name="add" size="md" />}
             onPress={onPress}
           >
             Créer votre premier programme

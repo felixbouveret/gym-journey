@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Box, Button, HStack, IconButton, Text, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
@@ -47,7 +47,6 @@ export default function ProgramsCreationScreen({
               <Text fontSize={'lg'}>{session.name}</Text>
               <IconButton
                 size="sm"
-                p={0}
                 onPress={() =>
                   navigation.navigate('ProgramsSession', {
                     sessionName: session.name,
@@ -55,8 +54,8 @@ export default function ProgramsCreationScreen({
                   })
                 }
                 _icon={{
-                  as: MaterialIcons,
-                  name: 'more-vert'
+                  as: Ionicons,
+                  name: 'ellipsis-horizontal'
                 }}
               />
             </HStack>
