@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import useSessions from '@/hooks/useSessions';
+import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { ProgramsTabScreenProps } from '@/types';
 
@@ -15,7 +15,7 @@ export default function ProgramsCreationScreen({
   route
 }: ProgramsTabScreenProps<'ProgramsSession'>) {
   const { programs } = useSelector((state: RootState) => state.programs);
-  const { onRemoveSessionStep } = useSessions();
+  const { onRemoveSessionStep } = usePrograms();
 
   const currentProgram = programs.find((program) => program.id === route.params.programId);
   const currentSession = currentProgram?.sessions.find(

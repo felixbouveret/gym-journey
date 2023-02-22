@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import useSessions from '@/hooks/useSessions';
+import usePrograms from '@/hooks/usePrograms';
 import useStorage from '@/hooks/useStorage';
 import { RootState } from '@/store';
 import { ProgramSessionStep } from '@/store/Programs';
@@ -30,7 +30,7 @@ export default function ProgramsExerciceModal({
 }: ProgramsTabScreenProps<'ProgramsExerciceModal'>) {
   const { programs } = useSelector((state: RootState) => state.programs);
   const { setStorageData, getStorageData } = useStorage();
-  const { onAddSessionStep, onUpdateSessionStep } = useSessions();
+  const { onAddSessionStep, onUpdateSessionStep } = usePrograms();
 
   const [isUnilateral, setIsUnilateral] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);

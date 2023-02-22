@@ -37,6 +37,15 @@ export const roomsStore = createSlice({
   initialState,
 
   reducers: {
+    setState: {
+      reducer(state, action: PayloadAction<{ storageState: Program[] }>) {
+        state.programs = action.payload.storageState;
+      },
+      prepare(storageState: Program[]) {
+        return { payload: { storageState } };
+      }
+    },
+
     createProgram: {
       reducer(state, action: PayloadAction<{ name: string }>) {
         const programId = uuid.v4();
@@ -173,6 +182,7 @@ export const roomsStore = createSlice({
 });
 
 export const {
+  setState,
   createProgram,
   deleteProgram,
   renameProgram,
