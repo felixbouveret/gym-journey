@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import {
+  Box,
   Button,
   Checkbox,
   FormControl,
@@ -10,6 +11,7 @@ import {
   Input,
   KeyboardAvoidingView,
   Pressable,
+  ScrollView,
   VStack
 } from 'native-base';
 import { useEffect, useState } from 'react';
@@ -31,6 +33,7 @@ export default function ProgramsExerciceModal({
   const { onAddSessionStep, onUpdateSessionStep } = useSessions();
 
   const [isUnilateral, setIsUnilateral] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [formData, setFormData] = useState<Partial<ProgramSessionStep>>({
     name: '',
     setNumber: '',
@@ -54,6 +57,17 @@ export default function ProgramsExerciceModal({
         setIsUnilateral(currentStepIsUni);
       }
     }
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
   }, []);
 
   const setSingleFormData = (key: string, value: string | boolean) => {
@@ -122,90 +136,95 @@ export default function ProgramsExerciceModal({
       keyboardVerticalOffset={46}
     >
       <Pressable onPress={Keyboard.dismiss}>
-        <VStack
-          w="full"
-          h={'full'}
-          p="4"
-          pb={46}
-          backgroundColor="white"
-          space={8}
-          alignItems="center"
-        >
-          <VStack w="full" space={2} alignItems="center" maxW={200}>
-            <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
-            <Heading textAlign={'center'}>Ajouter un nouvel exercice</Heading>
-          </VStack>
-          <VStack flex={1} w="full" space="4">
-            <FormControl>
-              <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                Nom de l'exercice
-              </FormControl.Label>
-              <Input
-                size={'xl'}
-                value={formData.name}
-                onChangeText={(e) => setSingleFormData('name', e)}
-              />
-            </FormControl>
-            <HStack space={4}>
-              <FormControl flex={1}>
-                <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                  Séries
-                </FormControl.Label>
-                <Input
-                  size={'xl'}
-                  value={formData.setNumber}
-                  keyboardType="decimal-pad"
-                  onChangeText={(e) => setSingleFormData('setNumber', e)}
-                />
-              </FormControl>
-              <FormControl flex={1}>
-                <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                  Répétitions
-                </FormControl.Label>
-                <Input
-                  size={'xl'}
-                  value={formData.reps}
-                  keyboardType="decimal-pad"
-                  onChangeText={(e) => setSingleFormData('reps', e)}
-                />
-              </FormControl>
-            </HStack>
-            <HStack space={4}>
-              <FormControl flex={1}>
-                <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                  Charge (kg)
-                </FormControl.Label>
-                <Input
-                  size={'xl'}
-                  value={formData.weight}
-                  keyboardType="decimal-pad"
-                  onChangeText={(e) => setSingleFormData('weight', e)}
-                />
-              </FormControl>
-              <FormControl flex={1}>
-                <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                  Repos (m)
-                </FormControl.Label>
-                <Input
-                  size={'xl'}
-                  value={formData.restTime}
-                  keyboardType="decimal-pad"
-                  onChangeText={(e) => setSingleFormData('restTime', e)}
-                />
-              </FormControl>
-            </HStack>
-            <Checkbox
-              value="isUnilateral"
-              isChecked={isUnilateral}
-              onChange={(e) => {
-                setIsUnilateral(e);
-              }}
-            >
-              Exercice unilatéral
-            </Checkbox>
-          </VStack>
-
-          {submitButton()}
+        <VStack w="full" h="full" pb={46} space={8} alignItems="center" backgroundColor={'white'}>
+          <ScrollView w={'full'} scrollEnabled={isKeyboardVisible} overflow="visible">
+            <VStack w="full" p="4" space={8} alignItems="center">
+              <VStack w="full" space={2} alignItems="center" maxW={200}>
+                <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
+                <Heading textAlign={'center'}>Ajouter un nouvel exercice</Heading>
+              </VStack>
+              <VStack flex={1} w="full" space="4">
+                <FormControl>
+                  <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
+                    Nom de l'exercice
+                  </FormControl.Label>
+                  <Input
+                    size={'xl'}
+                    value={formData.name}
+                    onChangeText={(e) => setSingleFormData('name', e)}
+                  />
+                </FormControl>
+                <HStack space={4}>
+                  <FormControl flex={1}>
+                    <FormControl.Label
+                      _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}
+                    >
+                      Séries
+                    </FormControl.Label>
+                    <Input
+                      size={'xl'}
+                      value={formData.setNumber}
+                      keyboardType="decimal-pad"
+                      onChangeText={(e) => setSingleFormData('setNumber', e)}
+                    />
+                  </FormControl>
+                  <FormControl flex={1}>
+                    <FormControl.Label
+                      _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}
+                    >
+                      Répétitions
+                    </FormControl.Label>
+                    <Input
+                      size={'xl'}
+                      value={formData.reps}
+                      keyboardType="decimal-pad"
+                      onChangeText={(e) => setSingleFormData('reps', e)}
+                    />
+                  </FormControl>
+                </HStack>
+                <HStack space={4}>
+                  <FormControl flex={1}>
+                    <FormControl.Label
+                      _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}
+                    >
+                      Charge (kg)
+                    </FormControl.Label>
+                    <Input
+                      size={'xl'}
+                      value={formData.weight}
+                      keyboardType="decimal-pad"
+                      onChangeText={(e) => setSingleFormData('weight', e)}
+                    />
+                  </FormControl>
+                  <FormControl flex={1}>
+                    <FormControl.Label
+                      _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}
+                    >
+                      Repos (m)
+                    </FormControl.Label>
+                    <Input
+                      size={'xl'}
+                      value={formData.restTime}
+                      keyboardType="decimal-pad"
+                      onChangeText={(e) => setSingleFormData('restTime', e)}
+                    />
+                  </FormControl>
+                </HStack>
+                <Checkbox
+                  value="isUnilateral"
+                  isChecked={isUnilateral}
+                  onChange={(e) => {
+                    setIsUnilateral(e);
+                  }}
+                >
+                  Exercice unilatéral
+                </Checkbox>
+              </VStack>
+            </VStack>
+          </ScrollView>
+          <Box px={4} w="full">
+            {submitButton()}
+          </Box>
 
           {/* Use a light status bar on iOS to account for the black space above the modal */}
           <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
