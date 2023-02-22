@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Box, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
+import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
 
 import { Program, ProgramStatus, UID_V4 } from '@/store/Programs';
 
@@ -25,43 +25,41 @@ export default function ProgramBlock({
       return { wording: 'Archivé', colorScheme: 'default' };
   };
   return (
-    <Pressable w="full">
-      <Box w="full" backgroundColor="gray.200" rounded={4} overflow="hidden">
-        <HStack backgroundColor={'gray.400'} px={2} py="2" justifyContent={'space-between'}>
-          <HStack space={2}>
-            <Badge p={1} colorScheme={programStatus()?.colorScheme}>
-              {programStatus()?.wording}
-            </Badge>
-            <Text fontSize={'lg'}>{program.name}</Text>
+    <Pressable w="full" onPress={() => onEditPress(program.id)}>
+      <VStack w="full" backgroundColor="white" rounded={8} overflow="hidden" p={4} space="4">
+        <VStack w="full" space="2">
+          <HStack justifyContent={'space-between'}>
+            <HStack space={2} justifyContent={'space-between'}>
+              <Text fontSize={'lg'}>{program.name}</Text>
+              <Badge colorScheme={programStatus()?.colorScheme}>{programStatus()?.wording}</Badge>
+            </HStack>
+            <IconButton
+              size="sm"
+              p={1}
+              onPress={() => onOptionsPress(program.id)}
+              _icon={{
+                as: Ionicons,
+                color: 'gray.700',
+                name: 'ellipsis-horizontal'
+              }}
+            />
           </HStack>
-          <IconButton
-            size="sm"
-            p={1}
-            onPress={() => onOptionsPress(program.id)}
-            _icon={{
-              as: Ionicons,
-              color: 'gray.700',
-              name: 'ellipsis-horizontal'
-            }}
-          />
-        </HStack>
-        <VStack p={2} space="2">
-          {program.sessions.length ? (
-            program.sessions.map((session, sIndex) => (
-              <Text key={`${key}-${sIndex}`}>
-                {session.name} - {session.steps.length} exercice
-              </Text>
-            ))
-          ) : (
-            <Text>Pas encore de séance</Text>
-          )}
+          <VStack>
+            {program.sessions.length ? (
+              program.sessions.map((session, sIndex) => (
+                <Text fontSize={'md'} color="gray.500" key={`${key}-${sIndex}`}>
+                  {session.name} - {session.steps.length} exercice
+                </Text>
+              ))
+            ) : (
+              <Text>Pas encore de séance</Text>
+            )}
+          </VStack>
         </VStack>
         {program.status === ProgramStatus.DRAFT && (
-          <Box p={2}>
-            <Button onPress={() => onEditPress(program.id)}> Éditer le programme </Button>
-          </Box>
+          <Button onPress={() => onEditPress(program.id)}> Éditer le programme </Button>
         )}
-      </Box>
+      </VStack>
     </Pressable>
   );
 }

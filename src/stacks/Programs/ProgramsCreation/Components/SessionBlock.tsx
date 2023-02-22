@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Box, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
+import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
 
 import { ProgramSession, UID_V4 } from '@/store/Programs';
 
@@ -22,42 +22,50 @@ export default function SessionBlock({
   );
 
   return (
-    <Pressable w="full">
-      <Box w="full" backgroundColor="gray.200" rounded={4} overflow="hidden">
-        <HStack backgroundColor={'gray.400'} px={2} py="2" justifyContent={'space-between'}>
-          <HStack space={2} justifyContent={'space-between'}>
-            {!!session.steps.length && <Badge p={1} />}
-            <Text fontSize={'lg'}>{session.name}</Text>
+    <Pressable w="full" onPress={() => onEditPress(session.id)}>
+      <VStack w="full" backgroundColor="white" rounded={8} overflow="hidden" p={4} space="4">
+        <VStack w="full" space="2">
+          <HStack justifyContent={'space-between'}>
+            <HStack space={2} justifyContent={'space-between'}>
+              <Text fontSize={'xl'} fontWeight="medium">
+                {session.name}
+              </Text>
+              <Badge>
+                <Text>{averageTime}"</Text>
+              </Badge>
+            </HStack>
+            <IconButton
+              size="sm"
+              p={1}
+              onPress={() => onOptionsPress(session.id)}
+              _icon={{
+                as: Ionicons,
+                color: 'gray.700',
+                name: 'ellipsis-horizontal'
+              }}
+            />
           </HStack>
-          <IconButton
-            size="sm"
-            p={1}
-            onPress={() => onOptionsPress(session.id)}
-            _icon={{
-              as: Ionicons,
-              color: 'gray.700',
-              name: 'ellipsis-horizontal'
-            }}
-          />
-        </HStack>
-        <VStack p={2} space="2">
-          {session.steps.length ? (
-            session.steps.map((step, sIndex) => (
-              <HStack justifyContent={'space-between'} key={`${key}-${sIndex}`}>
-                <Text>{step.name}</Text>
-                <Text>
-                  {step.setNumber} x {step.reps} @ {step.weight} kg
-                </Text>
-              </HStack>
-            ))
-          ) : (
-            <Text>Pas encore d'exercice</Text>
-          )}
+          <VStack>
+            {session.steps.length ? (
+              session.steps.map((step, sIndex) => (
+                <HStack justifyContent={'space-between'} key={`${key}-${sIndex}`}>
+                  <Text fontSize={'md'} color="gray.500">
+                    {step.name}
+                  </Text>
+                  <Text fontSize={'md'} color="gray.500">
+                    {step.setNumber} x {step.reps} @ {step.weight} kg
+                  </Text>
+                </HStack>
+              ))
+            ) : (
+              <Text fontSize={'md'} color="gray.500">
+                Pas encore d'exercice
+              </Text>
+            )}
+          </VStack>
         </VStack>
-        <Box p={2}>
-          <Button onPress={() => onEditPress(session.id)}> Éditer la séance </Button>
-        </Box>
-      </Box>
+        <Button onPress={() => onEditPress(session.id)}> Éditer la séance </Button>
+      </VStack>
     </Pressable>
   );
 }
