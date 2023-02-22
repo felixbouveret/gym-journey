@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Button, Icon, ScrollView, VStack } from 'native-base';
+import { Box, Button, Icon, ScrollView, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -52,19 +52,22 @@ export default function ProgramsCreationScreen({
   }, [currentSession?.name]);
 
   return (
-    <ScrollView>
-      <VStack
-        justifyContent={currentSession?.steps.length ? '' : 'flex-end'}
-        h="full"
-        w="full"
-        p={4}
-        space="4"
-      >
-        {currentSession?.steps.length
-          ? currentSession?.steps.map((step, index) => (
-              <SessionStep step={step} key={index} onOptions={onOptions} />
-            ))
-          : null}
+    <VStack
+      justifyContent={currentSession?.steps.length ? '' : 'flex-end'}
+      h="full"
+      w="full"
+      pt="0"
+    >
+      <ScrollView h="full">
+        <VStack h="full" w="full" p={4} space={4}>
+          {currentSession?.steps.length
+            ? currentSession?.steps.map((step, index) => (
+                <SessionStep step={step} key={index} onOptions={onOptions} />
+              ))
+            : null}
+        </VStack>
+      </ScrollView>
+      <Box p={4} pt="0">
         <Button
           w="full"
           leftIcon={<Icon as={Ionicons} name="add" size="md" />}
@@ -77,7 +80,7 @@ export default function ProgramsCreationScreen({
         >
           Ajouter un exercice
         </Button>
-      </VStack>
-    </ScrollView>
+      </Box>
+    </VStack>
   );
 }
