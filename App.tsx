@@ -9,23 +9,29 @@ import Navigation from '@/navigation';
 
 import store from './src/store';
 
-export default function App() {
+function CacheCheckComponent() {
   const isLoadingComplete = useCachedResources();
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <Provider store={store}>
-        <NativeBaseProvider>
-          <BottomSheetModalProvider>
-            <SafeAreaProvider>
-              <Navigation />
-              <StatusBar />
-            </SafeAreaProvider>
-          </BottomSheetModalProvider>
-        </NativeBaseProvider>
-      </Provider>
+      <NativeBaseProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <Navigation />
+            <StatusBar />
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
+      </NativeBaseProvider>
     );
   }
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <CacheCheckComponent />
+    </Provider>
+  );
 }
