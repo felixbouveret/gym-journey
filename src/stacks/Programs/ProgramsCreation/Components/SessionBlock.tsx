@@ -16,11 +16,16 @@ export default function SessionBlock({
   key,
   onEditPress
 }: SessionBlockProps) {
+  const averageTime = session.steps.reduce(
+    (acc, step) => acc + (Number(step.restTime) + 1) * Number(step.setNumber),
+    0
+  );
+
   return (
     <Pressable w="full">
       <Box w="full" backgroundColor="gray.200" rounded={4} overflow="hidden">
         <HStack backgroundColor={'gray.400'} px={2} py="2" justifyContent={'space-between'}>
-          <HStack space={2}>
+          <HStack space={2} justifyContent={'space-between'}>
             {!!session.steps.length && <Badge p={1} />}
             <Text fontSize={'lg'}>{session.name}</Text>
           </HStack>
@@ -37,7 +42,14 @@ export default function SessionBlock({
         </HStack>
         <VStack p={2} space="2">
           {session.steps.length ? (
-            session.steps.map((step, sIndex) => <Text key={`${key}-${sIndex}`}>{step.name}</Text>)
+            session.steps.map((step, sIndex) => (
+              <HStack justifyContent={'space-between'} key={`${key}-${sIndex}`}>
+                <Text>{step.name}</Text>
+                <Text>
+                  {step.setNumber} x {step.reps} @ {step.weight} kg
+                </Text>
+              </HStack>
+            ))
           ) : (
             <Text>Pas encore d'exercice</Text>
           )}

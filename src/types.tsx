@@ -46,7 +46,7 @@ export type ProgramsTabParamList = {
   Programs: undefined;
   ProgramsCreation: { id: UID_V4; editing?: boolean };
   ProgramsSession: { programId: UID_V4; sessionId: UID_V4; editing?: boolean };
-  ProgramsExerciceModal: { editing?: boolean };
+  ProgramsExerciceModal: { programId: UID_V4; sessionId: UID_V4; exerciceName?: string };
 };
 
 export type ProgramsTabScreenProps<Screen extends keyof ProgramsTabParamList> =

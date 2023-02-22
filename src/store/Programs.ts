@@ -9,6 +9,11 @@ export enum ProgramStatus {
 export type UID_V4 = string | number[];
 export interface ProgramSessionStep {
   name: string;
+  setNumber: string;
+  weight: string;
+  restTime: string;
+  reps: string;
+  isUnilateral: boolean;
 }
 export interface ProgramSession {
   id: UID_V4;
@@ -105,6 +110,64 @@ export const roomsStore = createSlice({
       prepare(programId: UID_V4, sessionId: UID_V4, newName: string) {
         return { payload: { programId, sessionId, newName } };
       }
+    },
+
+    addSessionStep: {
+      reducer(
+        state,
+        action: PayloadAction<{ programId: UID_V4; sessionId: UID_V4; step: ProgramSessionStep }>
+      ) {
+        const program = state.programs.find((p) => p.id === action.payload.programId);
+        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        if (session) session.steps.push(action.payload.step);
+      },
+      prepare(programId: UID_V4, sessionId: UID_V4, step: ProgramSessionStep) {
+        return { payload: { programId, sessionId, step } };
+      }
+    },
+
+    updateSessionStep: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          programId: UID_V4;
+          sessionId: UID_V4;
+          stepName: string;
+          step: ProgramSessionStep;
+        }>
+      ) {
+        //update a session step
+        const program = state.programs.find((p) => p.id === action.payload.programId);
+        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const stepIndex = session?.steps.findIndex((s) => s.name === action.payload.stepName);
+
+        if (stepIndex !== undefined && stepIndex !== -1 && !!session)
+          session.steps[stepIndex] = { ...action.payload.step };
+      },
+      prepare(programId: UID_V4, sessionId: UID_V4, stepName: string, step: ProgramSessionStep) {
+        return { payload: { programId, sessionId, stepName, step } };
+      }
+    },
+
+    removeSessionStep: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          programId: UID_V4;
+          sessionId: UID_V4;
+          stepName: string;
+        }>
+      ) {
+        const program = state.programs.find((p) => p.id === action.payload.programId);
+        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const stepIndex = session?.steps.findIndex((s) => s.name === action.payload.stepName);
+
+        if (stepIndex !== undefined && stepIndex !== -1 && !!session)
+          session.steps.splice(stepIndex, 1);
+      },
+      prepare(programId: UID_V4, sessionId: UID_V4, stepName: string) {
+        return { payload: { programId, sessionId, stepName } };
+      }
     }
   }
 });
@@ -115,7 +178,10 @@ export const {
   renameProgram,
   createSession,
   deleteSession,
-  renameSession
+  renameSession,
+  addSessionStep,
+  updateSessionStep,
+  removeSessionStep
 } = roomsStore.actions;
 
 export default roomsStore.reducer;

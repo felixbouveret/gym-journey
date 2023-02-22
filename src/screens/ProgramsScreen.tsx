@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { IconButton } from 'native-base';
+import { Button, HStack, IconButton } from 'native-base';
 
 import usePrograms from '@/hooks/usePrograms';
 import ProgramsCreation from '@/stacks/Programs/ProgramsCreation';
@@ -39,7 +39,15 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
         <Stack.Screen
           name="ProgramsExerciceModal"
           component={ProgramsExerciceModal}
-          options={{ title: 'Nouvel exercice' }}
+          options={{
+            header: ({ navigation }) => (
+              <HStack backgroundColor={'white'} justifyContent="flex-end" py={2} px={4}>
+                <Button onPress={navigation.goBack} variant={'unstyled'}>
+                  Annuler
+                </Button>
+              </HStack>
+            )
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>
