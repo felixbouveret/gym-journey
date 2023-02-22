@@ -61,6 +61,26 @@ export const roomsStore = createSlice({
       }
     },
 
+    validateProgram: {
+      reducer(state, action: PayloadAction<{ id: UID_V4 }>) {
+        const program = state.programs.find((p) => p.id === action.payload.id);
+        if (program) program.status = ProgramStatus.ACTIVE;
+      },
+      prepare(id: UID_V4) {
+        return { payload: { id } };
+      }
+    },
+
+    archiveProgram: {
+      reducer(state, action: PayloadAction<{ id: UID_V4 }>) {
+        const program = state.programs.find((p) => p.id === action.payload.id);
+        if (program) program.status = ProgramStatus.ARCHIVED;
+      },
+      prepare(id: UID_V4) {
+        return { payload: { id } };
+      }
+    },
+
     deleteProgram: {
       reducer(state, action: PayloadAction<{ id: UID_V4 }>) {
         state.programs = state.programs.filter((program) => program.id !== action.payload.id);
@@ -184,6 +204,8 @@ export const roomsStore = createSlice({
 export const {
   setState,
   createProgram,
+  validateProgram,
+  archiveProgram,
   deleteProgram,
   renameProgram,
   createSession,

@@ -12,7 +12,7 @@ import { ProgramsTabParamList, RootTabScreenProps } from '@/types';
 const Stack = createNativeStackNavigator<ProgramsTabParamList>();
 
 export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>) {
-  const { onCreateProgram } = usePrograms();
+  const { onCreateProgram, onValidateProgram } = usePrograms();
 
   return (
     <Stack.Navigator>
@@ -33,7 +33,25 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
           )
         })}
       />
-      <Stack.Screen name="ProgramsCreation" component={ProgramsCreation} options={{}} />
+      <Stack.Screen
+        name="ProgramsCreation"
+        component={ProgramsCreation}
+        options={({ navigation, route }) => ({
+          headerRight: () => (
+            <IconButton
+              size="sm"
+              variant={'solid'}
+              onPress={() => {
+                onValidateProgram(route.params.id, () => navigation.goBack());
+              }}
+              _icon={{
+                as: Ionicons,
+                name: 'checkmark'
+              }}
+            />
+          )
+        })}
+      />
       <Stack.Screen name="ProgramsSession" component={ProgramsSession} options={{}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen
