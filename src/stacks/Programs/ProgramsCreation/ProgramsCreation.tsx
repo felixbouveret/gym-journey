@@ -61,6 +61,12 @@ export default function ProgramsCreationScreen({
               session={session}
               key={index}
               onOptionsPress={onProgramOptionsPress}
+              onPress={(id) =>
+                navigation.navigate('ProgramsSession', {
+                  programId: route.params.id,
+                  sessionId: id
+                })
+              }
               onEditPress={(id) =>
                 navigation.navigate('ProgramsSession', {
                   programId: route.params.id,

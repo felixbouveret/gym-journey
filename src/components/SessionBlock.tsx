@@ -1,13 +1,12 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
+import { Badge, HStack, Pressable, Text, VStack } from 'native-base';
 import { ColorType } from 'native-base/lib/typescript/components/types';
 
 import { ProgramSession, UID_V4 } from '@/store/Programs';
 
 interface SessionBlockProps {
   session: ProgramSession;
-  onOptionsPress?: (id: UID_V4) => void;
-  onEditPress?: (id: UID_V4) => void;
+  rightAction?: React.ReactNode;
+  footer?: React.ReactNode;
   onPress?: (id: UID_V4) => void;
   key: number | string;
   backgroundColor?: ColorType;
@@ -15,9 +14,9 @@ interface SessionBlockProps {
 
 export default function SessionBlock({
   session,
-  onOptionsPress,
+  rightAction,
+  footer,
   key,
-  onEditPress,
   onPress,
   backgroundColor
 }: SessionBlockProps) {
@@ -46,18 +45,7 @@ export default function SessionBlock({
                 <Text>{averageTime}"</Text>
               </Badge>
             </HStack>
-            {onOptionsPress && (
-              <IconButton
-                size="sm"
-                p={1}
-                onPress={() => onOptionsPress(session.id)}
-                _icon={{
-                  as: Ionicons,
-                  color: 'gray.700',
-                  name: 'ellipsis-horizontal'
-                }}
-              />
-            )}
+            {rightAction()}
           </HStack>
           <VStack>
             {session.steps.length ? (
@@ -78,7 +66,7 @@ export default function SessionBlock({
             )}
           </VStack>
         </VStack>
-        {onEditPress && <Button onPress={() => onEditPress(session.id)}> Éditer la séance </Button>}
+        {footer}
       </VStack>
     </Pressable>
   );
