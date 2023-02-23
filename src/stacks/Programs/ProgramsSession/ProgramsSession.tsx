@@ -1,11 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Box, Button, Icon, ScrollView, Text, VStack } from 'native-base';
+import * as Haptics from 'expo-haptics';
+import { Box, Button, Icon, Text, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
-import { useSelector } from 'react-redux';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import { useDispatch, useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
+import { setSessionSteps } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 
 import SessionStep from './components/SessionStep';
@@ -14,6 +17,7 @@ export default function ProgramsCreationScreen({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsSession'>) {
+  const dispatch = useDispatch();
   const { programs } = useSelector((state: RootState) => state.programs);
   const { onRemoveSessionStep } = usePrograms();
 
@@ -21,6 +25,9 @@ export default function ProgramsCreationScreen({
   const currentSession = currentProgram?.sessions.find(
     (session) => session.id === route.params.sessionId
   );
+
+  const sessionSteps = currentSession?.steps || [];
+
   const onOptions = (exerciceName: string) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -58,26 +65,36 @@ export default function ProgramsCreationScreen({
       w="full"
       pt="0"
     >
-      <ScrollView h="full">
-        <VStack
-          h="full"
-          w="full"
-          p={4}
-          space={4}
-          justifyContent={currentSession?.steps.length ? '' : 'center'}
-          alignItems={currentSession?.steps.length ? '' : 'center'}
-        >
-          {currentSession?.steps.length ? (
-            currentSession?.steps.map((step, index) => (
-              <SessionStep step={step} key={index} onOptions={onOptions} />
-            ))
-          ) : (
+      <VStack flex="1" w="full" space={4}>
+        {sessionSteps.length ? (
+          <DraggableFlatList
+            style={{ width: '100%', height: '100%', padding: 16 }}
+            data={sessionSteps}
+            renderItem={({ item, drag }) => (
+              <Box pb="4">
+                <SessionStep
+                  drag={() => {
+                    drag();
+                    Haptics.impactAsync();
+                  }}
+                  item={item}
+                  onOptions={onOptions}
+                />
+              </Box>
+            )}
+            keyExtractor={(item) => item.name}
+            onDragEnd={({ data }) =>
+              dispatch(setSessionSteps(route.params.programId, route.params.sessionId, data))
+            }
+          />
+        ) : (
+          <Box h={'full'} w={'full'} justifyContent="center" alignItems={'center'}>
             <Text fontSize={'2xl'} fontWeight="bold" color={'gray.300'}>
-              Pas de d'éxercice créé
+              Pas de d'exercice ajouté
             </Text>
-          )}
-        </VStack>
-      </ScrollView>
+          </Box>
+        )}
+      </VStack>
       <Box p={4} pt="0">
         <Button
           w="full"

@@ -197,6 +197,24 @@ export const roomsStore = createSlice({
       prepare(programId: UID_V4, sessionId: UID_V4, stepName: string) {
         return { payload: { programId, sessionId, stepName } };
       }
+    },
+
+    setSessionSteps: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          programId: UID_V4;
+          sessionId: UID_V4;
+          steps: ProgramSessionStep[];
+        }>
+      ) {
+        const program = state.programs.find((p) => p.id === action.payload.programId);
+        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        if (session) session.steps = action.payload.steps;
+      },
+      prepare(programId: UID_V4, sessionId: UID_V4, steps: ProgramSessionStep[]) {
+        return { payload: { programId, sessionId, steps } };
+      }
     }
   }
 });
@@ -213,7 +231,8 @@ export const {
   renameSession,
   addSessionStep,
   updateSessionStep,
-  removeSessionStep
+  removeSessionStep,
+  setSessionSteps
 } = roomsStore.actions;
 
 export default roomsStore.reducer;
