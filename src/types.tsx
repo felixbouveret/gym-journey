@@ -63,7 +63,7 @@ export type navigationProgramsProps = CompositeNavigationProp<
 
 export type ExercicesTabParamList = {
   ExercicesList: undefined;
-  ExerciceSingle: undefined;
+  ExerciceSingle: { id: UID_V4 };
   ExerciceModal: undefined;
 };
 

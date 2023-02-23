@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, HStack, IconButton } from 'native-base';
 
 import ExerciceModalScreen from '@/stacks/Exercices/ExerciceModalScreen';
+import ExerciceSingle from '@/stacks/Exercices/ExerciceSingle';
 import ExercicesList from '@/stacks/Exercices/ExercicesList';
 import { ExercicesTabParamList, RootTabScreenProps } from '@/types';
 
@@ -14,6 +15,24 @@ export default function ProgramsScreen({}: RootTabScreenProps<'Exercices'>) {
       <Stack.Screen
         name="ExercicesList"
         component={ExercicesList}
+        options={({ navigation }) => ({
+          title: 'Vos exercices',
+          headerRight: () => (
+            <IconButton
+              size="sm"
+              variant={'solid'}
+              onPress={() => navigation.navigate('ExerciceModal')}
+              _icon={{
+                as: Ionicons,
+                name: 'add'
+              }}
+            />
+          )
+        })}
+      />
+      <Stack.Screen
+        name="ExerciceSingle"
+        component={ExerciceSingle}
         options={({ navigation }) => ({
           title: 'Vos exercices',
           headerRight: () => (
