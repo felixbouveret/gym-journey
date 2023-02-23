@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Box, Button, Icon, ScrollView, VStack } from 'native-base';
+import { Box, Button, Icon, ScrollView, Text, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -59,12 +59,23 @@ export default function ProgramsCreationScreen({
       pt="0"
     >
       <ScrollView h="full">
-        <VStack h="full" w="full" p={4} space={4}>
-          {currentSession?.steps.length
-            ? currentSession?.steps.map((step, index) => (
-                <SessionStep step={step} key={index} onOptions={onOptions} />
-              ))
-            : null}
+        <VStack
+          h="full"
+          w="full"
+          p={4}
+          space={4}
+          justifyContent={currentSession?.steps.length ? '' : 'center'}
+          alignItems={currentSession?.steps.length ? '' : 'center'}
+        >
+          {currentSession?.steps.length ? (
+            currentSession?.steps.map((step, index) => (
+              <SessionStep step={step} key={index} onOptions={onOptions} />
+            ))
+          ) : (
+            <Text fontSize={'2xl'} fontWeight="bold" color={'gray.300'}>
+              Pas de d'éxercice créé
+            </Text>
+          )}
         </VStack>
       </ScrollView>
       <Box p={4} pt="0">

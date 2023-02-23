@@ -1,6 +1,6 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
-import { NativeBaseProvider } from 'native-base';
+import { extendTheme, NativeBaseProvider } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
@@ -11,12 +11,31 @@ import store from './src/store';
 
 function CacheCheckComponent() {
   const isLoadingComplete = useCachedResources();
+  const theme = extendTheme({
+    components: {
+      Button: {
+        baseStyle: {
+          rounded: 8
+        }
+      },
+      IconButton: {
+        baseStyle: {
+          rounded: 8
+        }
+      },
+      Input: {
+        baseStyle: {
+          rounded: 8
+        }
+      }
+    }
+  });
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <NativeBaseProvider>
+      <NativeBaseProvider theme={theme}>
         <BottomSheetModalProvider>
           <SafeAreaProvider>
             <Navigation />

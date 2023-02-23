@@ -1,15 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
+import { Badge, Button, HStack, Icon, IconButton, Pressable, Text, VStack } from 'native-base';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
-import { Program, ProgramStatus } from '@/store/Programs';
-
-import SessionBlock from '../../ProgramsCreation/Components/SessionBlock';
+import SessionBlock from '@/components/SessionBlock';
+import { Program, ProgramStatus, UID_V4 } from '@/store/Programs';
 
 interface ProgramBlockProps {
   program: Program;
   onOptionsPress: () => void;
   onEditPress: () => void;
+  onSessionPress: (id: UID_V4) => void;
   key: number | string;
 }
 
@@ -17,6 +17,7 @@ export default function ProgramBlock({
   program,
   onOptionsPress,
   key,
+  onSessionPress,
   onEditPress
 }: ProgramBlockProps) {
   const isDraft = program.status === ProgramStatus.DRAFT;
@@ -49,7 +50,15 @@ export default function ProgramBlock({
 
   const ActiveProgramSessionList = () =>
     program.sessions.map((session, sIndex) => (
-      <SessionBlock session={session} key={sIndex} backgroundColor={'gray.50'} />
+      <SessionBlock
+        session={session}
+        key={sIndex}
+        backgroundColor={'gray.50'}
+        onPress={() => onSessionPress(session.id)}
+        rightAction={() => (
+          <Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />
+        )}
+      />
     ));
 
   return (

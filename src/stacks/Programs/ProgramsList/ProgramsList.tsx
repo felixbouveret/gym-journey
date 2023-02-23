@@ -51,6 +51,7 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
             key={index}
             onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
             onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
+            onSessionPress={() => navigation.navigate('Training')}
           />
         ))
       ) : (
