@@ -1,24 +1,12 @@
-import { Badge, Box, Button, HStack, ScrollView, Text, View, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { Badge, Box, Button, HStack, Icon, ScrollView, Text, View, VStack } from 'native-base';
+import { useState } from 'react';
 
-import useStorage from '@/hooks/useStorage';
 import { RootTabScreenProps } from '@/types';
 import { Exercice } from '@/types/Exercices.types';
 
 export default function ExercicesScreen({ navigation }: RootTabScreenProps<'Exercices'>) {
   const [exercices, setExercices] = useState<Exercice[]>([]);
-
-  const { getStorageData } = useStorage();
-
-  const fetchExercices = async () => {
-    const exercicesFromStorage = await getStorageData('exercices');
-
-    setExercices(exercicesFromStorage);
-  };
-
-  useEffect(() => {
-    fetchExercices();
-  }, []);
 
   const Wrapper = exercices?.length ? ScrollView : View;
 
@@ -39,7 +27,7 @@ export default function ExercicesScreen({ navigation }: RootTabScreenProps<'Exer
 
   return (
     <Wrapper w="full" h="full">
-      <VStack h="full" padding={4} justifyContent={exercices?.length ? '' : 'center'} space={4}>
+      <VStack h="full" padding={4} justifyContent={exercices?.length ? '' : 'flex-end'} space={4}>
         {exercices?.length ? (
           exercicesList
         ) : (
@@ -59,7 +47,13 @@ export default function ExercicesScreen({ navigation }: RootTabScreenProps<'Exer
             </VStack>
           </Box>
         )}
-        <Button onPress={() => navigation.navigate('ExerciceModal')}>Ajouter un exercice</Button>
+        <Button
+          w="full"
+          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+          onPress={() => navigation.navigate('ExerciceModal')}
+        >
+          Ajouter un exercice
+        </Button>
       </VStack>
     </Wrapper>
   );

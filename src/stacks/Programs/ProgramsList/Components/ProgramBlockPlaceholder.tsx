@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Button, Icon, Pressable, Text, VStack } from 'native-base';
+import { Box, Button, Icon, Pressable, Text, VStack } from 'native-base';
 
 interface ProgramBlockPlaceholderProps {
   onPress: () => void;
@@ -7,25 +7,26 @@ interface ProgramBlockPlaceholderProps {
 
 export default function ProgramBlockPlaceholder({ onPress }: ProgramBlockPlaceholderProps) {
   return (
-    <Pressable w="full">
-      <VStack
-        w="full"
-        backgroundColor="gray.50"
-        rounded={8}
-        overflow="hidden"
-        p={4}
-        space="4"
-        alignItems={'center'}
-      >
-        <Text fontSize={'lg'} color="gray.400" fontWeight={'medium'}>
-          Aucun programme pour le moment
-        </Text>
-        <Button
-          variant={'outline'}
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={onPress}
+    <Pressable w="full" onPress={onPress}>
+      <VStack space={4}>
+        <Box
+          rounded={8}
+          p={4}
+          backgroundColor="gray.200"
+          borderColor={'gray.400'}
+          borderStyle="dashed"
+          borderWidth={2}
         >
+          <VStack space={1}>
+            <Text color={'gray.500'} fontSize="xl">
+              Aucun programme pour le moment
+            </Text>
+            <Text color={'gray.500'}>
+              Vos programmes apparaîtront ici. Créez-en un pour commencer.
+            </Text>
+          </VStack>
+        </Box>
+        <Button w="full" leftIcon={<Icon as={Ionicons} name="add" size="md" />} onPress={onPress}>
           Créer votre premier programme
         </Button>
       </VStack>
