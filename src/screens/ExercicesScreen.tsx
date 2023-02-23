@@ -1,60 +1,49 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Box, Button, HStack, Icon, ScrollView, Text, View, VStack } from 'native-base';
-import { useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Button, HStack, IconButton } from 'native-base';
 
-import { RootTabScreenProps } from '@/types';
-import { Exercice } from '@/types/Exercices.types';
+import ExerciceModalScreen from '@/stacks/Exercices/ExerciceModalScreen';
+import ExercicesList from '@/stacks/Exercices/ExercicesList';
+import { ExercicesTabParamList, RootTabScreenProps } from '@/types';
 
-export default function ExercicesScreen({ navigation }: RootTabScreenProps<'Exercices'>) {
-  const [exercices, setExercices] = useState<Exercice[]>([]);
+const Stack = createNativeStackNavigator<ExercicesTabParamList>();
 
-  const Wrapper = exercices?.length ? ScrollView : View;
-
-  const exercicesList = exercices?.map((exercice, index) => (
-    <Box rounded={8} p={4} backgroundColor="white" key={index}>
-      <VStack space={1}>
-        <HStack justifyContent={'space-between'}>
-          <Text color={'gray.700'} fontSize="xl">
-            {exercice.name}
-          </Text>
-          {exercice?.isUnilateral ? <Badge>Unilateral</Badge> : null}
-        </HStack>
-
-        <Text color={'gray.700'}>{exercice?.description}</Text>
-      </VStack>
-    </Box>
-  ));
-
+export default function ProgramsScreen({}: RootTabScreenProps<'Exercices'>) {
   return (
-    <Wrapper w="full" h="full">
-      <VStack h="full" padding={4} justifyContent={exercices?.length ? '' : 'flex-end'} space={4}>
-        {exercices?.length ? (
-          exercicesList
-        ) : (
-          <Box
-            rounded={8}
-            p={4}
-            backgroundColor="gray.200"
-            borderColor={'gray.400'}
-            borderStyle="dashed"
-            borderWidth={2}
-          >
-            <VStack space={1}>
-              <Text color={'gray.500'} fontSize="xl">
-                Pas d'exercices
-              </Text>
-              <Text color={'gray.500'}>Créez en ici ou pendant la création de votre programme</Text>
-            </VStack>
-          </Box>
-        )}
-        <Button
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => navigation.navigate('ExerciceModal')}
-        >
-          Ajouter un exercice
-        </Button>
-      </VStack>
-    </Wrapper>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ExercicesList"
+        component={ExercicesList}
+        options={({ navigation }) => ({
+          title: 'Vos exercices',
+          headerRight: () => (
+            <IconButton
+              size="sm"
+              variant={'solid'}
+              onPress={() => navigation.navigate('ExerciceModal')}
+              _icon={{
+                as: Ionicons,
+                name: 'add'
+              }}
+            />
+          )
+        })}
+      />
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          name="ExerciceModal"
+          component={ExerciceModalScreen}
+          options={{
+            header: ({ navigation }) => (
+              <HStack backgroundColor={'white'} justifyContent="flex-end" py={2} px={4}>
+                <Button onPress={navigation.goBack} variant={'unstyled'}>
+                  Annuler
+                </Button>
+              </HStack>
+            )
+          }}
+        />
+      </Stack.Group>
+    </Stack.Navigator>
   );
 }

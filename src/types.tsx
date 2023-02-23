@@ -60,3 +60,20 @@ export type navigationProgramsProps = CompositeNavigationProp<
   BottomTabNavigationProp<ProgramsTabParamList, 'Programs'>,
   NativeStackNavigationProp<RootStackParamList>
 >;
+
+export type ExercicesTabParamList = {
+  ExercicesList: undefined;
+  ExerciceSingle: undefined;
+  ExerciceModal: undefined;
+};
+
+export type ExercicesTabScreenProps<Screen extends keyof ExercicesTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<ExercicesTabParamList, Screen>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
+
+export type navigationExercicesProps = CompositeNavigationProp<
+  BottomTabNavigationProp<ExercicesTabParamList, 'ExercicesList'>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
