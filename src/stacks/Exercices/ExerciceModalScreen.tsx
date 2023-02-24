@@ -77,6 +77,10 @@ export default function ExerciceModalScreen({
     navigation.goBack();
   };
 
+  const isValid = () => {
+    return [formData.name].every((e) => e);
+  };
+
   const submitButton = () => {
     if (route.params.id)
       return (
@@ -84,7 +88,7 @@ export default function ExerciceModalScreen({
           w="full"
           leftIcon={<Icon as={Ionicons} name="pencil" size="md" />}
           onPress={() => handleUpdate()}
-          isDisabled={!Object.values(formData).every((e) => e)}
+          isDisabled={!isValid()}
         >
           Modifier
         </Button>
@@ -94,7 +98,7 @@ export default function ExerciceModalScreen({
         w="full"
         leftIcon={<Icon as={Ionicons} name="add" size="md" />}
         onPress={() => handleSubmit()}
-        isDisabled={!Object.values(formData).every((e) => e)}
+        isDisabled={!isValid()}
       >
         Ajouter
       </Button>

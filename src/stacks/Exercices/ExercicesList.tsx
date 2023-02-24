@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import {
+  Badge,
   Box,
   Button,
   HStack,
@@ -58,6 +59,11 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
             <Text fontSize={'xl'} fontWeight="medium">
               {item.name}
             </Text>
+            {item.isUnilateral && (
+              <Badge>
+                <Text>Unilatéral</Text>
+              </Badge>
+            )}
           </HStack>
         </VStack>
         <IconButton
