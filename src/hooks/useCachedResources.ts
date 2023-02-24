@@ -20,8 +20,11 @@ export default function useCachedResources() {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
-        const storagePrograms = await getStorageData('programs');
-        const storageExercices = await getStorageData('exercices');
+        const [storagePrograms, storageExercices] = await Promise.all([
+          getStorageData('programs'),
+          getStorageData('exercices')
+        ]);
+
         if (storagePrograms) dispatch(setProgramsState(storagePrograms));
         if (storageExercices) dispatch(setExercicesState(storageExercices));
         // Load fonts

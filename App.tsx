@@ -11,6 +11,7 @@ import store from './src/store';
 
 function CacheCheckComponent() {
   const isLoadingComplete = useCachedResources();
+
   const theme = extendTheme({
     components: {
       Button: {
