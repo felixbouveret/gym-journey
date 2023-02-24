@@ -16,8 +16,9 @@ import {
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { RootState } from '@/store';
 import { createExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
 import { Exercice } from '@/types/Exercices.types';
@@ -27,6 +28,7 @@ export default function ExerciceModalScreen({
   route
 }: ExercicesTabScreenProps<'ExerciceModal'>) {
   const dispatch = useDispatch();
+  const { exercices } = useSelector((state: RootState) => state.exercices);
 
   const [isUnilateral, setIsUnilateral] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -37,6 +39,12 @@ export default function ExerciceModalScreen({
 
   useEffect(() => {
     if (route.params.id) {
+      const currentExercice = exercices.find((exercice) => exercice.id === route.params.id);
+      if (currentExercice) {
+        const { isUnilateral: currentExerciceIsUni, ...currentExerciceFormData } = currentExercice;
+        setFormData({ ...currentExerciceFormData });
+        setIsUnilateral(currentExerciceIsUni);
+      }
     }
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       setIsKeyboardVisible(true);
