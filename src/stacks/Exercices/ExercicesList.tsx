@@ -1,36 +1,88 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Box, Button, HStack, Icon, ScrollView, Text, View, VStack } from 'native-base';
-import { useState } from 'react';
+import {
+  Box,
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Pressable,
+  ScrollView,
+  Text,
+  VStack
+} from 'native-base';
+import { ActionSheetIOS } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { RootState } from '@/store';
+import { removeExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
-import { Exercice } from '@/types/Exercices.types';
+import { UID_V4 } from '@/types/Exercices.types';
 
 export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'ExercicesList'>) {
-  const [exercices, setExercices] = useState<Exercice[]>([]);
+  const dispatch = useDispatch();
+  const { exercices } = useSelector((state: RootState) => state.exercices);
 
-  const Wrapper = exercices?.length ? ScrollView : View;
+  const onOptions = (id: UID_V4) =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Annuler', 'Modifier', 'Supprimer'],
+        destructiveButtonIndex: 2,
+        cancelButtonIndex: 0
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) return;
+        if (buttonIndex === 1) return navigation.navigate('ExerciceModal', { id });
+        if (buttonIndex === 2) return dispatch(removeExercice(id));
+      }
+    );
 
-  const exercicesList = exercices?.map((exercice, index) => (
-    <Box rounded={8} p={4} backgroundColor="white" key={index}>
-      <VStack space={1}>
-        <HStack justifyContent={'space-between'}>
-          <Text color={'gray.700'} fontSize="xl">
-            {exercice.name}
-          </Text>
-          {exercice?.isUnilateral ? <Badge>Unilateral</Badge> : null}
-        </HStack>
-
-        <Text color={'gray.700'}>{exercice?.description}</Text>
-      </VStack>
-    </Box>
+  const exercicesList = exercices?.map((item, index) => (
+    <Pressable
+      key={index}
+      w="full"
+      flex="1"
+      onPress={() => navigation.navigate('ExerciceSingle', { id: item.id })}
+    >
+      <HStack
+        space="4"
+        p={4}
+        pr="2"
+        flex="1"
+        backgroundColor={'white'}
+        rounded={8}
+        w="full"
+        alignItems={'center'}
+      >
+        <VStack flex="1" space="2">
+          <HStack alignItems="center" justifyContent={'space-between'}>
+            <Text fontSize={'xl'} fontWeight="medium">
+              {item.name}
+            </Text>
+          </HStack>
+        </VStack>
+        <IconButton
+          size="sm"
+          p={1}
+          onPress={() => onOptions(item.id)}
+          _icon={{
+            as: Ionicons,
+            color: 'gray.700',
+            name: 'ellipsis-vertical'
+          }}
+        />
+      </HStack>
+    </Pressable>
   ));
 
   return (
-    <Wrapper w="full" h="full">
-      <VStack h="full" padding={4} justifyContent={exercices?.length ? '' : 'flex-end'} space={4}>
-        {exercices?.length ? (
-          exercicesList
-        ) : (
+    <VStack h="full" justifyContent={exercices?.length ? '' : 'flex-end'}>
+      <ScrollView w="full" h="full">
+        <VStack h="full" space={4} p="4">
+          {!!exercices?.length && exercicesList}
+        </VStack>
+      </ScrollView>
+      <VStack p="4" pt={0} space={4}>
+        {!exercices?.length && (
           <Box
             rounded={8}
             p={4}
@@ -50,11 +102,11 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
         <Button
           w="full"
           leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => navigation.navigate('ExerciceModal')}
+          onPress={() => navigation.navigate('ExerciceModal', {})}
         >
           Ajouter un exercice
         </Button>
       </VStack>
-    </Wrapper>
+    </VStack>
   );
 }

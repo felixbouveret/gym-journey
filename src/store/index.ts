@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import exercicesReducer from './Exercices';
 import programsReducer from './Programs';
 
 const store = configureStore({
   reducer: {
-    programs: programsReducer
+    programs: programsReducer,
+    exercices: exercicesReducer
   }
 });
 

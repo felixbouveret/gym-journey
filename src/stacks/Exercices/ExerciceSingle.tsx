@@ -2,7 +2,7 @@ import { Box, Text, VStack } from 'native-base';
 
 import { ExercicesTabScreenProps } from '@/types';
 
-export default function ExerciceSingle({ id }: ExercicesTabScreenProps<'ExerciceSingle'>) {
+export default function ExerciceSingle({ route }: ExercicesTabScreenProps<'ExerciceSingle'>) {
   return (
     <VStack w="full" h="full">
       <Box
@@ -15,7 +15,7 @@ export default function ExerciceSingle({ id }: ExercicesTabScreenProps<'Exercice
       >
         <VStack space={1}>
           <Text color={'gray.500'} fontSize="xl">
-            {id}
+            {route.params.id}
           </Text>
           <Text color={'gray.500'}>Créez en ici ou pendant la création de votre programme</Text>
         </VStack>
