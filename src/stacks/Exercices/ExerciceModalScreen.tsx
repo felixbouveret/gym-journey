@@ -19,7 +19,7 @@ import { Keyboard, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
-import { createExercice } from '@/store/Exercices';
+import { createExercice, updateExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
 import { Exercice } from '@/types/Exercices.types';
 
@@ -71,6 +71,8 @@ export default function ExerciceModalScreen({
 
   const handleUpdate = async () => {
     if (!route.params.id) return;
+    const exercice = { ...formData, isUnilateral } as Exercice;
+    dispatch(updateExercice(route.params.id, exercice));
 
     navigation.goBack();
   };
