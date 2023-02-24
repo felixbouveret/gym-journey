@@ -55,9 +55,7 @@ export default function ProgramBlock({
         key={sIndex}
         backgroundColor={'gray.50'}
         onPress={() => onSessionPress(session.id)}
-        rightAction={() => (
-          <Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />
-        )}
+        rightAction={<Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />}
       />
     ));
 

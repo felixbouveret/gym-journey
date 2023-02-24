@@ -16,20 +16,22 @@ import {
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
-import useStorage from '@/hooks/useStorage';
 import { RootState } from '@/store';
+import { createExercice } from '@/store/Exercices';
 import { ProgramSessionStep } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
+import { Exercice } from '@/types/Exercices.types';
 
 export default function ProgramsExerciceModal({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsExerciceModal'>) {
+  const dispatch = useDispatch();
   const { programs } = useSelector((state: RootState) => state.programs);
-  const { setStorageData, getStorageData } = useStorage();
+  const { exercices } = useSelector((state: RootState) => state.exercices);
   const { onAddSessionStep, onUpdateSessionStep } = usePrograms();
 
   const [isUnilateral, setIsUnilateral] = useState(false);
@@ -75,9 +77,8 @@ export default function ProgramsExerciceModal({
   };
 
   const handleExerciceDatabase = async () => {
-    const exercice = ((await getStorageData('exercices')) as []) || [];
-    if (!exercice.find((e: any) => e.name === formData.name))
-      await setStorageData('exercices', [{ name: formData.name, isUnilateral }, ...exercice]);
+    const step = { ...formData, isUnilateral } as Exercice;
+    if (!exercices.find((e: any) => e.name === formData.name)) dispatch(createExercice(step));
   };
 
   const handleSubmit = async () => {

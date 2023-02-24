@@ -5,8 +5,8 @@ import { ProgramSession, UID_V4 } from '@/store/Programs';
 
 interface SessionBlockProps {
   session: ProgramSession;
-  rightAction?: React.ReactNode;
-  footer?: React.ReactNode;
+  rightAction?: JSX.Element;
+  footer?: JSX.Element;
   onPress?: (id: UID_V4) => void;
   key: number | string;
   backgroundColor?: ColorType;
@@ -45,7 +45,7 @@ export default function SessionBlock({
                 <Text>{averageTime}"</Text>
               </Badge>
             </HStack>
-            {rightAction()}
+            {rightAction}
           </HStack>
           <VStack>
             {session.steps.length ? (

@@ -12,7 +12,6 @@ import * as React from 'react';
 
 import Colors from '@/constants/Colors';
 import useColorScheme from '@/hooks/useColorScheme';
-import ExerciceModalScreen from '@/screens/ExerciceModalScreen';
 import ExercicesScreen from '@/screens/ExercicesScreen';
 import HistoryScreen from '@/screens/HistoryScreen';
 import ModalScreen from '@/screens/ModalScreen';
@@ -45,11 +44,6 @@ function RootNavigator() {
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
-        <Stack.Screen
-          name="ExerciceModal"
-          component={ExerciceModalScreen}
-          options={{ title: 'Nouvel exercice' }}
-        />
       </Stack.Group>
     </Stack.Navigator>
   );
