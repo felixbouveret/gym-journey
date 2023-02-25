@@ -33,6 +33,10 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
     onChange(formData);
   }, [formData]);
 
+  useEffect(() => {
+    if (data && JSON.stringify(data) !== JSON.stringify(formData)) setFormData(data);
+  }, [data]);
+
   return (
     <VStack flex={1} w="full" space="4">
       <FormControl>

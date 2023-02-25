@@ -10,10 +10,25 @@ export enum ExerciceEquipment {
   OTHER = 'Other'
 }
 
+export enum ExerciceType {
+  NORMAL = 'Normal',
+  SUPERSET = 'Superset',
+  DROPSET = 'Dropset'
+}
+
 export interface Exercice {
   id: UID_V4;
   name: string;
   description?: string;
   isUnilateral: boolean;
   equipment?: ExerciceEquipment;
+}
+
+export interface NormalSetFormData {
+  name: string;
+  isUnilateral: boolean;
+  weight: string;
+  reps: string;
+  sets: string;
+  restTime: string;
 }

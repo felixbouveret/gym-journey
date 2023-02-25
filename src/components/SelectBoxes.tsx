@@ -20,13 +20,14 @@ export default function SelectBoxes<T>({ options, label, onChange }: SelectBoxes
         </Text>
       )}
       <HStack justifyContent={'space-between'} space="2">
-        {options.map(({ value, wording }) => (
+        {options.map(({ value, wording }, index) => (
           <Button
             flex="1"
             onPress={() => {
               setSelected(value);
               onChange(value);
             }}
+            key={index}
             variant={getVariant(value)}
           >
             {wording}

@@ -10,6 +10,7 @@ import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { setSessionSteps } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
+import { UID_V4 } from '@/types/Exercices.types';
 
 import SessionStep from './components/SessionStep';
 
@@ -28,7 +29,7 @@ export default function ProgramsCreationScreen({
 
   const sessionSteps = currentSession?.steps || [];
 
-  const onOptions = (exerciceName: string) =>
+  const onOptions = (id: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Annuler', 'Modifier', 'Supprimer'],
@@ -41,13 +42,13 @@ export default function ProgramsCreationScreen({
           return navigation.navigate('ProgramsExerciceModal', {
             programId: route.params.programId,
             sessionId: route.params.sessionId,
-            exerciceName
+            stepId: id
           });
         if (buttonIndex === 2)
           return onRemoveSessionStep({
             programId: route.params.programId,
             sessionId: route.params.sessionId,
-            stepName: exerciceName
+            stepId: id
           });
       }
     );
@@ -82,7 +83,7 @@ export default function ProgramsCreationScreen({
                 />
               </Box>
             )}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id as string}
             onDragEnd={({ data }) =>
               dispatch(setSessionSteps(route.params.programId, route.params.sessionId, data))
             }

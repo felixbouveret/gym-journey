@@ -174,13 +174,13 @@ export default function usePrograms() {
   const onRemoveSessionStep = ({
     programId,
     sessionId,
-    stepName
+    stepId
   }: {
     programId: UID_V4;
     sessionId: UID_V4;
-    stepName: string;
+    stepId: UID_V4;
   }) => {
-    dispatch(removeSessionStep(programId, sessionId, stepName));
+    dispatch(removeSessionStep(programId, sessionId, stepId));
   };
 
   return {
