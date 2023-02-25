@@ -1,17 +1,16 @@
 import { Button, HStack, Text, VStack } from 'native-base';
 import { useState } from 'react';
 
-interface SelectBoxesProps {
-  options: { wording: string; value: string | number | boolean }[];
-  onChange: (value: string | number | boolean) => void;
+interface SelectBoxesProps<T> {
+  options: { wording: string; value: T }[];
+  onChange: (value: T) => void;
   label?: string;
 }
 
-export default function SelectBoxes({ options, label, onChange }: SelectBoxesProps) {
-  const [selected, setSelected] = useState(options[0].value);
+export default function SelectBoxes<T>({ options, label, onChange }: SelectBoxesProps<T>) {
+  const [selected, setSelected] = useState<T>(options[0].value);
 
-  const getVariant = (value: string | number | boolean) =>
-    selected === value ? 'solid' : 'outline';
+  const getVariant = (value: T) => (selected === value ? 'solid' : 'outline');
 
   return (
     <VStack space="1">
