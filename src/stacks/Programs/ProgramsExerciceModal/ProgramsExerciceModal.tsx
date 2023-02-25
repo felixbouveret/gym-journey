@@ -22,6 +22,7 @@ import { ProgramsTabScreenProps } from '@/types';
 import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 import NormalSet from './components/NormalSet';
+import SuperSet from './components/Superset';
 
 export default function ProgramsExerciceModal({
   navigation,
@@ -40,14 +41,16 @@ export default function ProgramsExerciceModal({
   const { onCreateExercice } = useExercices();
 
   const [type, setType] = useState(ExerciceType.NORMAL);
-  const [normalSet, setNormalSet] = useState({
-    name: '',
-    isUnilateral: false,
-    weight: '',
-    reps: '',
-    sets: '',
-    restTime: ''
-  });
+  const [stepExercices, setStepExercies] = useState([
+    {
+      name: '',
+      weight: '',
+      reps: '',
+      isUnilateral: false
+    }
+  ]);
+  const [sets, setSets] = useState('');
+  const [restTime, setRestTime] = useState('');
 
   useEffect(() => {
     if (stepId) {
@@ -56,17 +59,17 @@ export default function ProgramsExerciceModal({
       const step = session?.steps.find((s) => s.id === stepId);
 
       if (step) {
-        if (step.type === ExerciceType.NORMAL) {
-          const globalExercice = exercices.find((e) => e.id === step.exercices[0].exerciceId);
-          setNormalSet({
+        setSets(step.setNumber);
+        setRestTime(step.restTime);
+        step.exercices.forEach(async (stepExercice, index) => {
+          const globalExercice = exercices.find((e) => e.id === stepExercice.exerciceId);
+          updateExercice(index, {
             name: globalExercice?.name || '',
             isUnilateral: globalExercice?.isUnilateral || false,
-            weight: step.exercices[0].weight,
-            reps: step.exercices[0].reps,
-            sets: step.setNumber,
-            restTime: step.restTime
+            weight: stepExercice.weight,
+            reps: stepExercice.reps
           });
-        }
+        });
       }
     }
 
@@ -84,28 +87,32 @@ export default function ProgramsExerciceModal({
   }, []);
 
   const submitNormalSet = async () => {
-    let exerciceId: UID_V4;
+    if (stepExercices.length <= 0) return;
+    const stepExercicesFormatted = await Promise.all(
+      stepExercices.map(async (e, index) => {
+        if (type === ExerciceType.NORMAL && index > 0) return;
+        let exerciceId: UID_V4;
+        const globalExercice = exercices.find((ex) => ex.name === e.name);
+        if (!globalExercice) {
+          exerciceId = await onCreateExercice({
+            name: e.name,
+            isUnilateral: e.isUnilateral
+          });
+        } else exerciceId = globalExercice.id;
 
-    const globalExercice = exercices.find((e) => e.name === normalSet.name);
-
-    if (globalExercice) exerciceId = globalExercice.id;
-    else
-      exerciceId = await onCreateExercice({
-        name: normalSet.name,
-        isUnilateral: normalSet.isUnilateral
-      });
+        return {
+          exerciceId: exerciceId,
+          weight: e.weight,
+          reps: e.reps
+        };
+      })
+    );
 
     const sessionStep = {
       type: ExerciceType.NORMAL,
-      setNumber: normalSet.sets,
-      restTime: normalSet.restTime,
-      exercices: [
-        {
-          weight: normalSet.weight,
-          reps: normalSet.reps,
-          exerciceId: exerciceId
-        }
-      ]
+      setNumber: sets,
+      restTime: restTime,
+      exercices: stepExercicesFormatted
     };
 
     if (!stepId) dispatch(addSessionStep(programId, sessionId, sessionStep));
@@ -113,17 +120,23 @@ export default function ProgramsExerciceModal({
   };
 
   const submit = async () => {
-    if (type === ExerciceType.NORMAL) await submitNormalSet();
+    await submitNormalSet();
     navigation.goBack();
   };
 
   const isValid = () => {
     if (type === ExerciceType.NORMAL) {
-      return Object.entries(normalSet).every(([k, value]) =>
+      return Object.entries(stepExercices[0]).every(([k, value]) =>
         k === 'isUnilateral' ? true : !!value
       );
     }
-    return false;
+    return true;
+  };
+
+  const updateExercice = (index: number, e: any) => {
+    const newExercices = [...stepExercices];
+    newExercices[index] = e;
+    setStepExercies(newExercices);
   };
 
   return (
@@ -133,13 +146,13 @@ export default function ProgramsExerciceModal({
     >
       <Pressable onPress={Keyboard.dismiss}>
         <VStack w="full" h="full" pb={46} space={8} alignItems="center" backgroundColor={'white'}>
-          <ScrollView w={'full'} scrollEnabled={isKeyboardVisible} overflow="visible">
+          <ScrollView w={'full'} overflow="visible">
             <VStack w="full" p="4" space={8} alignItems="center">
               <VStack w="full" space={2} alignItems="center" maxW={200}>
                 <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
                 <Heading textAlign={'center'}>Ajouter un nouvel exercice</Heading>
               </VStack>
-              <VStack w="full">
+              <VStack w="full" space={4}>
                 <SelectBoxes
                   label="Type d'exercice"
                   onChange={(e) => setType(e)}
@@ -154,10 +167,26 @@ export default function ProgramsExerciceModal({
                     }
                   ]}
                 />
+                {type === ExerciceType.NORMAL ? (
+                  <NormalSet
+                    data={stepExercices}
+                    sets={sets}
+                    restTime={restTime}
+                    onDataChange={updateExercice}
+                    onSetsChange={(e) => setSets(e)}
+                    onRestTimeChange={(e) => setRestTime(e)}
+                  />
+                ) : (
+                  <SuperSet
+                    data={stepExercices}
+                    sets={sets}
+                    restTime={restTime}
+                    onDataChange={updateExercice}
+                    onSetsChange={(e) => setSets(e)}
+                    onRestTimeChange={(e) => setRestTime(e)}
+                  />
+                )}
               </VStack>
-              {type === ExerciceType.NORMAL ? (
-                <NormalSet data={normalSet} onChange={(e) => setNormalSet(e)} />
-              ) : null}
             </VStack>
           </ScrollView>
           <Box px={4} w="full">

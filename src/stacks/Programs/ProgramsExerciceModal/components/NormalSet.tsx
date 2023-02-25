@@ -1,41 +1,26 @@
 import { Checkbox, FormControl, HStack, Input, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
 
 interface NormalSetFormData {
   name: string;
   isUnilateral: boolean;
   weight: string;
   reps: string;
-  sets: string;
-  restTime: string;
 }
 
 interface NormalSetProps {
-  data: NormalSetFormData | null;
-  onChange: (data: NormalSetFormData) => void;
+  sets: string;
+  restTime: string;
+  data: NormalSetFormData[] | [];
+  onDataChange: (index: number, data: NormalSetFormData) => void;
+  onSetsChange: (sets: string) => void;
+  onRestTimeChange: (restTime: string) => void;
 }
 
-export default function NormalSet({ data, onChange }: NormalSetProps) {
-  const [formData, setFormData] = useState<NormalSetFormData>({
-    name: data?.name || '',
-    isUnilateral: data?.isUnilateral || false,
-    weight: data?.weight || '',
-    reps: data?.reps || '',
-    sets: data?.sets || '',
-    restTime: data?.restTime || ''
-  });
-
+export default function NormalSet(props: NormalSetProps) {
   const setSingleFormData = (key: string, value: string | boolean) => {
-    setFormData({ ...formData, [key]: value });
+    const updatedSet = { ...props.data[0], [key]: value };
+    props.onDataChange(0, updatedSet);
   };
-
-  useEffect(() => {
-    onChange(formData);
-  }, [formData]);
-
-  useEffect(() => {
-    if (data && JSON.stringify(data) !== JSON.stringify(formData)) setFormData(data);
-  }, [data]);
 
   return (
     <VStack flex={1} w="full" space="4">
@@ -45,7 +30,7 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
         </FormControl.Label>
         <Input
           size={'xl'}
-          value={formData.name}
+          value={props.data[0].name}
           onChangeText={(e) => setSingleFormData('name', e)}
         />
       </FormControl>
@@ -56,9 +41,9 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
           </FormControl.Label>
           <Input
             size={'xl'}
-            value={formData.sets}
+            value={props.sets}
             keyboardType="decimal-pad"
-            onChangeText={(e) => setSingleFormData('sets', e)}
+            onChangeText={props.onSetsChange}
           />
         </FormControl>
         <FormControl flex={1}>
@@ -67,7 +52,7 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
           </FormControl.Label>
           <Input
             size={'xl'}
-            value={formData.reps}
+            value={props.data[0].reps}
             keyboardType="decimal-pad"
             onChangeText={(e) => setSingleFormData('reps', e)}
           />
@@ -80,7 +65,7 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
           </FormControl.Label>
           <Input
             size={'xl'}
-            value={formData.weight}
+            value={props.data[0].weight}
             keyboardType="decimal-pad"
             onChangeText={(e) => setSingleFormData('weight', e)}
           />
@@ -91,15 +76,15 @@ export default function NormalSet({ data, onChange }: NormalSetProps) {
           </FormControl.Label>
           <Input
             size={'xl'}
-            value={formData.restTime}
+            value={props.restTime}
             keyboardType="decimal-pad"
-            onChangeText={(e) => setSingleFormData('restTime', e)}
+            onChangeText={props.onRestTimeChange}
           />
         </FormControl>
       </HStack>
       <Checkbox
         value="isUnilateral"
-        isChecked={formData.isUnilateral}
+        isChecked={props.data[0].isUnilateral}
         onChange={(e) => setSingleFormData('isUnilateral', e)}
       >
         Exercice unilatéral
