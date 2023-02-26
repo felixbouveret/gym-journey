@@ -41,7 +41,7 @@ export default function ProgramsExerciceModal({
   const { onCreateExercice } = useExercices();
 
   const [type, setType] = useState(ExerciceType.NORMAL);
-  const [stepExercices, setStepExercies] = useState([
+  const [stepExercices, setStepExercices] = useState([
     {
       name: '',
       weight: '',
@@ -59,17 +59,19 @@ export default function ProgramsExerciceModal({
       const step = session?.steps.find((s) => s.id === stepId);
 
       if (step) {
+        setType(step.type);
         setSets(step.setNumber);
         setRestTime(step.restTime);
-        step.exercices.forEach(async (stepExercice, index) => {
+        const formattedExercices = step.exercices.map((stepExercice, index) => {
           const globalExercice = exercices.find((e) => e.id === stepExercice.exerciceId);
-          updateExercice(index, {
+          return {
             name: globalExercice?.name || '',
             isUnilateral: globalExercice?.isUnilateral || false,
             weight: stepExercice.weight,
             reps: stepExercice.reps
-          });
+          };
         });
+        setStepExercices(formattedExercices);
       }
     }
 
@@ -109,10 +111,10 @@ export default function ProgramsExerciceModal({
     );
 
     const sessionStep = {
-      type: ExerciceType.NORMAL,
+      type,
       setNumber: sets,
       restTime: restTime,
-      exercices: stepExercicesFormatted
+      exercices: stepExercicesFormatted || []
     };
 
     if (!stepId) dispatch(addSessionStep(programId, sessionId, sessionStep));
@@ -136,7 +138,7 @@ export default function ProgramsExerciceModal({
   const updateExercice = (index: number, e: any) => {
     const newExercices = [...stepExercices];
     newExercices[index] = e;
-    setStepExercies(newExercices);
+    setStepExercices(newExercices);
   };
 
   return (
@@ -155,6 +157,7 @@ export default function ProgramsExerciceModal({
               <VStack w="full" space={4}>
                 <SelectBoxes
                   label="Type d'exercice"
+                  selectedValue={type}
                   onChange={(e) => setType(e)}
                   options={[
                     {

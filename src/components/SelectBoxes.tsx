@@ -3,12 +3,18 @@ import { useState } from 'react';
 
 interface SelectBoxesProps<T> {
   options: { wording: string; value: T }[];
+  selectedValue: T;
   onChange: (value: T) => void;
   label?: string;
 }
 
-export default function SelectBoxes<T>({ options, label, onChange }: SelectBoxesProps<T>) {
-  const [selected, setSelected] = useState<T>(options[0].value);
+export default function SelectBoxes<T>({
+  options,
+  label,
+  selectedValue,
+  onChange
+}: SelectBoxesProps<T>) {
+  const [selected, setSelected] = useState<T>(selectedValue);
 
   const getVariant = (value: T) => (selected === value ? 'solid' : 'outline');
 
