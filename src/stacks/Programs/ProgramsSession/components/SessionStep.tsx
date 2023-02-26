@@ -31,8 +31,14 @@ export default function SessionStep({ item, onOptions, drag }: SessionStepProps)
           <Box w={1} h="100%" backgroundColor={'gray.100'} rounded="full" />
           {item.exercices.map((exercice, index) => (
             <VStack flex="1" space="2" key={index}>
-              <HStack alignItems="center" justifyContent={'space-between'}>
-                <Text fontSize={'xl'} fontWeight="medium">
+              <HStack alignItems="center" justifyContent={'space-between'} space="2">
+                <Text
+                  fontSize={'xl'}
+                  fontWeight="medium"
+                  lineBreakMode="head"
+                  numberOfLines={1}
+                  flex="1"
+                >
                   {exercices.find((exerciceItem) => exerciceItem.id === exercice.exerciceId)?.name}
                 </Text>
                 <Text fontSize={'xl'}>{exercice.weight} kg</Text>

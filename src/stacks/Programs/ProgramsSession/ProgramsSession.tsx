@@ -10,9 +10,10 @@ import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { setSessionSteps } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
-import { UID_V4 } from '@/types/Exercices.types';
+import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 import SessionStep from './components/SessionStep';
+import SessionStepSuperset from './components/SessionStepSuperset';
 
 export default function ProgramsCreationScreen({
   navigation,
@@ -73,14 +74,25 @@ export default function ProgramsCreationScreen({
             data={sessionSteps}
             renderItem={({ item, drag }) => (
               <Box pb="4">
-                <SessionStep
-                  drag={() => {
-                    drag();
-                    Haptics.impactAsync();
-                  }}
-                  item={item}
-                  onOptions={onOptions}
-                />
+                {item.type === ExerciceType.NORMAL ? (
+                  <SessionStep
+                    drag={() => {
+                      drag();
+                      Haptics.impactAsync();
+                    }}
+                    item={item}
+                    onOptions={onOptions}
+                  />
+                ) : (
+                  <SessionStepSuperset
+                    drag={() => {
+                      drag();
+                      Haptics.impactAsync();
+                    }}
+                    item={item}
+                    onOptions={onOptions}
+                  />
+                )}
               </Box>
             )}
             keyExtractor={(item) => item.id as string}

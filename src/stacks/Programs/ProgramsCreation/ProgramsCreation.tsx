@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Button, Icon, VStack } from 'native-base';
+import { Box, Button, Icon, ScrollView, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -47,43 +47,41 @@ export default function ProgramsCreationScreen({
     );
 
   return (
-    <VStack
-      justifyContent={currentProgram?.sessions.length ? '' : 'flex-end'}
-      h="full"
-      w="full"
-      p={4}
-      space="4"
-    >
-      {currentProgram?.sessions.length ? (
-        <VStack flex={1} w="full" space="4">
-          {currentProgram.sessions.map((session, index) => (
-            <SessionBlock
-              session={session}
-              key={index}
-              onOptionsPress={onProgramOptionsPress}
-              onPress={(id) =>
-                navigation.navigate('ProgramsSession', {
-                  programId: route.params.id,
-                  sessionId: id
-                })
-              }
-              onEditPress={(id) =>
-                navigation.navigate('ProgramsSession', {
-                  programId: route.params.id,
-                  sessionId: id
-                })
-              }
-            />
-          ))}
-        </VStack>
-      ) : null}
-      <Button
-        w="full"
-        leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-        onPress={() => onCreateSession(route.params.id)}
-      >
-        Ajouter une séance
-      </Button>
+    <VStack h="full" w="full">
+      <ScrollView>
+        {currentProgram?.sessions.length ? (
+          <VStack flex={1} w="full" space="4" p={4}>
+            {currentProgram.sessions.map((session, index) => (
+              <SessionBlock
+                session={session}
+                key={index}
+                onOptionsPress={onProgramOptionsPress}
+                onPress={(id) =>
+                  navigation.navigate('ProgramsSession', {
+                    programId: route.params.id,
+                    sessionId: id
+                  })
+                }
+                onEditPress={(id) =>
+                  navigation.navigate('ProgramsSession', {
+                    programId: route.params.id,
+                    sessionId: id
+                  })
+                }
+              />
+            ))}
+          </VStack>
+        ) : null}
+      </ScrollView>
+      <Box p={4} pt="0">
+        <Button
+          w="full"
+          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+          onPress={() => onCreateSession(route.params.id)}
+        >
+          Ajouter une séance
+        </Button>
+      </Box>
     </VStack>
   );
 }
