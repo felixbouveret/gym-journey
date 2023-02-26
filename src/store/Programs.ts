@@ -1,19 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uuid from 'react-native-uuid';
 
+import { ExerciceType } from '@/types/Exercices.types';
+
 export enum ProgramStatus {
   ACTIVE = 'active',
   ARCHIVED = 'archived',
   DRAFT = 'draft'
 }
 export type UID_V4 = string | number[];
-export interface ProgramSessionStep {
-  name: string;
-  setNumber: string;
+export interface StepExercice {
+  exerciceId: UID_V4;
   weight: string;
-  restTime: string;
   reps: string;
-  isUnilateral: boolean;
+}
+export interface ProgramSessionStep {
+  id: UID_V4;
+  exercices: StepExercice[];
+  setNumber: string;
+  restTime: string;
+  type: ExerciceType;
 }
 export interface ProgramSession {
   id: UID_V4;
@@ -144,13 +150,18 @@ export const roomsStore = createSlice({
     addSessionStep: {
       reducer(
         state,
-        action: PayloadAction<{ programId: UID_V4; sessionId: UID_V4; step: ProgramSessionStep }>
+        action: PayloadAction<{
+          programId: UID_V4;
+          sessionId: UID_V4;
+          step: Omit<ProgramSessionStep, 'id'>;
+        }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
         const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
-        if (session) session.steps.push(action.payload.step);
+        const stepId = uuid.v4();
+        if (session) session.steps.push({ id: stepId, ...action.payload.step });
       },
-      prepare(programId: UID_V4, sessionId: UID_V4, step: ProgramSessionStep) {
+      prepare(programId: UID_V4, sessionId: UID_V4, step: Omit<ProgramSessionStep, 'id'>) {
         return { payload: { programId, sessionId, step } };
       }
     },
@@ -161,20 +172,25 @@ export const roomsStore = createSlice({
         action: PayloadAction<{
           programId: UID_V4;
           sessionId: UID_V4;
-          stepName: string;
-          step: ProgramSessionStep;
+          stepId: UID_V4;
+          step: Omit<ProgramSessionStep, 'id'>;
         }>
       ) {
         //update a session step
         const program = state.programs.find((p) => p.id === action.payload.programId);
         const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
-        const stepIndex = session?.steps.findIndex((s) => s.name === action.payload.stepName);
+        const stepIndex = session?.steps.findIndex((s) => s.id === action.payload.stepId);
 
         if (stepIndex !== undefined && stepIndex !== -1 && !!session)
-          session.steps[stepIndex] = { ...action.payload.step };
+          session.steps[stepIndex] = { id: action.payload.stepId, ...action.payload.step };
       },
-      prepare(programId: UID_V4, sessionId: UID_V4, stepName: string, step: ProgramSessionStep) {
-        return { payload: { programId, sessionId, stepName, step } };
+      prepare(
+        programId: UID_V4,
+        sessionId: UID_V4,
+        stepId: UID_V4,
+        step: Omit<ProgramSessionStep, 'id'>
+      ) {
+        return { payload: { programId, sessionId, stepId, step } };
       }
     },
 
@@ -184,18 +200,18 @@ export const roomsStore = createSlice({
         action: PayloadAction<{
           programId: UID_V4;
           sessionId: UID_V4;
-          stepName: string;
+          stepId: UID_V4;
         }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
         const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
-        const stepIndex = session?.steps.findIndex((s) => s.name === action.payload.stepName);
+        const stepIndex = session?.steps.findIndex((s) => s.id === action.payload.stepId);
 
         if (stepIndex !== undefined && stepIndex !== -1 && !!session)
           session.steps.splice(stepIndex, 1);
       },
-      prepare(programId: UID_V4, sessionId: UID_V4, stepName: string) {
-        return { payload: { programId, sessionId, stepName } };
+      prepare(programId: UID_V4, sessionId: UID_V4, stepId: UID_V4) {
+        return { payload: { programId, sessionId, stepId } };
       }
     },
 

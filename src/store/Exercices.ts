@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import uuid from 'react-native-uuid';
 
 import { Exercice } from '@/types/Exercices.types';
 
@@ -25,19 +24,10 @@ export const roomsStore = createSlice({
     },
 
     createExercice: {
-      reducer(
-        state,
-        action: PayloadAction<{ name: string; description?: string; isUnilateral: boolean }>
-      ) {
-        const exerciceId = uuid.v4();
-        state.exercices.push({
-          id: exerciceId,
-          name: action.payload.name,
-          description: action.payload.description,
-          isUnilateral: action.payload.isUnilateral
-        });
+      reducer(state, action: PayloadAction<Exercice>) {
+        state.exercices.push(action.payload);
       },
-      prepare(exercice: { name: string; description?: string; isUnilateral: boolean }) {
+      prepare(exercice: Exercice) {
         return { payload: exercice };
       }
     },

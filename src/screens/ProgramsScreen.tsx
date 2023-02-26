@@ -58,6 +58,7 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
           name="ProgramsExerciceModal"
           component={ProgramsExerciceModal}
           options={{
+            gestureEnabled: false,
             header: ({ navigation }) => (
               <HStack backgroundColor={'white'} justifyContent="flex-end" py={2} px={4}>
                 <Button onPress={navigation.goBack} variant={'unstyled'}>
