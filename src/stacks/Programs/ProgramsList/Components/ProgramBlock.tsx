@@ -21,6 +21,7 @@ export default function ProgramBlock({
   onEditPress
 }: ProgramBlockProps) {
   const isDraft = program.status === ProgramStatus.DRAFT;
+  const isArchived = program.status === ProgramStatus.ARCHIVED;
 
   const programStatus = (): { wording: string; colorScheme: ColorSchemeType } | void => {
     if (program.status === ProgramStatus.DRAFT)
@@ -33,42 +34,60 @@ export default function ProgramBlock({
 
   const EditingProgramSessionList = () => {
     return program.sessions.length ? (
-      program.sessions.map((session, sIndex) => (
-        <HStack key={`${key}-${sIndex}`} justifyContent="space-between">
-          <Text fontSize={'md'} color="gray.500">
-            {session.name}
-          </Text>
-          <Text fontSize={'md'} color="gray.500">
-            {session.steps.length} exercice
-          </Text>
-        </HStack>
-      ))
+      <VStack space="2">
+        {program.sessions.map((session, sIndex) => (
+          <HStack key={`${key}-${sIndex}`} justifyContent="space-between">
+            <Text fontSize={'md'} color="gray.500">
+              {session.name}
+            </Text>
+            <Text fontSize={'md'} color="gray.500">
+              {session.steps.length} exercice
+            </Text>
+          </HStack>
+        ))}
+      </VStack>
     ) : (
       <Text>Pas encore de séance</Text>
     );
   };
 
-  const ActiveProgramSessionList = () =>
-    program.sessions.map((session, sIndex) => (
-      <SessionBlock
-        session={session}
-        key={sIndex}
-        backgroundColor={'gray.50'}
-        onPress={() => onSessionPress(session.id)}
-        rightAction={<Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />}
-      />
-    ));
+  const ActiveProgramSessionList = () => (
+    <VStack space="2">
+      {program.sessions.map((session, sIndex) => (
+        <SessionBlock
+          session={session}
+          key={sIndex}
+          backgroundColor={'gray.50'}
+          onPress={() => onSessionPress(session.id)}
+          rightAction={
+            <Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />
+          }
+        />
+      ))}
+    </VStack>
+  );
+
+  const ProgramSessionList = () => {
+    if (isArchived) return null;
+    if (isDraft) return EditingProgramSessionList();
+    return ActiveProgramSessionList();
+  };
 
   return (
     <Pressable w="full" onPress={isDraft ? onEditPress : null}>
       <VStack w="full" backgroundColor="white" rounded={8} overflow="hidden" p={4} space="4">
         <VStack w="full" space="4">
           <HStack justifyContent={'space-between'}>
-            <HStack space={2} justifyContent={'space-between'}>
+            <HStack space={2} justifyContent={'space-between'} alignItems="center">
               <Text fontSize={'lg'} color="gray.700" fontWeight={'medium'}>
                 {program.name}
               </Text>
               <Badge colorScheme={programStatus()?.colorScheme}>{programStatus()?.wording}</Badge>
+              {isArchived && (
+                <Text textAlign={'right'} color="gray.500">
+                  {program.sessions.length} séances
+                </Text>
+              )}
             </HStack>
             <IconButton
               size="sm"
@@ -81,9 +100,7 @@ export default function ProgramBlock({
               }}
             />
           </HStack>
-          <VStack space={4}>
-            {isDraft ? EditingProgramSessionList() : ActiveProgramSessionList()}
-          </VStack>
+          {ProgramSessionList()}
         </VStack>
         {isDraft && <Button onPress={onEditPress}> Éditer le programme </Button>}
       </VStack>
