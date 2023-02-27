@@ -46,6 +46,13 @@ export default function ProgramsCreationScreen({
       }
     );
 
+  const goToSession = (id: UID_V4) => {
+    navigation.navigate('ProgramsSession', {
+      programId: route.params.id,
+      sessionId: id
+    });
+  };
+
   return (
     <VStack h="full" w="full">
       <ScrollView>
@@ -56,18 +63,8 @@ export default function ProgramsCreationScreen({
                 session={session}
                 key={index}
                 onOptionsPress={onProgramOptionsPress}
-                onPress={(id) =>
-                  navigation.navigate('ProgramsSession', {
-                    programId: route.params.id,
-                    sessionId: id
-                  })
-                }
-                onEditPress={(id) =>
-                  navigation.navigate('ProgramsSession', {
-                    programId: route.params.id,
-                    sessionId: id
-                  })
-                }
+                onPress={(id) => goToSession(id)}
+                onEditPress={(id) => goToSession(id)}
               />
             ))}
           </VStack>
@@ -77,7 +74,7 @@ export default function ProgramsCreationScreen({
         <Button
           w="full"
           leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => onCreateSession(route.params.id)}
+          onPress={() => onCreateSession(route.params.id, goToSession)}
         >
           Ajouter une séance
         </Button>

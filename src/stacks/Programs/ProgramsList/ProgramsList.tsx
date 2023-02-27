@@ -1,4 +1,4 @@
-import { VStack } from 'native-base';
+import { ScrollView, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -36,27 +36,33 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
     );
 
   return (
-    <VStack
-      justifyContent={programs.length ? '' : 'flex-end'}
-      alignItems="center"
-      h="full"
-      w="full"
-      p={4}
-      space="4"
-    >
-      {programs.length ? (
-        programs.map((program, index) => (
-          <ProgramBlock
-            program={program}
-            key={index}
-            onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
-            onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
-            onSessionPress={() => navigation.navigate('Training')}
+    <ScrollView>
+      <VStack
+        justifyContent={programs.length ? '' : 'flex-end'}
+        alignItems="center"
+        h="full"
+        w="full"
+        p={4}
+        space="4"
+      >
+        {programs.length ? (
+          programs.map((program, index) => (
+            <ProgramBlock
+              program={program}
+              key={index}
+              onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
+              onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
+              onSessionPress={() => navigation.navigate('Training')}
+            />
+          ))
+        ) : (
+          <ProgramBlockPlaceholder
+            onPress={() => {
+              onCreateProgram((id) => navigation.navigate('ProgramsCreation', { id }));
+            }}
           />
-        ))
-      ) : (
-        <ProgramBlockPlaceholder onPress={onCreateProgram} />
-      )}
-    </VStack>
+        )}
+      </VStack>
+    </ScrollView>
   );
 }

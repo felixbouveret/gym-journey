@@ -19,12 +19,14 @@ export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>)
       <Stack.Screen
         name="Programs"
         component={ProgramsList}
-        options={() => ({
+        options={({ navigation }) => ({
           headerRight: () => (
             <IconButton
               size="sm"
               variant={'solid'}
-              onPress={onCreateProgram}
+              onPress={() =>
+                onCreateProgram((id) => navigation.navigate('ProgramsCreation', { id }))
+              }
               _icon={{
                 as: Ionicons,
                 name: 'add'

@@ -53,17 +53,16 @@ export const roomsStore = createSlice({
     },
 
     createProgram: {
-      reducer(state, action: PayloadAction<{ name: string }>) {
-        const programId = uuid.v4();
+      reducer(state, action: PayloadAction<{ name: string; id: UID_V4 }>) {
         state.programs.push({
-          id: programId,
+          id: action.payload.id,
           name: action.payload.name,
           sessions: [],
           status: ProgramStatus.DRAFT
         });
       },
-      prepare(name: string) {
-        return { payload: { name } };
+      prepare(name: string, id: UID_V4) {
+        return { payload: { name, id } };
       }
     },
 
@@ -107,18 +106,21 @@ export const roomsStore = createSlice({
     },
 
     createSession: {
-      reducer(state, action: PayloadAction<{ programId: UID_V4; name: string }>) {
+      reducer(
+        state,
+        action: PayloadAction<{ programId: UID_V4; sessionId: UID_V4; name: string }>
+      ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
         if (program) {
           program.sessions.push({
-            id: uuid.v4(),
+            id: action.payload.sessionId,
             name: action.payload.name,
             steps: []
           });
         }
       },
-      prepare(programId: UID_V4, name: string) {
-        return { payload: { programId, name } };
+      prepare(programId: UID_V4, sessionId: UID_V4, name: string) {
+        return { payload: { programId, name, sessionId } };
       }
     },
 
