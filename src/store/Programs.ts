@@ -86,6 +86,16 @@ export const roomsStore = createSlice({
       }
     },
 
+    restoreProgram: {
+      reducer(state, action: PayloadAction<{ id: UID_V4 }>) {
+        const program = state.programs.find((p) => p.id === action.payload.id);
+        if (program) program.status = ProgramStatus.DRAFT;
+      },
+      prepare(id: UID_V4) {
+        return { payload: { id } };
+      }
+    },
+
     deleteProgram: {
       reducer(state, action: PayloadAction<{ id: UID_V4 }>) {
         state.programs = state.programs.filter((program) => program.id !== action.payload.id);
@@ -250,7 +260,8 @@ export const {
   addSessionStep,
   updateSessionStep,
   removeSessionStep,
-  setSessionSteps
+  setSessionSteps,
+  restoreProgram
 } = roomsStore.actions;
 
 export default roomsStore.reducer;

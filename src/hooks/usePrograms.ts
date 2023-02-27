@@ -13,6 +13,7 @@ import {
   removeSessionStep,
   renameProgram,
   renameSession,
+  restoreProgram,
   UID_V4,
   updateSessionStep,
   validateProgram
@@ -66,6 +67,22 @@ export default function usePrograms() {
         text: 'Archiver',
         onPress: () => {
           dispatch(archiveProgram(id));
+          callback?.();
+        }
+      }
+    ]);
+  };
+
+  const onRestorProgram = (id: UID_V4, callback?: () => void) => {
+    Alert.alert('Restaurer', '', [
+      {
+        text: 'Annuler',
+        style: 'cancel'
+      },
+      {
+        text: 'Restaurer',
+        onPress: () => {
+          dispatch(restoreProgram(id));
           callback?.();
         }
       }
@@ -201,6 +218,7 @@ export default function usePrograms() {
     onUpdateSession,
     onAddSessionStep,
     onUpdateSessionStep,
-    onRemoveSessionStep
+    onRemoveSessionStep,
+    onRestorProgram
   };
 }

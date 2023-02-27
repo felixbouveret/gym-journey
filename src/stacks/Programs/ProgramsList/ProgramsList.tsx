@@ -12,14 +12,15 @@ import ProgramBlockPlaceholder from './Components/ProgramBlockPlaceholder';
 
 export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps<'Programs'>) {
   const { programs } = useSelector((state: RootState) => state.programs);
-  const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram } = usePrograms();
+  const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
+    usePrograms();
 
   const onProgramOptionsPress = (id: UID_V4, status: ProgramStatus) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [
           'Annuler',
-          'Modifier',
+          status === ProgramStatus.ARCHIVED ? 'Restaurer' : 'Modifier',
           status === ProgramStatus.ACTIVE ? 'Archiver' : 'Renommer',
           'Supprimer'
         ],
@@ -28,7 +29,10 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
       },
       (buttonIndex) => {
         if (buttonIndex === 0) return;
-        if (buttonIndex === 1) return navigation.navigate('ProgramsCreation', { id: id });
+        if (buttonIndex === 1)
+          return status === ProgramStatus.ARCHIVED
+            ? onRestorProgram(id)
+            : navigation.navigate('ProgramsCreation', { id: id });
         if (buttonIndex === 2)
           return status === ProgramStatus.ACTIVE ? onArchiveProgram(id) : onUpdateProgram(id);
         if (buttonIndex === 3) return onDeleteProgram(id);
