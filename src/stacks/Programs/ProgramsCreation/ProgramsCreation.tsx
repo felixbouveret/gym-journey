@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Box, Button, Icon, ScrollView, VStack } from 'native-base';
+import * as Haptics from 'expo-haptics';
+import { Box, Button, Icon, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
-import { useSelector } from 'react-redux';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import { useDispatch, useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
-import { UID_V4 } from '@/store/Programs';
+import { setSessions, UID_V4 } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 
 import SessionBlock from './Components/SessionBlock';
@@ -15,6 +17,8 @@ export default function ProgramsCreationScreen({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsCreation'>) {
+  const dispatch = useDispatch();
+
   const { programs } = useSelector((state: RootState) => state.programs);
 
   const currentProgram = programs.find((program) => program.id === route.params.id);
@@ -55,21 +59,30 @@ export default function ProgramsCreationScreen({
 
   return (
     <VStack h="full" w="full">
-      <ScrollView>
-        {currentProgram?.sessions.length ? (
-          <VStack flex={1} w="full" space="4" p={4}>
-            {currentProgram.sessions.map((session, index) => (
-              <SessionBlock
-                session={session}
-                key={index}
-                onOptionsPress={onProgramOptionsPress}
-                onPress={(id) => goToSession(id)}
-                onEditPress={(id) => goToSession(id)}
-              />
-            ))}
-          </VStack>
-        ) : null}
-      </ScrollView>
+      {currentProgram?.sessions.length ? (
+        <DraggableFlatList
+          style={{ width: '100%', padding: 16 }}
+          data={currentProgram.sessions}
+          renderItem={({ item, drag }) => (
+            <Box pb="4">
+              <ScaleDecorator>
+                <SessionBlock
+                  session={item}
+                  onOptionsPress={onProgramOptionsPress}
+                  onPress={(id) => goToSession(id)}
+                  onEditPress={(id) => goToSession(id)}
+                  onLongPress={() => {
+                    drag();
+                    Haptics.impactAsync();
+                  }}
+                />
+              </ScaleDecorator>
+            </Box>
+          )}
+          keyExtractor={(item) => item.id as string}
+          onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
+        />
+      ) : null}
       <Box p={4} pt="0">
         <Button
           w="full"

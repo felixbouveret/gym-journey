@@ -12,16 +12,16 @@ interface SessionBlockProps {
   onOptionsPress?: (id: UID_V4) => void;
   onEditPress?: (id: UID_V4) => void;
   onPress?: (id: UID_V4) => void;
-  key: number | string;
+  onLongPress?: () => void;
   backgroundColor?: ColorType;
 }
 
 export default function SessionBlock({
   session,
   onOptionsPress,
-  key,
   onEditPress,
   onPress,
+  onLongPress,
   backgroundColor
 }: SessionBlockProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
@@ -67,7 +67,7 @@ export default function SessionBlock({
   };
 
   return (
-    <Pressable w="full" onPress={() => onPress && onPress(session.id)}>
+    <Pressable w="full" onPress={() => onPress && onPress(session.id)} onLongPress={onLongPress}>
       <VStack
         w="full"
         backgroundColor={backgroundColor || 'white'}
@@ -102,7 +102,7 @@ export default function SessionBlock({
           <VStack>
             {session.steps.length ? (
               session.steps.map((step, sIndex) => (
-                <HStack justifyContent={'space-between'} key={`${key}-${sIndex}`}>
+                <HStack justifyContent={'space-between'} key={sIndex}>
                   {exercice(step)}
                 </HStack>
               ))
