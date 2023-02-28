@@ -11,7 +11,6 @@ import { Icon } from 'native-base';
 import * as React from 'react';
 
 import Colors from '@/constants/Colors';
-import useColorScheme from '@/hooks/useColorScheme';
 import ExercicesScreen from '@/screens/ExercicesScreen';
 import HistoryScreen from '@/screens/HistoryScreen';
 import NotFoundScreen from '@/screens/NotFoundScreen';
@@ -52,13 +51,13 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
       initialRouteName="ProgramsScreen"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint
+        tabBarActiveTintColor: Colors.light.tint
       }}
     >
       <BottomTab.Screen
