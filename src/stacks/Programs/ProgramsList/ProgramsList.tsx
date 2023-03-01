@@ -1,4 +1,4 @@
-import { ScrollView, VStack } from 'native-base';
+import { Box, ScrollView, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -40,33 +40,40 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
     );
 
   return (
-    <ScrollView>
-      <VStack
-        justifyContent={programs.length ? '' : 'flex-end'}
-        alignItems="center"
-        h="full"
-        w="full"
-        p={4}
-        space="4"
-      >
-        {programs.length ? (
-          programs.map((program, index) => (
-            <ProgramBlock
-              program={program}
-              key={index}
-              onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
-              onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
-              onSessionPress={() => navigation.navigate('Training')}
-            />
-          ))
-        ) : (
+    <VStack h="full" justifyContent={programs?.length ? '' : 'flex-end'}>
+      <ScrollView>
+        <VStack
+          justifyContent={programs.length ? '' : 'flex-end'}
+          alignItems="center"
+          h="full"
+          w="full"
+          p={4}
+          space="4"
+        >
+          {programs.length
+            ? programs.map((program, index) => (
+                <ProgramBlock
+                  program={program}
+                  key={index}
+                  onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
+                  onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
+                  onSessionPress={(sessionId) =>
+                    navigation.navigate('Training', { programId: program.id, sessionId })
+                  }
+                />
+              ))
+            : null}
+        </VStack>
+      </ScrollView>
+      {!programs.length && (
+        <Box p={4}>
           <ProgramBlockPlaceholder
             onPress={() => {
               onCreateProgram((id) => navigation.navigate('ProgramsCreation', { id }));
             }}
           />
-        )}
-      </VStack>
-    </ScrollView>
+        </Box>
+      )}
+    </VStack>
   );
 }

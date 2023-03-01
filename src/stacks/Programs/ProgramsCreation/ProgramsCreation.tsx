@@ -59,30 +59,32 @@ export default function ProgramsCreationScreen({
 
   return (
     <VStack h="full" w="full">
-      {currentProgram?.sessions.length ? (
-        <DraggableFlatList
-          style={{ width: '100%', padding: 16 }}
-          data={currentProgram.sessions}
-          renderItem={({ item, drag }) => (
-            <Box pb="4">
-              <ScaleDecorator>
-                <SessionBlock
-                  session={item}
-                  onOptionsPress={onProgramOptionsPress}
-                  onPress={(id) => goToSession(id)}
-                  onEditPress={(id) => goToSession(id)}
-                  onLongPress={() => {
-                    drag();
-                    Haptics.impactAsync();
-                  }}
-                />
-              </ScaleDecorator>
-            </Box>
-          )}
-          keyExtractor={(item) => item.id as string}
-          onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
-        />
-      ) : null}
+      <VStack flex="1">
+        {currentProgram?.sessions.length ? (
+          <DraggableFlatList
+            style={{ width: '100%', paddingTop: 16 }}
+            data={currentProgram.sessions}
+            renderItem={({ item, drag, getIndex }) => (
+              <Box p={4} pt={0} pb={getIndex() === currentProgram.sessions.length - 1 ? 8 : 4}>
+                <ScaleDecorator>
+                  <SessionBlock
+                    session={item}
+                    onOptionsPress={onProgramOptionsPress}
+                    onPress={(id) => goToSession(id)}
+                    onEditPress={(id) => goToSession(id)}
+                    onLongPress={() => {
+                      drag();
+                      Haptics.impactAsync();
+                    }}
+                  />
+                </ScaleDecorator>
+              </Box>
+            )}
+            keyExtractor={(item) => item.id as string}
+            onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
+          />
+        ) : null}
+      </VStack>
       <Box p={4} pt="0">
         <Button
           w="full"
