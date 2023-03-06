@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { Box, Button, Icon, Text, VStack } from 'native-base';
+import { Box, Button, Icon, Pressable, Text, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
@@ -74,25 +74,22 @@ export default function ProgramsCreationScreen({
             data={sessionSteps}
             renderItem={({ item, drag }) => (
               <Box pb="4">
-                {item.type === ExerciceType.NORMAL ? (
-                  <SessionStep
-                    drag={() => {
+                <ScaleDecorator>
+                  <Pressable
+                    onLongPress={() => {
                       drag();
                       Haptics.impactAsync();
                     }}
-                    item={item}
-                    onOptions={onOptions}
-                  />
-                ) : (
-                  <SessionStepSuperset
-                    drag={() => {
-                      drag();
-                      Haptics.impactAsync();
-                    }}
-                    item={item}
-                    onOptions={onOptions}
-                  />
-                )}
+                    w="full"
+                    flex="1"
+                  >
+                    {item.type === ExerciceType.NORMAL ? (
+                      <SessionStep item={item} onOptions={onOptions} isDraggable />
+                    ) : (
+                      <SessionStepSuperset item={item} onOptions={onOptions} isDraggable />
+                    )}
+                  </Pressable>
+                </ScaleDecorator>
               </Box>
             )}
             keyExtractor={(item) => item.id as string}

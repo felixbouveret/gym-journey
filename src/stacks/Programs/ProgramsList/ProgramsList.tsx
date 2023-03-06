@@ -58,7 +58,10 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
                   onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
                   onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
                   onSessionPress={(sessionId) =>
-                    navigation.navigate('Training', { programId: program.id, sessionId })
+                    navigation.navigate('Training', {
+                      screen: 'SessionRecap',
+                      params: { programId: program.id, sessionId }
+                    })
                   }
                 />
               ))
