@@ -3,8 +3,9 @@ import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import usePrograms from '@/hooks/usePrograms';
+import useTraining from '@/hooks/useTraining';
 import { RootState } from '@/store';
-import { ProgramStatus, UID_V4 } from '@/store/Programs';
+import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 
 import ProgramBlock from './Components/ProgramBlock';
@@ -14,6 +15,7 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
   const { programs } = useSelector((state: RootState) => state.programs);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
     usePrograms();
+  const { onTrainingInit } = useTraining();
 
   const onProgramOptionsPress = (id: UID_V4, status: ProgramStatus) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -39,6 +41,13 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
       }
     );
 
+  const onProgramPress = (programId: UID_V4, session: ProgramSession) => {
+    onTrainingInit(programId, session);
+    navigation.navigate('Training', {
+      screen: 'SessionRecap'
+    });
+  };
+
   return (
     <VStack h="full" justifyContent={programs?.length ? '' : 'flex-end'}>
       <ScrollView>
@@ -57,12 +66,7 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
                   key={index}
                   onOptionsPress={() => onProgramOptionsPress(program.id, program.status)}
                   onEditPress={() => navigation.navigate('ProgramsCreation', { id: program.id })}
-                  onSessionPress={(sessionId) =>
-                    navigation.navigate('Training', {
-                      screen: 'SessionRecap',
-                      params: { programId: program.id, sessionId }
-                    })
-                  }
+                  onSessionPress={(session) => onProgramPress(program.id, session)}
                 />
               ))
             : null}

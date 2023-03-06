@@ -2,6 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ProgramSessionStep, UID_V4 } from './Programs';
 
+export enum TrainingStateEnum {
+  NOT_STARTED = 'NOT_STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FINISHED = 'FINISHED'
+}
+
 type lift = {
   weight: string;
   reps: string;
@@ -24,7 +30,9 @@ export interface Training {
   id: UID_V4;
   programId: UID_V4;
   sessionId: UID_V4;
-  startedAt: Date;
+  sessionName: string;
+  startedAt: string | null;
+  state: TrainingStateEnum;
   steps: TrainingStep[];
 }
 
@@ -47,30 +55,16 @@ export const roomsStore = createSlice({
       }
     },
     initTraining: {
-      reducer(
-        state,
-        action: PayloadAction<{
-          trainingId: UID_V4;
-          programId: UID_V4;
-          sessionId: UID_V4;
-          steps: TrainingStep[];
-        }>
-      ) {
-        state.training = {
-          id: action.payload.trainingId,
-          programId: action.payload.programId,
-          sessionId: action.payload.sessionId,
-          startedAt: new Date(),
-          steps: action.payload.steps
-        };
+      reducer(state, action: PayloadAction<Training>) {
+        state.training = action.payload;
       },
-      prepare(trainingId: UID_V4, programId: UID_V4, sessionId: UID_V4, steps: TrainingStep[]) {
-        return { payload: { trainingId, programId, sessionId, steps } };
+      prepare(training: Training) {
+        return { payload: training };
       }
     }
   }
 });
 
-export const { setState } = roomsStore.actions;
+export const { setState, initTraining } = roomsStore.actions;
 
 export default roomsStore.reducer;
