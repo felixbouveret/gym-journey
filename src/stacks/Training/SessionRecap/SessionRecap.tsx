@@ -27,37 +27,45 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
   return (
     <ScrollView>
       <VStack w="full" h="full" justifyContent="center" px={4}>
-        <HStack space={4} pt={8}>
-          <VStack
-            rounded={8}
-            p={4}
-            flex={1}
-            backgroundColor="gray.200"
-            borderColor={'gray.400'}
-            borderWidth={2}
-            alignItems="center"
-          >
-            <Icon as={Ionicons} name="stopwatch-outline" size={8} />
-            <Text color={'gray.500'} fontSize="xl" textAlign={'center'}>
-              ~{averageTime} minutes
-            </Text>
-          </VStack>
-          <VStack
-            rounded={8}
-            p={4}
-            flex={1}
-            backgroundColor="gray.200"
-            borderColor={'gray.400'}
-            borderWidth={2}
-            alignItems="center"
-          >
-            <Icon as={Ionicons} name="albums-outline" size={8} />
-            <Text color={'gray.500'} fontSize="xl" textAlign={'center'}>
-              {training.steps.length} exercices
-            </Text>
-          </VStack>
-        </HStack>
+        <VStack space={4} pb={4} pt={8}>
+          <Text fontSize={'md'} fontWeight="medium">
+            Informations
+          </Text>
+          <HStack space={4}>
+            <VStack
+              rounded={8}
+              p={4}
+              flex={1}
+              backgroundColor="gray.200"
+              borderColor={'gray.400'}
+              borderWidth={2}
+              alignItems="center"
+            >
+              <Icon as={Ionicons} name="stopwatch-outline" size={8} />
+              <Text color={'gray.500'} fontSize="xl" textAlign={'center'}>
+                ~{averageTime} minutes
+              </Text>
+            </VStack>
+            <VStack
+              rounded={8}
+              p={4}
+              flex={1}
+              backgroundColor="gray.200"
+              borderColor={'gray.400'}
+              borderWidth={2}
+              alignItems="center"
+            >
+              <Icon as={Ionicons} name="albums-outline" size={8} />
+              <Text color={'gray.500'} fontSize="xl" textAlign={'center'}>
+                {training.steps.length} exercices
+              </Text>
+            </VStack>
+          </HStack>
+        </VStack>
         <VStack space={4} pt={8} pb={4}>
+          <Text fontSize={'md'} fontWeight="medium">
+            Exercices de la séance
+          </Text>
           {training.steps.map((step, id) => (
             <SessionStep item={step.sessionStep} key={id} />
           ))}

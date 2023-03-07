@@ -22,10 +22,10 @@ export default function NormalSet({ item }: NormalSetProps) {
       <HStack space={8} justifyContent={'space-between'}>
         <HStack space={4} justifyContent={'space-between'}>
           <Text color={'gray.500'} fontSize={'sm'}>
-            {item.setNumber} séries
+            {item.setNumber} sets
           </Text>
           <Text color={'gray.500'} fontSize={'sm'}>
-            {exercice.reps} répétitions
+            {exercice.reps} reps
           </Text>
         </HStack>
         <Text color={'gray.500'} fontSize={'sm'}>

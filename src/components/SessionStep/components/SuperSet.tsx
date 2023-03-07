@@ -39,7 +39,7 @@ export default function SuperSet({ item }: SuperSetProps) {
       ))}
       <HStack alignItems="center" justifyContent={'space-between'}>
         <Text color={'gray.500'} fontSize={'sm'}>
-          {item.setNumber} séries
+          {item.setNumber} sets
         </Text>
         <Text color={'gray.500'} fontSize={'sm'}>
           {item.restTime} min
