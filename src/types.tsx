@@ -11,6 +11,7 @@ import {
 } from '@react-navigation/native';
 import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { TrainingTabParamList } from './screens/TrainingScreen';
 import { UID_V4 } from './store/Programs';
 
 declare global {
@@ -23,7 +24,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   ExerciceModal: undefined;
-  Training: undefined;
+  Training: NavigatorScreenParams<TrainingTabParamList> | undefined;
   NotFound: undefined;
 };
 

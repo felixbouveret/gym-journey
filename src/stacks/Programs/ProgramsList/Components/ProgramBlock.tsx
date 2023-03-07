@@ -3,13 +3,13 @@ import { Badge, Button, HStack, Icon, IconButton, Pressable, Text, VStack } from
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
 import SessionBlock from '@/components/SessionBlock';
-import { Program, ProgramStatus, UID_V4 } from '@/store/Programs';
+import { Program, ProgramSession, ProgramStatus } from '@/store/Programs';
 
 interface ProgramBlockProps {
   program: Program;
   onOptionsPress: () => void;
   onEditPress: () => void;
-  onSessionPress: (id: UID_V4) => void;
+  onSessionPress: (session: ProgramSession) => void;
   key: number | string;
 }
 
@@ -58,7 +58,7 @@ export default function ProgramBlock({
           session={session}
           key={sIndex}
           backgroundColor={'gray.50'}
-          onPress={() => onSessionPress(session.id)}
+          onPress={() => onSessionPress(session)}
           rightAction={
             <Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />
           }
