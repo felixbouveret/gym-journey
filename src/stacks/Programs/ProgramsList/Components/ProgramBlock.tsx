@@ -56,11 +56,10 @@ export default function ProgramBlock({
   const ActiveProgramSessionList = () => (
     <VStack space="2">
       {program.sessions.map((session, sIndex) => (
-        <Pressable onPress={() => onSessionPress(session)}>
+        <Pressable onPress={() => onSessionPress(session)} key={sIndex}>
           <HStack
             justifyContent={'space-between'}
             backgroundColor={'gray.50'}
-            key={sIndex}
             p={2}
             rounded={8}
             space={2}
