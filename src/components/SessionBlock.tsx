@@ -11,7 +11,6 @@ interface SessionBlockProps {
   rightAction?: JSX.Element;
   footer?: JSX.Element;
   onPress?: (id: UID_V4) => void;
-  key: number | string;
   backgroundColor?: ColorType;
 }
 
@@ -19,7 +18,6 @@ export default function SessionBlock({
   session,
   rightAction,
   footer,
-  key,
   onPress,
   backgroundColor
 }: SessionBlockProps) {
@@ -88,7 +86,7 @@ export default function SessionBlock({
           <VStack>
             {session.steps.length ? (
               session.steps.map((step, sIndex) => (
-                <HStack justifyContent={'space-between'} key={`${key}-${sIndex}`}>
+                <HStack justifyContent={'space-between'} key={sIndex}>
                   {exercice(step)}
                 </HStack>
               ))

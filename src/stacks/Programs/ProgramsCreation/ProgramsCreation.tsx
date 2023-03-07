@@ -6,6 +6,7 @@ import { ActionSheetIOS } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 
+import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { setSessions, UID_V4 } from '@/store/Programs';
@@ -60,7 +61,7 @@ export default function ProgramsCreationScreen({
   return (
     <VStack h="full" w="full">
       <VStack flex="1">
-        {currentProgram?.sessions.length ? (
+        {!!currentProgram?.sessions.length && (
           <DraggableFlatList
             style={{ width: '100%', paddingTop: 16 }}
             data={currentProgram.sessions}
@@ -83,17 +84,26 @@ export default function ProgramsCreationScreen({
             keyExtractor={(item) => item.id as string}
             onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
           />
-        ) : null}
+        )}
       </VStack>
-      <Box p={4} pt="0">
-        <Button
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => onCreateSession(route.params.id, goToSession)}
-        >
-          Ajouter une séance
-        </Button>
-      </Box>
+      <VStack p={4} pt="0" space={4}>
+        {!currentProgram?.sessions.length ? (
+          <BlockPlaceholder
+            onPress={() => onCreateSession(route.params.id, goToSession)}
+            title="Créez vos séances."
+            description="Listez toutes les séances de votre programme ici pour pouvoir les utiliser plus tard lors de vos entrainements."
+            cta="Ajouter une séance"
+          />
+        ) : (
+          <Button
+            w="full"
+            leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+            onPress={() => onCreateSession(route.params.id, goToSession)}
+          >
+            Ajouter une séance
+          </Button>
+        )}
+      </VStack>
     </VStack>
   );
 }

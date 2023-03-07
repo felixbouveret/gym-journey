@@ -18,8 +18,9 @@ import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+import useExercices from '@/hooks/useExercices';
 import { RootState } from '@/store';
-import { createExercice, updateExercice } from '@/store/Exercices';
+import { updateExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
 import { Exercice } from '@/types/Exercices.types';
 
@@ -28,7 +29,10 @@ export default function ExerciceModalScreen({
   route
 }: ExercicesTabScreenProps<'ExerciceModal'>) {
   const dispatch = useDispatch();
+
   const { exercices } = useSelector((state: RootState) => state.exercices);
+
+  const { onCreateExercice } = useExercices();
 
   const [isUnilateral, setIsUnilateral] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -65,7 +69,7 @@ export default function ExerciceModalScreen({
 
   const handleSubmit = async () => {
     const exercice = { ...formData, isUnilateral } as Exercice;
-    dispatch(createExercice(exercice));
+    onCreateExercice(exercice);
     navigation.goBack();
   };
 

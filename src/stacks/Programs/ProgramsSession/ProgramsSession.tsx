@@ -1,19 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { Box, Button, Icon, Pressable, Text, VStack } from 'native-base';
+import { Box, Button, Icon, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 
+import SessionStep from '@/components/SessionStep';
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { setSessionSteps } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
-import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
-
-import SessionStep from './components/SessionStep';
-import SessionStepSuperset from './components/SessionStepSuperset';
+import { UID_V4 } from '@/types/Exercices.types';
 
 export default function ProgramsCreationScreen({
   navigation,
@@ -68,27 +66,21 @@ export default function ProgramsCreationScreen({
       pt="0"
     >
       <VStack flex="1" w="full" space={4}>
-        {sessionSteps.length ? (
+        {!!sessionSteps.length && (
           <DraggableFlatList
             style={{ width: '100%', height: '100%', padding: 16 }}
             data={sessionSteps}
             renderItem={({ item, drag }) => (
               <Box pb="4">
                 <ScaleDecorator>
-                  <Pressable
+                  <SessionStep
+                    item={item}
                     onLongPress={() => {
                       drag();
                       Haptics.impactAsync();
                     }}
-                    w="full"
-                    flex="1"
-                  >
-                    {item.type === ExerciceType.NORMAL ? (
-                      <SessionStep item={item} onOptions={onOptions} isDraggable />
-                    ) : (
-                      <SessionStepSuperset item={item} onOptions={onOptions} isDraggable />
-                    )}
-                  </Pressable>
+                    onOptions={() => onOptions(item.id)}
+                  />
                 </ScaleDecorator>
               </Box>
             )}
@@ -97,15 +89,9 @@ export default function ProgramsCreationScreen({
               dispatch(setSessionSteps(route.params.programId, route.params.sessionId, data))
             }
           />
-        ) : (
-          <Box h={'full'} w={'full'} justifyContent="center" alignItems={'center'}>
-            <Text fontSize={'2xl'} fontWeight="bold" color={'gray.300'}>
-              Pas de d'exercice ajouté
-            </Text>
-          </Box>
         )}
       </VStack>
-      <Box p={4} pt="0">
+      <VStack p={4} pt="0" space={4}>
         <Button
           w="full"
           leftIcon={<Icon as={Ionicons} name="add" size="md" />}
@@ -118,7 +104,7 @@ export default function ProgramsCreationScreen({
         >
           Ajouter un exercice
         </Button>
-      </Box>
+      </VStack>
     </VStack>
   );
 }

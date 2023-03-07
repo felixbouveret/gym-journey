@@ -1,19 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Icon,
-  IconButton,
-  Pressable,
-  ScrollView,
-  Text,
-  VStack
-} from 'native-base';
+import { Badge, Button, HStack, Icon, ScrollView, Text, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+import BlockPlaceholder from '@/components/BlockPlaceholder';
+import ExerciceContainer from '@/components/ExerciceContainer';
 import { RootState } from '@/store';
 import { removeExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
@@ -38,80 +29,49 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
     );
 
   const exercicesList = exercices?.map((item, index) => (
-    <Pressable
+    <ExerciceContainer
       key={index}
-      w="full"
-      flex="1"
       onPress={() => navigation.navigate('ExerciceSingle', { id: item.id })}
+      onOptions={() => onOptions(item.id)}
+      small
     >
-      <HStack
-        space="4"
-        p={4}
-        pr="2"
-        flex="1"
-        backgroundColor={'white'}
-        rounded={8}
-        w="full"
-        alignItems={'center'}
-      >
-        <VStack flex="1" space="2">
-          <HStack alignItems="center" justifyContent={'space-between'}>
-            <Text fontSize={'xl'} fontWeight="medium">
-              {item.name}
-            </Text>
-            {item.isUnilateral && (
-              <Badge>
-                <Text>Unilatéral</Text>
-              </Badge>
-            )}
-          </HStack>
-        </VStack>
-        <IconButton
-          size="sm"
-          p={1}
-          onPress={() => onOptions(item.id)}
-          _icon={{
-            as: Ionicons,
-            color: 'gray.700',
-            name: 'ellipsis-vertical'
-          }}
-        />
+      <HStack alignItems="center" justifyContent={'space-between'}>
+        <Text fontSize={'md'} fontWeight="medium">
+          {item.name}
+        </Text>
+        {item.isUnilateral && (
+          <Badge>
+            <Text>Unilatéral</Text>
+          </Badge>
+        )}
       </HStack>
-    </Pressable>
+    </ExerciceContainer>
   ));
 
   return (
     <VStack h="full" justifyContent={exercices?.length ? '' : 'flex-end'}>
       <ScrollView w="full" h="full">
-        <VStack h="full" space={4} p="4">
+        <VStack h="full" space={2} p="4">
           {!!exercices?.length && exercicesList}
         </VStack>
       </ScrollView>
       <VStack p="4" pt={0} space={4}>
-        {!exercices?.length && (
-          <Box
-            rounded={8}
-            p={4}
-            backgroundColor="gray.200"
-            borderColor={'gray.400'}
-            borderStyle="dashed"
-            borderWidth={2}
+        {!exercices?.length ? (
+          <BlockPlaceholder
+            onPress={() => navigation.navigate('ExerciceModal', {})}
+            title="Pas d'exercices"
+            description="Créez en ici ou pendant la création de votre programme"
+            cta="Ajouter un exercice"
+          />
+        ) : (
+          <Button
+            w="full"
+            leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+            onPress={() => navigation.navigate('ExerciceModal', {})}
           >
-            <VStack space={1}>
-              <Text color={'gray.500'} fontSize="xl">
-                Pas d'exercices
-              </Text>
-              <Text color={'gray.500'}>Créez en ici ou pendant la création de votre programme</Text>
-            </VStack>
-          </Box>
+            Ajouter un exercice
+          </Button>
         )}
-        <Button
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => navigation.navigate('ExerciceModal', {})}
-        >
-          Ajouter un exercice
-        </Button>
       </VStack>
     </VStack>
   );

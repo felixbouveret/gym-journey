@@ -1,15 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Box, HStack, Icon, Text, VStack } from 'native-base';
+import { HStack, Icon, Text, VStack } from 'native-base';
 import { useEffect } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
+import SessionStep from '@/components/SessionStep';
 import { SessionRecapScreenProps } from '@/screens/TrainingScreen';
-import SessionStep from '@/stacks/Programs/ProgramsSession/components/SessionStep';
-import SessionStepSuperset from '@/stacks/Programs/ProgramsSession/components/SessionStepSuperset';
 import { RootState } from '@/store';
 import { Training } from '@/store/Training';
-import { ExerciceType } from '@/types/Exercices.types';
 
 export default function SessionRecap({ navigation }: SessionRecapScreenProps<'SessionRecap'>) {
   const { training } = useSelector((state: RootState) => state.training) as { training: Training };
@@ -61,13 +59,7 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
         </HStack>
         <VStack space={4} pt={8} pb={4}>
           {training.steps.map((step, id) => (
-            <Box key={id}>
-              {step.sessionStep.type === ExerciceType.NORMAL ? (
-                <SessionStep item={step.sessionStep} />
-              ) : (
-                <SessionStepSuperset item={step.sessionStep} />
-              )}
-            </Box>
+            <SessionStep item={step.sessionStep} key={id} />
           ))}
         </VStack>
       </VStack>
