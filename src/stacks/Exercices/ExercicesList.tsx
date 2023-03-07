@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import {
   Badge,
-  Box,
   Button,
   HStack,
   Icon,
@@ -14,6 +13,7 @@ import {
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+import BlockPlaceholder from '@/components/BlockPlaceholder';
 import { RootState } from '@/store';
 import { removeExercice } from '@/store/Exercices';
 import { ExercicesTabScreenProps } from '@/types';
@@ -88,30 +88,22 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
         </VStack>
       </ScrollView>
       <VStack p="4" pt={0} space={4}>
-        {!exercices?.length && (
-          <Box
-            rounded={8}
-            p={4}
-            backgroundColor="gray.200"
-            borderColor={'gray.400'}
-            borderStyle="dashed"
-            borderWidth={2}
+        {!exercices?.length ? (
+          <BlockPlaceholder
+            onPress={() => navigation.navigate('ExerciceModal', {})}
+            title="Pas d'exercices"
+            description="Créez en ici ou pendant la création de votre programme"
+            cta="Ajouter un exercice"
+          />
+        ) : (
+          <Button
+            w="full"
+            leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+            onPress={() => navigation.navigate('ExerciceModal', {})}
           >
-            <VStack space={1}>
-              <Text color={'gray.500'} fontSize="xl">
-                Pas d'exercices
-              </Text>
-              <Text color={'gray.500'}>Créez en ici ou pendant la création de votre programme</Text>
-            </VStack>
-          </Box>
+            Ajouter un exercice
+          </Button>
         )}
-        <Button
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => navigation.navigate('ExerciceModal', {})}
-        >
-          Ajouter un exercice
-        </Button>
       </VStack>
     </VStack>
   );

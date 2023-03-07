@@ -6,6 +6,7 @@ import { ActionSheetIOS } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 
+import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { setSessions, UID_V4 } from '@/store/Programs';
@@ -85,15 +86,24 @@ export default function ProgramsCreationScreen({
           />
         ) : null}
       </VStack>
-      <Box p={4} pt="0">
-        <Button
-          w="full"
-          leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-          onPress={() => onCreateSession(route.params.id, goToSession)}
-        >
-          Ajouter une séance
-        </Button>
-      </Box>
+      <VStack p={4} pt="0" space={4}>
+        {!currentProgram?.sessions.length ? (
+          <BlockPlaceholder
+            onPress={() => onCreateSession(route.params.id, goToSession)}
+            title="Créez vos séances."
+            description="Listez toutes les séances de votre programme ici pour pouvoir les utiliser plus tard lors de vos entrainements."
+            cta="Ajouter une séance"
+          />
+        ) : (
+          <Button
+            w="full"
+            leftIcon={<Icon as={Ionicons} name="add" size="md" />}
+            onPress={() => onCreateSession(route.params.id, goToSession)}
+          >
+            Ajouter une séance
+          </Button>
+        )}
+      </VStack>
     </VStack>
   );
 }
