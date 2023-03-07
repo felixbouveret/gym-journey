@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Badge, Button, HStack, Icon, IconButton, Pressable, Text, VStack } from 'native-base';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
-import SessionBlock from '@/components/SessionBlock';
+import useTime from '@/hooks/useTime';
 import { Program, ProgramSession, ProgramStatus } from '@/store/Programs';
 
 interface ProgramBlockProps {
@@ -20,6 +20,8 @@ export default function ProgramBlock({
   onSessionPress,
   onEditPress
 }: ProgramBlockProps) {
+  const { getAverageTime } = useTime();
+
   const isDraft = program.status === ProgramStatus.DRAFT;
   const isArchived = program.status === ProgramStatus.ARCHIVED;
 
@@ -54,15 +56,30 @@ export default function ProgramBlock({
   const ActiveProgramSessionList = () => (
     <VStack space="2">
       {program.sessions.map((session, sIndex) => (
-        <SessionBlock
-          session={session}
-          key={sIndex}
-          backgroundColor={'gray.50'}
-          onPress={() => onSessionPress(session)}
-          rightAction={
-            <Icon size="sm" p={1} as={Ionicons} color="gray.700" name="chevron-forward" />
-          }
-        />
+        <Pressable onPress={() => onSessionPress(session)}>
+          <HStack
+            justifyContent={'space-between'}
+            backgroundColor={'gray.50'}
+            key={sIndex}
+            p={2}
+            rounded={8}
+            space={2}
+            alignItems="center"
+          >
+            <HStack space={2} justifyContent={'space-between'}>
+              <Badge>
+                <Text>{getAverageTime(session.steps)}"</Text>
+              </Badge>
+              <Text fontSize={'md'} fontWeight="medium">
+                {session.name}
+              </Text>
+            </HStack>
+            <Text textAlign="right" flexGrow="1" color={'gray.500'}>
+              {session.steps.length} exercices
+            </Text>
+            <Icon size="sm" as={Ionicons} flexShrink={0} color="gray.700" name="chevron-forward" />
+          </HStack>
+        </Pressable>
       ))}
     </VStack>
   );

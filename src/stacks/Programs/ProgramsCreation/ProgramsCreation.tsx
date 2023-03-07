@@ -61,7 +61,7 @@ export default function ProgramsCreationScreen({
   return (
     <VStack h="full" w="full">
       <VStack flex="1">
-        {currentProgram?.sessions.length ? (
+        {!!currentProgram?.sessions.length && (
           <DraggableFlatList
             style={{ width: '100%', paddingTop: 16 }}
             data={currentProgram.sessions}
@@ -84,7 +84,7 @@ export default function ProgramsCreationScreen({
             keyExtractor={(item) => item.id as string}
             onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
           />
-        ) : null}
+        )}
       </VStack>
       <VStack p={4} pt="0" space={4}>
         {!currentProgram?.sessions.length ? (
