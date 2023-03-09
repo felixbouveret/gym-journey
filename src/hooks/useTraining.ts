@@ -4,21 +4,22 @@ import { useDispatch } from 'react-redux';
 import { ProgramSession } from '@/store/Programs';
 import {
   initTraining,
+  ITrainingSet,
+  ITrainingStep,
+  startTraining,
   TrainingExercice,
-  TrainingSet,
-  TrainingStateEnum,
-  TrainingStep
+  TrainingStateEnum
 } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
 export default function useTraining() {
   const dispatch = useDispatch();
 
-  const getTrainingSteps = (session: ProgramSession): TrainingStep[] => {
+  const getTrainingSteps = (session: ProgramSession): ITrainingStep[] => {
     return session.steps.map((e) => {
-      const sets: TrainingSet[] = [];
+      const sets: ITrainingSet[] = [];
 
-      for (let i = 0; i <= Number(e.setNumber); i++) {
+      for (let i = 0; i < Number(e.setNumber); i++) {
         sets.push({
           exercices: e.exercices.map<TrainingExercice>(({ exerciceId, weight, reps }) => ({
             id: uuid.v4(),
@@ -54,7 +55,7 @@ export default function useTraining() {
   };
 
   const onTrainingStart = async () => {
-    dispatch(initTraining());
+    dispatch(startTraining());
   };
 
   return {

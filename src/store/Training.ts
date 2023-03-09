@@ -8,22 +8,22 @@ export enum TrainingStateEnum {
   FINISHED = 'FINISHED'
 }
 
-type lift = {
+export type ITrainingLifts = {
   weight: string;
   reps: string;
 };
 export interface TrainingExercice {
   exerciceId: UID_V4;
-  lifts: [lift, lift | undefined];
+  lifts: [ITrainingLifts, ITrainingLifts | undefined];
 }
-export interface TrainingSet {
+export interface ITrainingSet {
   exercices: TrainingExercice[];
 }
 
-export interface TrainingStep {
+export interface ITrainingStep {
   id: UID_V4;
   sessionStep: ProgramSessionStep;
-  sets: TrainingSet[];
+  sets: ITrainingSet[];
 }
 
 export interface Training {
@@ -33,7 +33,7 @@ export interface Training {
   sessionName: string;
   startedAt: string | null;
   state: TrainingStateEnum;
-  steps: TrainingStep[];
+  steps: ITrainingStep[];
 }
 
 type SliceState = { training: Training | null };
@@ -61,10 +61,13 @@ export const roomsStore = createSlice({
       prepare(training: Training) {
         return { payload: training };
       }
+    },
+    startTraining(state) {
+      if (state.training !== null) state.training.state = TrainingStateEnum.IN_PROGRESS;
     }
   }
 });
 
-export const { setState, initTraining } = roomsStore.actions;
+export const { setState, initTraining, startTraining } = roomsStore.actions;
 
 export default roomsStore.reducer;
