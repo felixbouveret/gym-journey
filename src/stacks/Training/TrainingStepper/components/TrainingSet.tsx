@@ -39,6 +39,7 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
         if (buttonIndex === 2) return;
       }
     );
+
   return (
     <HStack backgroundColor={'gray.100'} rounded="8" borderColor={'gray.100'} borderWidth={2}>
       <Box

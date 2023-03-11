@@ -31,11 +31,11 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
     <VStack h="full">
       <ScrollView>
         <VStack h="full" justifyContent="center" px={4}>
-          <VStack space={4} pb={4} pt={8}>
+          <VStack space={2} pb={4} pt={8}>
             <Text fontSize={'md'} fontWeight="medium">
               Informations
             </Text>
-            <HStack space={4}>
+            <HStack space={2}>
               <VStack
                 rounded={8}
                 p={4}
@@ -66,7 +66,7 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
               </VStack>
             </HStack>
           </VStack>
-          <VStack space={4} pt={8} pb={4}>
+          <VStack space={2} pt={4} pb={4}>
             <Text fontSize={'md'} fontWeight="medium">
               Exercices de la séance
             </Text>
