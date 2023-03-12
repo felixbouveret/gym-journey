@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
-import useTraining from '@/hooks/useTraining';
 import { RootState } from '@/store';
 import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
@@ -15,7 +14,6 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
   const { programs } = useSelector((state: RootState) => state.programs);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
     usePrograms();
-  const { onTrainingInit } = useTraining();
 
   const onProgramOptionsPress = (id: UID_V4, status: ProgramStatus) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -42,9 +40,12 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
     );
 
   const onProgramPress = (programId: UID_V4, session: ProgramSession) => {
-    onTrainingInit(programId, session);
     navigation.navigate('Training', {
-      screen: 'SessionRecap'
+      screen: 'SessionRecap',
+      params: {
+        programId,
+        sessionId: session.id
+      }
     });
   };
 

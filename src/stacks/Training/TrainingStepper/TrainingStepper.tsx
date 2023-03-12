@@ -2,18 +2,21 @@ import { Box, Button, HStack, VStack } from 'native-base';
 import { useRef, useState } from 'react';
 import { ViewToken } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 
 import Layout from '@/constants/Layout';
 import { TrainingScreenProps } from '@/screens/TrainingScreen';
-import { ITrainingStep } from '@/store/Training';
+import { RootState } from '@/store';
+import { ITrainingStep, Training } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
-export default function TrainingStepper({
-  navigation,
-  route
-}: TrainingScreenProps<'TrainingStepper'>) {
-  const training = route.params.training;
+export default function TrainingStepper({ route }: TrainingScreenProps<'TrainingStepper'>) {
+  const { trainingId } = route.params;
+
+  const { trainings } = useSelector((state: RootState) => state.training);
+
+  const training = trainings.find((t) => t.id === trainingId) as Training;
 
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -67,10 +70,10 @@ export default function TrainingStepper({
         borderTopStyle="solid"
         borderTopWidth="1"
       >
-        <Button flex="1" onPress={() => navigation.navigate('TrainingStepper', { training })}>
+        <Button flex="1" onPress={() => null}>
           Précédent
         </Button>
-        <Button flex="1" onPress={() => navigation.navigate('TrainingStepper', { training })}>
+        <Button flex="1" onPress={() => null}>
           Suivant
         </Button>
       </HStack>

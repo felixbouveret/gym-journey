@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Button, HStack, Icon, Text, VStack } from 'native-base';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
@@ -8,12 +8,22 @@ import SessionStep from '@/components/SessionStep';
 import useTraining from '@/hooks/useTraining';
 import { TrainingScreenProps } from '@/screens/TrainingScreen';
 import { RootState } from '@/store';
+import { Program, ProgramSession } from '@/store/Programs';
 import { Training } from '@/store/Training';
 
-export default function SessionRecap({ navigation }: TrainingScreenProps<'SessionRecap'>) {
-  const { training } = useSelector((state: RootState) => state.training) as { training: Training };
+export default function SessionRecap({ navigation, route }: TrainingScreenProps<'SessionRecap'>) {
+  const { sessionId, programId } = route.params;
 
-  const { onTrainingStart } = useTraining();
+  const { programs } = useSelector((state: RootState) => state.programs);
+
+  const currentProgram = programs.find((program) => program.id === programId) as Program;
+  const currentSession = currentProgram.sessions.find(
+    (session) => session.id === sessionId
+  ) as ProgramSession;
+
+  const { onTrainingStart, initTraining } = useTraining();
+
+  const [training, _] = useState<Training>(initTraining(programId, currentSession));
 
   useEffect(() => {
     navigation.setOptions({
@@ -99,8 +109,8 @@ export default function SessionRecap({ navigation }: TrainingScreenProps<'Sessio
         <Button
           w="full"
           onPress={() => {
-            navigation.navigate('TrainingStepper', { training });
-            onTrainingStart();
+            onTrainingStart(training);
+            navigation.navigate('TrainingStepper', { trainingId: training.id });
           }}
         >
           Démarrer la séance

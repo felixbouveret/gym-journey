@@ -13,7 +13,7 @@ import { UID_V4 } from '@/types/Exercices.types';
 
 const Stack = createNativeStackNavigator<ExercicesTabParamList>();
 
-export default function ProgramsScreen({}: RootTabScreenProps<'Exercices'>) {
+export default function ExercicesScreen({}: RootTabScreenProps<'Exercices'>) {
   const dispatch = useDispatch();
 
   const onOptions = (navigation: any, id: UID_V4) =>

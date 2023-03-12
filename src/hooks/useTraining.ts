@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux';
 
 import { ProgramSession } from '@/store/Programs';
 import {
-  initTraining,
   ITrainingSet,
   ITrainingStep,
   startTraining,
+  Training,
   TrainingExercice,
   TrainingStateEnum,
   updateTrainingStep
@@ -49,27 +49,27 @@ export default function useTraining() {
     });
   };
 
-  const onTrainingInit = async (programId: UID_V4, session: ProgramSession) => {
+  const initTraining = (programId: UID_V4, session: ProgramSession) => {
     const id = uuid.v4();
     const sessionId = session.id;
     const sessionName = session.name;
-    const startedAt = null;
+    const startedAt = new Date().toISOString();
     const state = TrainingStateEnum.NOT_STARTED;
     const steps = getTrainingSteps(session);
 
-    dispatch(initTraining({ id, programId, sessionId, sessionName, startedAt, state, steps }));
+    return { id, programId, sessionId, sessionName, startedAt, state, steps };
   };
 
-  const onTrainingStepUpdate = async (stepId: UID_V4, step: ITrainingStep) => {
-    dispatch(updateTrainingStep(stepId, step));
+  const onTrainingStepUpdate = (trainingId: UID_V4, stepId: UID_V4, step: ITrainingStep) => {
+    dispatch(updateTrainingStep(trainingId, stepId, step));
   };
 
-  const onTrainingStart = async () => {
-    dispatch(startTraining());
+  const onTrainingStart = (training: Training) => {
+    dispatch(startTraining(training));
   };
 
   return {
-    onTrainingInit,
+    initTraining,
     onTrainingStart,
     onTrainingStepUpdate
   };
