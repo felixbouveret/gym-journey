@@ -1,12 +1,20 @@
-import { ProgramSessionStep } from '@/store/Programs';
-import { ExerciceType } from '@/types/Exercices.types';
+import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 import ExerciceContainer from '../ExerciceContainer';
 import NormalSet from './components/NormalSet';
 import SuperSet from './components/SuperSet';
 
 interface SessionStepProps {
-  item: ProgramSessionStep;
+  item: {
+    type: ExerciceType;
+    setNumber: string;
+    restTime: string;
+    exercices: {
+      exerciceId: UID_V4;
+      reps: string;
+      weight: string;
+    }[];
+  };
   onOptions?: () => void;
   onLongPress?: () => void;
 }

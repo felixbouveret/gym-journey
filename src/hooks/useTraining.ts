@@ -8,7 +8,8 @@ import {
   ITrainingStep,
   startTraining,
   TrainingExercice,
-  TrainingStateEnum
+  TrainingStateEnum,
+  updateTrainingStep
 } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
@@ -16,14 +17,17 @@ export default function useTraining() {
   const dispatch = useDispatch();
 
   const getTrainingSteps = (session: ProgramSession): ITrainingStep[] => {
-    return session.steps.map((e) => {
+    return session.steps.map((s) => {
       const sets: ITrainingSet[] = [];
 
-      for (let i = 0; i < Number(e.setNumber); i++) {
+      for (let i = 0; i < Number(s.setNumber); i++) {
         sets.push({
-          exercices: e.exercices.map<TrainingExercice>(({ exerciceId, weight, reps }) => ({
+          id: uuid.v4(),
+          exercices: s.exercices.map<TrainingExercice>(({ exerciceId, weight, reps }) => ({
             id: uuid.v4(),
             exerciceId,
+            weight,
+            reps,
             lifts: [
               {
                 weight,
@@ -37,7 +41,9 @@ export default function useTraining() {
 
       return {
         id: uuid.v4(),
-        sessionStep: e,
+        exercices: s.exercices.map((e) => e.exerciceId),
+        type: s.type,
+        restTime: s.restTime,
         sets
       };
     });
@@ -54,12 +60,17 @@ export default function useTraining() {
     dispatch(initTraining({ id, programId, sessionId, sessionName, startedAt, state, steps }));
   };
 
+  const onTrainingStepUpdate = async (stepId: UID_V4, step: ITrainingStep) => {
+    dispatch(updateTrainingStep(stepId, step));
+  };
+
   const onTrainingStart = async () => {
     dispatch(startTraining());
   };
 
   return {
     onTrainingInit,
-    onTrainingStart
+    onTrainingStart,
+    onTrainingStepUpdate
   };
 }

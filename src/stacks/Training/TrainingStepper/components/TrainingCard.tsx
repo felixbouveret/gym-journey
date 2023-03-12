@@ -3,15 +3,17 @@ import { Keyboard, Platform } from 'react-native';
 
 import Layout from '@/constants/Layout';
 import { ITrainingStep } from '@/store/Training';
+import { UID_V4 } from '@/types/Exercices.types';
 
 import TrainingExerciceHeading from './TrainingExerciceHeading';
 import TrainingSet from './TrainingSet';
 
 interface TrainingCardProps {
   step: ITrainingStep;
+  onUpdateStep: (stepId: UID_V4) => void;
 }
 
-export default function TrainingCard({ step }: TrainingCardProps) {
+export default function TrainingCard({ step, onUpdateStep }: TrainingCardProps) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -21,7 +23,7 @@ export default function TrainingCard({ step }: TrainingCardProps) {
         <Pressable onPress={Keyboard.dismiss}>
           <ScrollView>
             <VStack p={4} space={4}>
-              <TrainingExerciceHeading step={step} />
+              <TrainingExerciceHeading step={step} onUpdateStep={onUpdateStep} />
 
               <VStack space={2}>
                 {step.sets.map((set, index) => (

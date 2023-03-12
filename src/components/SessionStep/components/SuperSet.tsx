@@ -2,10 +2,18 @@ import { Badge, HStack, Text, VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
-import { ProgramSessionStep } from '@/store/Programs';
+import { UID_V4 } from '@/types/Exercices.types';
 
 interface SuperSetProps {
-  item: ProgramSessionStep;
+  item: {
+    setNumber: string;
+    restTime: string;
+    exercices: {
+      exerciceId: UID_V4;
+      reps: string;
+      weight: string;
+    }[];
+  };
 }
 
 export default function SuperSet({ item }: SuperSetProps) {

@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 
 import SessionStep from '@/components/SessionStep';
 import useTraining from '@/hooks/useTraining';
-import { SessionRecapScreenProps } from '@/screens/TrainingScreen';
+import { TrainingScreenProps } from '@/screens/TrainingScreen';
 import { RootState } from '@/store';
 import { Training } from '@/store/Training';
 
-export default function SessionRecap({ navigation }: SessionRecapScreenProps<'SessionRecap'>) {
+export default function SessionRecap({ navigation }: TrainingScreenProps<'SessionRecap'>) {
   const { training } = useSelector((state: RootState) => state.training) as { training: Training };
 
   const { onTrainingStart } = useTraining();
@@ -22,8 +22,7 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
   }, []);
 
   const averageTime = training.steps.reduce(
-    (acc, step) =>
-      acc + (parseFloat(step.sessionStep.restTime) + 1) * parseFloat(step.sessionStep.setNumber),
+    (acc, step) => acc + (parseFloat(step.restTime) + 1) * step.sets.length,
     0
   );
 
@@ -71,7 +70,19 @@ export default function SessionRecap({ navigation }: SessionRecapScreenProps<'Se
               Exercices de la séance
             </Text>
             {training.steps.map((step, id) => (
-              <SessionStep item={step.sessionStep} key={id} />
+              <SessionStep
+                item={{
+                  type: step.type,
+                  setNumber: step.sets.length.toString(),
+                  restTime: step.restTime,
+                  exercices: step.sets[0].exercices.map((e) => ({
+                    exerciceId: e.exerciceId,
+                    reps: e.reps,
+                    weight: e.weight
+                  }))
+                }}
+                key={id}
+              />
             ))}
           </VStack>
         </VStack>

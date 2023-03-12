@@ -8,24 +8,28 @@ import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 interface TrainingExerciceHeadingProps {
   step: ITrainingStep;
+  onUpdateStep: (stepId: UID_V4) => void;
 }
 
-export default function TrainingExerciceHeading({ step }: TrainingExerciceHeadingProps) {
+export default function TrainingExerciceHeading({
+  step,
+  onUpdateStep
+}: TrainingExerciceHeadingProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
 
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
 
   const title = () => {
-    if (step.sessionStep.type === ExerciceType.SUPERSET)
+    if (step.type === ExerciceType.SUPERSET)
       return (
         <VStack alignItems={'center'}>
           <Text fontSize={'md'} fontWeight="medium">
-            {step.sessionStep.type}
+            {step.type}
           </Text>
           <HStack space={4}>
-            {step.sessionStep.exercices.map((exercice, i) => (
+            {step.exercices.map((exercice, i) => (
               <Text key={i} fontSize={'xs'}>
-                {getExerciceName(exercice.exerciceId)}
+                {getExerciceName(exercice)}
               </Text>
             ))}
           </HStack>
@@ -33,7 +37,7 @@ export default function TrainingExerciceHeading({ step }: TrainingExerciceHeadin
       );
     return (
       <Text fontSize={'md'} fontWeight="medium">
-        {getExerciceName(step.sessionStep.exercices[0].exerciceId)}
+        {getExerciceName(step.exercices[0])}
       </Text>
     );
   };
@@ -52,7 +56,7 @@ export default function TrainingExerciceHeading({ step }: TrainingExerciceHeadin
         {title()}
         <HStack justifyContent={'center'} space="2" alignItems={'center'}>
           <Icon as={Ionicons} name="hourglass-outline" size={4} />
-          <Text fontSize={'xs'}>{step.sessionStep.restTime} min</Text>
+          <Text fontSize={'xs'}>{step.restTime} min</Text>
         </HStack>
       </VStack>
       <IconButton
@@ -62,6 +66,7 @@ export default function TrainingExerciceHeading({ step }: TrainingExerciceHeadin
           as: Ionicons,
           name: 'swap-horizontal-outline'
         }}
+        onPress={() => onUpdateStep(step.id)}
       />
     </HStack>
   );

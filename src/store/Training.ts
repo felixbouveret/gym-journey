@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ProgramSessionStep, UID_V4 } from './Programs';
+import { ExerciceType } from '@/types/Exercices.types';
+
+import { UID_V4 } from './Programs';
 
 export enum TrainingStateEnum {
   NOT_STARTED = 'NOT_STARTED',
@@ -14,15 +16,20 @@ export type ITrainingLifts = {
 };
 export interface TrainingExercice {
   exerciceId: UID_V4;
+  weight: string;
+  reps: string;
   lifts: [ITrainingLifts, ITrainingLifts | undefined];
 }
 export interface ITrainingSet {
+  id: UID_V4;
   exercices: TrainingExercice[];
 }
 
 export interface ITrainingStep {
   id: UID_V4;
-  sessionStep: ProgramSessionStep;
+  restTime: string;
+  type: ExerciceType;
+  exercices: UID_V4[];
   sets: ITrainingSet[];
 }
 
@@ -54,6 +61,7 @@ export const roomsStore = createSlice({
         return { payload: { storageState } };
       }
     },
+
     initTraining: {
       reducer(state, action: PayloadAction<Training>) {
         state.training = action.payload;
@@ -62,12 +70,26 @@ export const roomsStore = createSlice({
         return { payload: training };
       }
     },
+
     startTraining(state) {
       if (state.training !== null) state.training.state = TrainingStateEnum.IN_PROGRESS;
+    },
+
+    updateTrainingStep: {
+      reducer(state, action: PayloadAction<{ stepId: UID_V4; step: ITrainingStep }>) {
+        if (state.training !== null) {
+          const { stepId, step } = action.payload;
+          const stepIndex = state.training.steps.findIndex((s) => s.id === stepId);
+          state.training.steps[stepIndex] = step;
+        }
+      },
+      prepare(stepId: UID_V4, step: ITrainingStep) {
+        return { payload: { stepId, step } };
+      }
     }
   }
 });
 
-export const { setState, initTraining, startTraining } = roomsStore.actions;
+export const { setState, initTraining, startTraining, updateTrainingStep } = roomsStore.actions;
 
 export default roomsStore.reducer;

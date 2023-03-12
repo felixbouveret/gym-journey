@@ -4,7 +4,7 @@ import { ViewToken } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 import Layout from '@/constants/Layout';
-import { SessionRecapScreenProps } from '@/screens/TrainingScreen';
+import { TrainingScreenProps } from '@/screens/TrainingScreen';
 import { ITrainingStep } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
@@ -12,7 +12,7 @@ import TrainingCard from './components/TrainingCard';
 export default function TrainingStepper({
   navigation,
   route
-}: SessionRecapScreenProps<'TrainingStepper'>) {
+}: TrainingScreenProps<'TrainingStepper'>) {
   const training = route.params.training;
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -29,7 +29,12 @@ export default function TrainingStepper({
     }
   ]);
 
-  const renderItem = ({ item }: { item: ITrainingStep }) => <TrainingCard step={item} />;
+  const renderItem = ({ item }: { item: ITrainingStep }) => (
+    <TrainingCard
+      step={item}
+      onUpdateStep={(stepId) => navigation.navigate('TrainingExerciceModal', { stepId })}
+    />
+  );
   return (
     <VStack h="full">
       <FlatList
