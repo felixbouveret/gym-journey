@@ -51,6 +51,7 @@ export default function TrainingExerciceHeading({
           as: Ionicons,
           name: 'albums-outline'
         }}
+        backgroundColor={'white'}
       />
       <VStack alignItems={'center'}>
         {title()}
