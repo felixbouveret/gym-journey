@@ -66,6 +66,7 @@ export default function TrainingExerciceHeading({
           as: Ionicons,
           name: 'swap-horizontal-outline'
         }}
+        backgroundColor={'white'}
         onPress={() => onUpdateStep(step.id)}
       />
     </HStack>

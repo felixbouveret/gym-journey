@@ -30,10 +30,7 @@ export default function TrainingStepper({
   ]);
 
   const renderItem = ({ item }: { item: ITrainingStep }) => (
-    <TrainingCard
-      step={item}
-      onUpdateStep={(stepId) => navigation.navigate('TrainingExerciceModal', { stepId })}
-    />
+    <TrainingCard step={item} onUpdateStep={() => null} />
   );
   return (
     <VStack h="full">
