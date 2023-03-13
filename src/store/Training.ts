@@ -43,9 +43,12 @@ export interface Training {
   steps: ITrainingStep[];
 }
 
-type SliceState = { trainings: Training[] };
+type SliceState = {
+  trainings: Training[];
+  activeTraining: Training | null;
+};
 
-const initialState: SliceState = { trainings: [] };
+const initialState: SliceState = { trainings: [], activeTraining: null };
 
 export const roomsStore = createSlice({
   name: 'trainings',
@@ -64,9 +67,7 @@ export const roomsStore = createSlice({
 
     startTraining: {
       reducer(state, action: PayloadAction<Training>) {
-        if (!action.payload) return;
-        const newTraining = { ...action.payload, state: TrainingStateEnum.IN_PROGRESS };
-        state.trainings.push(newTraining);
+        state.activeTraining = { ...action.payload, state: TrainingStateEnum.IN_PROGRESS };
       },
       prepare(training: Training) {
         return { payload: training };
@@ -74,20 +75,51 @@ export const roomsStore = createSlice({
     },
 
     updateTrainingStep: {
-      reducer(
-        state,
-        action: PayloadAction<{ trainingId: UID_V4; stepId: UID_V4; step: ITrainingStep }>
-      ) {
-        const training = state.trainings.find((t) => t.id === action.payload.trainingId);
-        if (training) {
+      reducer(state, action: PayloadAction<{ stepId: UID_V4; step: ITrainingStep }>) {
+        if (state.activeTraining) {
           const { stepId, step } = action.payload;
-          const stepIndex = training.steps.findIndex((s) => s.id === stepId);
-          training.steps[stepIndex] = step;
+          const stepIndex = state.activeTraining.steps.findIndex((s) => s.id === stepId);
+          state.activeTraining.steps[stepIndex] = step;
         }
       },
-      prepare(trainingId: UID_V4, stepId: UID_V4, step: ITrainingStep) {
-        return { payload: { trainingId, stepId, step } };
+      prepare(stepId: UID_V4, step: ITrainingStep) {
+        return { payload: { stepId, step } };
       }
+    },
+
+    updateTrainingLift: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          stepId: UID_V4;
+          setId: UID_V4;
+          eIndex: number;
+          liftIndex: number;
+          lift: { weight: string | never; reps: string | never };
+        }>
+      ) {
+        if (state.activeTraining) {
+          const { stepId, setId } = action.payload;
+          const step = state.activeTraining.steps.find((s) => s.id === stepId);
+          const set = step?.sets.find((s) => s.id === setId);
+          const { eIndex, liftIndex, lift } = action.payload;
+          const exercice = set?.exercices[eIndex];
+          if (exercice) exercice.lifts[liftIndex] = { ...exercice.lifts[liftIndex], ...lift };
+        }
+      },
+      prepare(
+        stepId: UID_V4,
+        setId: UID_V4,
+        eIndex: number,
+        liftIndex: number,
+        lift: { weight: string | never; reps: string | never }
+      ) {
+        return { payload: { stepId, setId, eIndex, liftIndex, lift } };
+      }
+    },
+
+    saveTraining(state) {
+      state.trainings.push(state.activeTraining as Training);
     },
 
     finishTraining: {
@@ -102,6 +134,7 @@ export const roomsStore = createSlice({
   }
 });
 
-export const { setState, startTraining, updateTrainingStep, finishTraining } = roomsStore.actions;
+export const { setState, startTraining, updateTrainingStep, finishTraining, updateTrainingLift } =
+  roomsStore.actions;
 
 export default roomsStore.reducer;

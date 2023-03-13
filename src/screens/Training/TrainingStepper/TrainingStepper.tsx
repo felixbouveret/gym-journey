@@ -6,19 +6,20 @@ import { useSelector } from 'react-redux';
 
 import Layout from '@/constants/Layout';
 import useTraining from '@/hooks/useTraining';
-import { TrainingScreenProps } from '@/screens/TrainingScreen';
+import { TrainingScreenProps } from '@/navigation/navigators/TrainingNavigator';
 import { RootState } from '@/store';
-import { ITrainingStep, Training } from '@/store/Training';
+import { ITrainingStep } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
-export default function TrainingStepper({ route }: TrainingScreenProps<'TrainingStepper'>) {
-  const { trainings } = useSelector((state: RootState) => state.trainings);
+const renderItem = ({ item }: { item: ITrainingStep }) => (
+  <TrainingCard step={item} onExerciceSwitch={() => null} />
+);
+
+export default function TrainingStepper({}: TrainingScreenProps<'TrainingStepper'>) {
+  const { activeTraining } = useSelector((state: RootState) => state.trainings);
   const { onTrainingFinished } = useTraining();
   const [currentStep, setCurrentStep] = useState(0);
-
-  const { trainingId } = route.params;
-  const training = trainings.find((t) => t.id === trainingId) as Training;
 
   const onViewableItemsChanged = ({ viewableItems }: { viewableItems: Array<ViewToken> }) => {
     if (viewableItems?.[0] && viewableItems?.[0]?.index !== null)
@@ -32,14 +33,12 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
     }
   ]);
 
-  const renderItem = ({ item }: { item: ITrainingStep }) => (
-    <TrainingCard step={item} onExerciceSwitch={() => null} />
-  );
+  if (!activeTraining) return <></>;
 
   return (
     <VStack h="full">
       <FlatList
-        data={training.steps}
+        data={activeTraining.steps}
         keyExtractor={(item) => item.id as string}
         renderItem={renderItem}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
@@ -47,10 +46,10 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
         snapToAlignment="center"
         decelerationRate={0}
         showsHorizontalScrollIndicator={false}
-        snapToOffsets={training.steps.map((_, index) => index * Layout.window.width)}
+        snapToOffsets={activeTraining.steps.map((_, index) => index * Layout.window.width)}
       />
       <HStack justifyContent={'center'} space="1" pb={4}>
-        {training.steps.map((_, index) => (
+        {activeTraining.steps.map((_, index) => (
           <Box
             key={index}
             w={2}
@@ -70,7 +69,7 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
         borderTopStyle="solid"
         borderTopWidth="1"
       >
-        <Button flex="1" onPress={() => onTrainingFinished(training.id)}>
+        <Button flex="1" onPress={() => onTrainingFinished(activeTraining.id)}>
           Terminer
         </Button>
       </HStack>

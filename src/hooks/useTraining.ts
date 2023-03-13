@@ -11,6 +11,7 @@ import {
   Training,
   TrainingExercice,
   TrainingStateEnum,
+  updateTrainingLift,
   updateTrainingStep
 } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
@@ -62,8 +63,18 @@ export default function useTraining() {
     return { id, programId, sessionId, sessionName, startedAt, state, steps };
   };
 
-  const onTrainingStepUpdate = (trainingId: UID_V4, stepId: UID_V4, step: ITrainingStep) => {
-    dispatch(updateTrainingStep(trainingId, stepId, step));
+  const onTrainingStepUpdate = (stepId: UID_V4, step: ITrainingStep) => {
+    dispatch(updateTrainingStep(stepId, step));
+  };
+
+  const onTrainingLiftUpdate = (
+    stepId: UID_V4,
+    setId: UID_V4,
+    eIndex: number,
+    liftIndex: number,
+    lift: { weight: string | never; reps: string | never }
+  ) => {
+    dispatch(updateTrainingLift(stepId, setId, eIndex, liftIndex, lift));
   };
 
   const onTrainingStart = (training: Training) => {
@@ -87,6 +98,7 @@ export default function useTraining() {
     initTraining,
     onTrainingStart,
     onTrainingStepUpdate,
-    onTrainingFinished
+    onTrainingFinished,
+    onTrainingLiftUpdate
   };
 }

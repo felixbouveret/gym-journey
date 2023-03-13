@@ -1,7 +1,9 @@
 import { Button, KeyboardAvoidingView, Pressable, ScrollView, VStack } from 'native-base';
+import { memo } from 'react';
 import { Keyboard, Platform } from 'react-native';
 
 import Layout from '@/constants/Layout';
+import useTraining from '@/hooks/useTraining';
 import { ITrainingStep } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
@@ -13,7 +15,9 @@ interface TrainingCardProps {
   onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
-export default function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
+function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
+  const { onTrainingLiftUpdate } = useTraining();
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -27,7 +31,14 @@ export default function TrainingCard({ step, onExerciceSwitch }: TrainingCardPro
 
               <VStack space={2}>
                 {step.sets.map((set, index) => (
-                  <TrainingSet key={index} set={set} index={index} />
+                  <TrainingSet
+                    key={index}
+                    set={set}
+                    index={index}
+                    onLiftUpdate={(exerciceIndex, liftIndex, value) => {
+                      onTrainingLiftUpdate(step.id, set.id, exerciceIndex, liftIndex, value);
+                    }}
+                  />
                 ))}
                 <Button mt={4} variant="outline">
                   Ajouter un set
@@ -40,3 +51,5 @@ export default function TrainingCard({ step, onExerciceSwitch }: TrainingCardPro
     </KeyboardAvoidingView>
   );
 }
+
+export default memo(TrainingCard);

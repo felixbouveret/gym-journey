@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Box, HStack, IconButton, Input, Text, VStack } from 'native-base';
+import { memo } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -10,11 +11,13 @@ import { UID_V4 } from '@/types/Exercices.types';
 interface TrainingSetProps {
   set: ITrainingSet;
   index: number;
+  onLiftUpdate: (exerciceIndex: number, liftIndex: number, value: unknown) => void;
 }
 
-export default function TrainingSet({ set, index }: TrainingSetProps) {
+function TrainingSet({ set, index, onLiftUpdate }: TrainingSetProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
+
   const onOptions = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -28,12 +31,12 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
     );
 
   const Lifts = ({
-    exerciceIndex,
+    eIndex,
     lifts,
     weightPlaceholder,
     repsPlaceholder
   }: {
-    exerciceIndex: number;
+    eIndex: number;
     lifts: [ITrainingLifts, ITrainingLifts | undefined];
     weightPlaceholder: string;
     repsPlaceholder: string;
@@ -46,14 +49,14 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
           flex="1"
           placeholder={repsPlaceholder}
           value={l?.reps}
-          onChange={(e) => null}
+          onChange={(e) => onLiftUpdate(eIndex, i, { reps: e.nativeEvent.text })}
           backgroundColor={'white'}
         />
         <Input
           flex="1"
           placeholder={weightPlaceholder}
           value={l?.weight}
-          onChange={(e) => null}
+          onChange={(e) => onLiftUpdate(eIndex, i, { weight: e.nativeEvent.text })}
           backgroundColor={'white'}
         />
       </HStack>
@@ -78,7 +81,12 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
               {set.exercices.length > 1 && (
                 <Text fontSize={'2xs'}>{getExerciceName(exerciceId)}</Text>
               )}
-              {Lifts({ exerciceIndex: i, lifts, weightPlaceholder: weight, repsPlaceholder: reps })}
+              {Lifts({
+                eIndex: i,
+                lifts,
+                weightPlaceholder: weight,
+                repsPlaceholder: reps
+              })}
             </VStack>
           ))}
         </VStack>
@@ -96,3 +104,5 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
     </HStack>
   );
 }
+
+export default memo(TrainingSet);
