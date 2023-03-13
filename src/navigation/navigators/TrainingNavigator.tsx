@@ -3,8 +3,8 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 
-import SessionRecap from '@/stacks/Training/SessionRecap';
-import TrainingStepper from '@/stacks/Training/TrainingStepper';
+import SessionRecap from '@/screens/Training/SessionRecap';
+import TrainingStepper from '@/screens/Training/TrainingStepper';
 import { RootStackScreenProps } from '@/types';
 import { UID_V4 } from '@/types/Exercices.types';
 
@@ -20,7 +20,9 @@ export type TrainingScreenProps<Screen extends keyof TrainingTabParamList> = Com
 
 const Stack = createNativeStackNavigator<TrainingTabParamList>();
 
-export default function TrainingScreen({ navigation: RootNav }: RootStackScreenProps<'Training'>) {
+export default function TrainingNavigator({
+  navigation: RootNav
+}: RootStackScreenProps<'Training'>) {
   useEffect(() => {
     RootNav.setOptions({
       title: 'training.sessionName'

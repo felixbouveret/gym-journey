@@ -11,14 +11,14 @@ import { Icon } from 'native-base';
 import * as React from 'react';
 
 import Colors from '@/constants/Colors';
-import ExercicesScreen from '@/screens/ExercicesScreen';
-import HistoryScreen from '@/screens/HistoryScreen';
 import NotFoundScreen from '@/screens/NotFoundScreen';
-import ProgramsScreen from '@/screens/ProgramsScreen';
-import TrainingScreen from '@/screens/TrainingScreen';
 import { RootStackParamList, RootTabParamList } from '@/types';
 
 import LinkingConfiguration from './LinkingConfiguration';
+import ExercicesScreen from './navigators/ExercicesNavigator';
+import HistoryScreen from './navigators/HistoryNavigator';
+import ProgramsScreen from './navigators/ProgramsNavigator';
+import TrainingScreen from './navigators/TrainingNavigator';
 
 export default function Navigation() {
   return (

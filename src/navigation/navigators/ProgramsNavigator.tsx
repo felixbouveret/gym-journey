@@ -3,15 +3,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, HStack, IconButton } from 'native-base';
 
 import usePrograms from '@/hooks/usePrograms';
-import ProgramsCreation from '@/stacks/Programs/ProgramsCreation';
-import ProgramsExerciceModal from '@/stacks/Programs/ProgramsExerciceModal';
-import ProgramsList from '@/stacks/Programs/ProgramsList';
-import ProgramsSession from '@/stacks/Programs/ProgramsSession';
+import ProgramsCreation from '@/screens/Programs/ProgramsCreation';
+import ProgramsExerciceModal from '@/screens/Programs/ProgramsExerciceModal';
+import ProgramsList from '@/screens/Programs/ProgramsList';
+import ProgramsSession from '@/screens/Programs/ProgramsSession';
 import { ProgramsTabParamList, RootTabScreenProps } from '@/types';
 
 const Stack = createNativeStackNavigator<ProgramsTabParamList>();
 
-export default function ProgramsScreen({}: RootTabScreenProps<'ProgramsScreen'>) {
+export default function ProgramsNavigator({}: RootTabScreenProps<'ProgramsScreen'>) {
   const { onCreateProgram, onValidateProgram } = usePrograms();
 
   return (

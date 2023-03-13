@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { RootTabScreenProps } from '@/types';
 
-export default function HistoryScreen({}: RootTabScreenProps<'History'>) {
-  const { trainings } = useSelector((state: RootState) => state.training);
+export default function HistoryNavigator({}: RootTabScreenProps<'History'>) {
+  const { trainings } = useSelector((state: RootState) => state.trainings);
 
   return (
     <VStack w="full" h="full" p={4} justifyContent="center">
