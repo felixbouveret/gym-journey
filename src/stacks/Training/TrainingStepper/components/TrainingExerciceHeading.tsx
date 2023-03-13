@@ -8,12 +8,12 @@ import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 interface TrainingExerciceHeadingProps {
   step: ITrainingStep;
-  onUpdateStep: (stepId: UID_V4) => void;
+  onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
 export default function TrainingExerciceHeading({
   step,
-  onUpdateStep
+  onExerciceSwitch
 }: TrainingExerciceHeadingProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
 
@@ -68,7 +68,7 @@ export default function TrainingExerciceHeading({
           name: 'swap-horizontal-outline'
         }}
         backgroundColor={'white'}
-        onPress={() => onUpdateStep(step.id)}
+        onPress={() => onExerciceSwitch(step.id)}
       />
     </HStack>
   );

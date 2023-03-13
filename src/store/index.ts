@@ -8,7 +8,7 @@ const store = configureStore({
   reducer: {
     programs: programsReducer,
     exercices: exercicesReducer,
-    training: trainingReducer
+    trainings: trainingReducer
   }
 });
 

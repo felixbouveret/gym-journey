@@ -1,8 +1,10 @@
+import { Alert } from 'react-native';
 import uuid from 'react-native-uuid';
 import { useDispatch } from 'react-redux';
 
 import { ProgramSession } from '@/store/Programs';
 import {
+  finishTraining,
   ITrainingSet,
   ITrainingStep,
   startTraining,
@@ -68,9 +70,23 @@ export default function useTraining() {
     dispatch(startTraining(training));
   };
 
+  const onTrainingFinished = (trainingId: UID_V4) => {
+    Alert.alert('Terminer la séance', '', [
+      {
+        text: 'Non annuler',
+        style: 'cancel'
+      },
+      {
+        text: 'Oui terminer',
+        onPress: () => finishTraining(trainingId)
+      }
+    ]);
+  };
+
   return {
     initTraining,
     onTrainingStart,
-    onTrainingStepUpdate
+    onTrainingStepUpdate,
+    onTrainingFinished
   };
 }

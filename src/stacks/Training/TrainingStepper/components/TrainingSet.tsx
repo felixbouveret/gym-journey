@@ -14,20 +14,7 @@ interface TrainingSetProps {
 
 export default function TrainingSet({ set, index }: TrainingSetProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
-
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
-
-  const Lifts = (lifts: [ITrainingLifts, ITrainingLifts | undefined]) => {
-    const filteredLifts = lifts.filter((e) => e);
-
-    return filteredLifts.map((l, i) => (
-      <HStack key={i} justifyContent="space-between" space={4}>
-        <Input flex="1" placeholder={l?.reps} backgroundColor={'white'} />
-        <Input flex="1" placeholder={l?.weight} backgroundColor={'white'} />
-      </HStack>
-    ));
-  };
-
   const onOptions = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -39,6 +26,39 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
         if (buttonIndex === 2) return;
       }
     );
+
+  const Lifts = ({
+    exerciceIndex,
+    lifts,
+    weightPlaceholder,
+    repsPlaceholder
+  }: {
+    exerciceIndex: number;
+    lifts: [ITrainingLifts, ITrainingLifts | undefined];
+    weightPlaceholder: string;
+    repsPlaceholder: string;
+  }) => {
+    const filteredLifts = lifts.filter((e) => e);
+
+    return filteredLifts.map((l, i) => (
+      <HStack key={i} justifyContent="space-between" space={4}>
+        <Input
+          flex="1"
+          placeholder={repsPlaceholder}
+          value={l?.reps}
+          onChange={(e) => null}
+          backgroundColor={'white'}
+        />
+        <Input
+          flex="1"
+          placeholder={weightPlaceholder}
+          value={l?.weight}
+          onChange={(e) => null}
+          backgroundColor={'white'}
+        />
+      </HStack>
+    ));
+  };
 
   return (
     <HStack backgroundColor={'gray.100'} rounded="8" borderColor={'gray.100'} borderWidth={2}>
@@ -53,12 +73,12 @@ export default function TrainingSet({ set, index }: TrainingSetProps) {
       </Box>
       <HStack space={2} flex="1" ml={2}>
         <VStack p="2" flex={1} space="1">
-          {set.exercices.map(({ lifts, exerciceId }, i) => (
+          {set.exercices.map(({ lifts, exerciceId, weight, reps }, i) => (
             <VStack key={i}>
               {set.exercices.length > 1 && (
                 <Text fontSize={'2xs'}>{getExerciceName(exerciceId)}</Text>
               )}
-              {Lifts(lifts)}
+              {Lifts({ exerciceIndex: i, lifts, weightPlaceholder: weight, repsPlaceholder: reps })}
             </VStack>
           ))}
         </VStack>

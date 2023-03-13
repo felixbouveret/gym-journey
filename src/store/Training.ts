@@ -88,10 +88,20 @@ export const roomsStore = createSlice({
       prepare(trainingId: UID_V4, stepId: UID_V4, step: ITrainingStep) {
         return { payload: { trainingId, stepId, step } };
       }
+    },
+
+    finishTraining: {
+      reducer(state, action: PayloadAction<{ trainingId: UID_V4 }>) {
+        const training = state.trainings.find((t) => t.id === action.payload.trainingId);
+        if (training) training.state = TrainingStateEnum.FINISHED;
+      },
+      prepare(trainingId: UID_V4) {
+        return { payload: { trainingId } };
+      }
     }
   }
 });
 
-export const { setState, startTraining, updateTrainingStep } = roomsStore.actions;
+export const { setState, startTraining, updateTrainingStep, finishTraining } = roomsStore.actions;
 
 export default roomsStore.reducer;

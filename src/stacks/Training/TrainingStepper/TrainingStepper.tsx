@@ -5,6 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 import Layout from '@/constants/Layout';
+import useTraining from '@/hooks/useTraining';
 import { TrainingScreenProps } from '@/screens/TrainingScreen';
 import { RootState } from '@/store';
 import { ITrainingStep, Training } from '@/store/Training';
@@ -12,13 +13,12 @@ import { ITrainingStep, Training } from '@/store/Training';
 import TrainingCard from './components/TrainingCard';
 
 export default function TrainingStepper({ route }: TrainingScreenProps<'TrainingStepper'>) {
-  const { trainingId } = route.params;
-
-  const { trainings } = useSelector((state: RootState) => state.training);
-
-  const training = trainings.find((t) => t.id === trainingId) as Training;
-
+  const { trainings } = useSelector((state: RootState) => state.trainings);
+  const { onTrainingFinished } = useTraining();
   const [currentStep, setCurrentStep] = useState(0);
+
+  const { trainingId } = route.params;
+  const training = trainings.find((t) => t.id === trainingId) as Training;
 
   const onViewableItemsChanged = ({ viewableItems }: { viewableItems: Array<ViewToken> }) => {
     if (viewableItems?.[0] && viewableItems?.[0]?.index !== null)
@@ -33,8 +33,9 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
   ]);
 
   const renderItem = ({ item }: { item: ITrainingStep }) => (
-    <TrainingCard step={item} onUpdateStep={() => null} />
+    <TrainingCard step={item} onExerciceSwitch={() => null} />
   );
+
   return (
     <VStack h="full">
       <FlatList
@@ -43,7 +44,6 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
         renderItem={renderItem}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         horizontal
-        pagingEnabled
         snapToAlignment="center"
         decelerationRate={0}
         showsHorizontalScrollIndicator={false}
@@ -70,11 +70,8 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
         borderTopStyle="solid"
         borderTopWidth="1"
       >
-        <Button flex="1" onPress={() => null}>
-          Précédent
-        </Button>
-        <Button flex="1" onPress={() => null}>
-          Suivant
+        <Button flex="1" onPress={() => onTrainingFinished(training.id)}>
+          Terminer
         </Button>
       </HStack>
     </VStack>

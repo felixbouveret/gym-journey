@@ -10,10 +10,10 @@ import TrainingSet from './TrainingSet';
 
 interface TrainingCardProps {
   step: ITrainingStep;
-  onUpdateStep: (stepId: UID_V4) => void;
+  onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
-export default function TrainingCard({ step, onUpdateStep }: TrainingCardProps) {
+export default function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -23,7 +23,7 @@ export default function TrainingCard({ step, onUpdateStep }: TrainingCardProps) 
         <Pressable onPress={Keyboard.dismiss}>
           <ScrollView>
             <VStack p={4} space={4}>
-              <TrainingExerciceHeading step={step} onUpdateStep={onUpdateStep} />
+              <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
 
               <VStack space={2}>
                 {step.sets.map((set, index) => (
