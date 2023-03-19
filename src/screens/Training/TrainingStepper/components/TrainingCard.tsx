@@ -1,6 +1,6 @@
-import { Button, KeyboardAvoidingView, Pressable, ScrollView, VStack } from 'native-base';
+import { Button, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
 import { memo } from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
 import Layout from '@/constants/Layout';
 import useTraining from '@/hooks/useTraining';
@@ -23,30 +23,33 @@ function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={100}
     >
-      <VStack w={Layout.window.width - 32} m={4} backgroundColor="white" rounded={8} shadow={2}>
-        <Pressable onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <VStack p={4} space={4}>
-              <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
+      <VStack
+        w={Layout.window.width - 32}
+        maxH={Layout.window.height - 250}
+        m={4}
+        backgroundColor="white"
+        rounded={8}
+        shadow={2}
+      >
+        <ScrollView>
+          <VStack p={4} space={4} h="full">
+            <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
 
-              <VStack space={2}>
-                {step.sets.map((set, index) => (
-                  <TrainingSet
-                    key={index}
-                    set={set}
-                    index={index}
-                    onLiftUpdate={(exerciceIndex, liftIndex, value) => {
-                      onTrainingLiftUpdate(step.id, set.id, exerciceIndex, liftIndex, value);
-                    }}
-                  />
-                ))}
-                <Button mt={4} variant="outline">
-                  Ajouter un set
-                </Button>
-              </VStack>
+            <VStack space={2}>
+              {step.sets.map((set, index) => (
+                <TrainingSet
+                  key={index}
+                  set={set}
+                  index={index}
+                  onLiftUpdate={(exerciceIndex, liftIndex, value) => {
+                    onTrainingLiftUpdate(step.id, set.id, exerciceIndex, liftIndex, value);
+                  }}
+                />
+              ))}
             </VStack>
-          </ScrollView>
-        </Pressable>
+            <Button variant="outline">Ajouter un set</Button>
+          </VStack>
+        </ScrollView>
       </VStack>
     </KeyboardAvoidingView>
   );
