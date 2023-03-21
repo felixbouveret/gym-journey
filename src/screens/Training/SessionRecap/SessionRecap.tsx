@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import SessionStep from '@/components/SessionStep';
 import useTraining from '@/hooks/useTraining';
-import { TrainingScreenProps } from '@/screens/TrainingScreen';
+import { TrainingScreenProps } from '@/navigation/navigators/TrainingNavigator';
 import { RootState } from '@/store';
 import { Program, ProgramSession } from '@/store/Programs';
 import { Training } from '@/store/Training';

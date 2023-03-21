@@ -5,8 +5,10 @@ import { useDispatch } from 'react-redux';
 import { ProgramSession } from '@/store/Programs';
 import {
   finishTraining,
+  ITrainingLift,
   ITrainingSet,
   ITrainingStep,
+  saveTraining,
   startTraining,
   Training,
   TrainingExercice,
@@ -31,13 +33,10 @@ export default function useTraining() {
             exerciceId,
             weight,
             reps,
-            lifts: [
-              {
-                weight,
-                reps
-              },
-              undefined
-            ]
+            lift: {
+              weight,
+              reps
+            }
           }))
         });
       }
@@ -65,20 +64,21 @@ export default function useTraining() {
 
   const onTrainingStepUpdate = (stepId: UID_V4, step: ITrainingStep) => {
     dispatch(updateTrainingStep(stepId, step));
+    dispatch(saveTraining());
   };
 
   const onTrainingLiftUpdate = (
     stepId: UID_V4,
     setId: UID_V4,
     eIndex: number,
-    liftIndex: number,
-    lift: { weight: string | never; reps: string | never }
+    lift: ITrainingLift
   ) => {
-    dispatch(updateTrainingLift(stepId, setId, eIndex, liftIndex, lift));
+    dispatch(updateTrainingLift(stepId, setId, eIndex, lift));
   };
 
   const onTrainingStart = (training: Training) => {
     dispatch(startTraining(training));
+    dispatch(saveTraining());
   };
 
   const onTrainingFinished = (trainingId: UID_V4) => {
@@ -94,11 +94,39 @@ export default function useTraining() {
     ]);
   };
 
+  const addSet = (step: ITrainingStep) => {
+    const sets = step.sets;
+    const lastSet = sets[sets.length - 1];
+    const newSet = {
+      id: uuid.v4(),
+      exercices: lastSet.exercices.map((e) => ({
+        ...e,
+        id: uuid.v4(),
+        lift: {
+          weight: '',
+          reps: ''
+        }
+      }))
+    };
+
+    const newStep = { ...step, sets: [...sets, newSet] };
+
+    onTrainingStepUpdate(step.id, newStep);
+  };
+
+  const removeSet = (step: ITrainingStep, setId: UID_V4) => {
+    const newStep = { ...step, sets: step.sets.filter((s) => s.id !== setId) };
+
+    onTrainingStepUpdate(step.id, newStep);
+  };
+
   return {
     initTraining,
     onTrainingStart,
     onTrainingStepUpdate,
     onTrainingFinished,
-    onTrainingLiftUpdate
+    onTrainingLiftUpdate,
+    addSet,
+    removeSet
   };
 }

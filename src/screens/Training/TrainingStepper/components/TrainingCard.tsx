@@ -1,6 +1,6 @@
 import { Button, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
 import { memo } from 'react';
-import { Platform } from 'react-native';
+import { ActionSheetIOS, Platform } from 'react-native';
 
 import Layout from '@/constants/Layout';
 import useTraining from '@/hooks/useTraining';
@@ -16,7 +16,18 @@ interface TrainingCardProps {
 }
 
 function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
-  const { onTrainingLiftUpdate } = useTraining();
+  const { onTrainingLiftUpdate, addSet, removeSet } = useTraining();
+
+  const onOptions = (setId: UID_V4) =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Supprimer'],
+        cancelButtonIndex: 0
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) return removeSet(step, setId);
+      }
+    );
 
   return (
     <KeyboardAvoidingView
@@ -41,13 +52,16 @@ function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
                   key={index}
                   set={set}
                   index={index}
-                  onLiftUpdate={(exerciceIndex, liftIndex, value) => {
-                    onTrainingLiftUpdate(step.id, set.id, exerciceIndex, liftIndex, value);
+                  onLiftUpdate={(exerciceIndex, value) => {
+                    onTrainingLiftUpdate(step.id, set.id, exerciceIndex, value);
                   }}
+                  onOptions={onOptions}
                 />
               ))}
             </VStack>
-            <Button variant="outline">Ajouter un set</Button>
+            <Button variant="outline" onPress={() => addSet(step)}>
+              Ajouter un set
+            </Button>
           </VStack>
         </ScrollView>
       </VStack>

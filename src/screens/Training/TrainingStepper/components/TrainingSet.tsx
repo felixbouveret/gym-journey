@@ -1,89 +1,93 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Box, HStack, IconButton, Input, Text, VStack } from 'native-base';
 import { memo } from 'react';
-import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
-import { ITrainingLifts, ITrainingSet } from '@/store/Training';
+import { ITrainingLift, ITrainingSet } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
 interface TrainingSetProps {
   set: ITrainingSet;
   index: number;
-  onLiftUpdate: (exerciceIndex: number, liftIndex: number, value: unknown) => void;
+  onLiftUpdate: (exerciceIndex: number, value: ITrainingLift) => void;
+  onOptions: (setId: UID_V4) => void;
 }
 
-function TrainingSet({ set, index, onLiftUpdate }: TrainingSetProps) {
+function TrainingSet({ set, index, onLiftUpdate, onOptions }: TrainingSetProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
 
-  const onOptions = () =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Supprimer'],
-        cancelButtonIndex: 0
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) return;
-        if (buttonIndex === 2) return;
-      }
-    );
-
-  const Lifts = ({
+  const Lift = ({
     eIndex,
-    lifts,
+    lift,
     weightPlaceholder,
     repsPlaceholder
   }: {
     eIndex: number;
-    lifts: [ITrainingLifts, ITrainingLifts | undefined];
+    lift: ITrainingLift;
     weightPlaceholder: string;
     repsPlaceholder: string;
   }) => {
-    const filteredLifts = lifts.filter((e) => e);
-
-    return filteredLifts.map((l, i) => (
-      <HStack key={i} justifyContent="space-between" space={4}>
+    return (
+      <HStack space={2}>
         <Input
           flex="1"
           placeholder={repsPlaceholder}
-          value={l?.reps}
-          onChange={(e) => onLiftUpdate(eIndex, i, { reps: e.nativeEvent.text })}
+          value={lift.reps}
+          onChange={(e) => onLiftUpdate(eIndex, { reps: e.nativeEvent.text, weight: lift.weight })}
           backgroundColor={'white'}
+          size={'lg'}
+          selectTextOnFocus
+          keyboardType="decimal-pad"
+          InputRightElement={
+            <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+              Reps
+            </Text>
+          }
         />
         <Input
           flex="1"
           placeholder={weightPlaceholder}
-          value={l?.weight}
-          onChange={(e) => onLiftUpdate(eIndex, i, { weight: e.nativeEvent.text })}
+          value={lift.weight}
+          onChange={(e) => onLiftUpdate(eIndex, { reps: lift.reps, weight: e.nativeEvent.text })}
           backgroundColor={'white'}
+          size={'lg'}
+          selectTextOnFocus
+          keyboardType="decimal-pad"
+          InputRightElement={
+            <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+              Kg
+            </Text>
+          }
         />
       </HStack>
-    ));
+    );
   };
 
   return (
-    <HStack backgroundColor={'gray.100'} rounded="8" borderColor={'gray.100'} borderWidth={2}>
+    <HStack rounded="8" space={2}>
       <Box
         w={'24px'}
-        backgroundColor={'white'}
+        backgroundColor={'gray.100'}
         alignItems="center"
         justifyContent="center"
-        roundedLeft={6}
+        rounded={8}
       >
-        <Text fontSize={'xs'}>#{index + 1}</Text>
+        <Text fontSize={'xs'} color={'gray.500'}>
+          {index + 1}
+        </Text>
       </Box>
-      <HStack space={2} flex="1" ml={2}>
-        <VStack p="2" flex={1} space="1">
-          {set.exercices.map(({ lifts, exerciceId, weight, reps }, i) => (
+      <HStack space={2} flex="1">
+        <VStack flex={1} space="1">
+          {set.exercices.map(({ lift, exerciceId, weight, reps }, i) => (
             <VStack key={i}>
               {set.exercices.length > 1 && (
                 <Text fontSize={'2xs'}>{getExerciceName(exerciceId)}</Text>
               )}
-              {Lifts({
+              {Lift({
                 eIndex: i,
-                lifts,
+                lift,
                 weightPlaceholder: weight,
                 repsPlaceholder: reps
               })}
@@ -94,7 +98,7 @@ function TrainingSet({ set, index, onLiftUpdate }: TrainingSetProps) {
       <IconButton
         size="sm"
         p={1}
-        onPress={() => onOptions()}
+        onPress={() => onOptions(set.id)}
         _icon={{
           as: Ionicons,
           color: 'gray.700',

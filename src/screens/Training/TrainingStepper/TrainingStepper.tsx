@@ -5,11 +5,14 @@ import { useSelector } from 'react-redux';
 import useTraining from '@/hooks/useTraining';
 import { TrainingScreenProps } from '@/navigation/navigators/TrainingNavigator';
 import { RootState } from '@/store';
+import { Training } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
 export default function TrainingStepper({}: TrainingScreenProps<'TrainingStepper'>) {
-  const { activeTraining } = useSelector((state: RootState) => state.trainings);
+  const { activeTraining } = useSelector((state: RootState) => state.trainings) as {
+    activeTraining: Training;
+  };
   const { onTrainingFinished } = useTraining();
 
   if (!activeTraining) return <></>;
