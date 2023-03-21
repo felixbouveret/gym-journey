@@ -4,16 +4,16 @@ import { Button, HStack, IconButton } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import ExerciceModalScreen from '@/stacks/Exercices/ExerciceModalScreen';
-import ExerciceSingle from '@/stacks/Exercices/ExerciceSingle';
-import ExercicesList from '@/stacks/Exercices/ExercicesList';
+import ExerciceModalScreen from '@/screens/Exercices/ExerciceModalScreen';
+import ExerciceSingle from '@/screens/Exercices/ExerciceSingle';
+import ExercicesList from '@/screens/Exercices/ExercicesList';
 import { removeExercice } from '@/store/Exercices';
 import { ExercicesTabParamList, RootTabScreenProps } from '@/types';
 import { UID_V4 } from '@/types/Exercices.types';
 
 const Stack = createNativeStackNavigator<ExercicesTabParamList>();
 
-export default function ProgramsScreen({}: RootTabScreenProps<'Exercices'>) {
+export default function ExercicesNavigator({}: RootTabScreenProps<'Exercices'>) {
   const dispatch = useDispatch();
 
   const onOptions = (navigation: any, id: UID_V4) =>

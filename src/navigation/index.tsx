@@ -11,14 +11,14 @@ import { Icon } from 'native-base';
 import * as React from 'react';
 
 import Colors from '@/constants/Colors';
-import ExercicesScreen from '@/screens/ExercicesScreen';
-import HistoryScreen from '@/screens/HistoryScreen';
 import NotFoundScreen from '@/screens/NotFoundScreen';
-import ProgramsScreen from '@/screens/ProgramsScreen';
-import TrainingScreen from '@/screens/TrainingScreen';
 import { RootStackParamList, RootTabParamList } from '@/types';
 
 import LinkingConfiguration from './LinkingConfiguration';
+import ExercicesScreen from './navigators/ExercicesNavigator';
+import HistoryScreen from './navigators/HistoryNavigator';
+import ProgramsScreen from './navigators/ProgramsNavigator';
+import TrainingScreen from './navigators/TrainingNavigator';
 
 export default function Navigation() {
   return (
@@ -38,7 +38,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="Training" component={TrainingScreen} options={{}} />
+      <Stack.Screen name="Training" component={TrainingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );

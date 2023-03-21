@@ -2,10 +2,18 @@ import { HStack, Text, VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
-import { ProgramSessionStep } from '@/store/Programs';
+import { UID_V4 } from '@/types/Exercices.types';
 
 interface NormalSetProps {
-  item: ProgramSessionStep;
+  item: {
+    setNumber: string;
+    restTime: string;
+    exercices: {
+      exerciceId: UID_V4;
+      reps: string;
+      weight: string;
+    }[];
+  };
 }
 
 export default function NormalSet({ item }: NormalSetProps) {
@@ -22,10 +30,10 @@ export default function NormalSet({ item }: NormalSetProps) {
       <HStack space={8} justifyContent={'space-between'}>
         <HStack space={4} justifyContent={'space-between'}>
           <Text color={'gray.500'} fontSize={'sm'}>
-            {item.setNumber} séries
+            {item.setNumber} sets
           </Text>
           <Text color={'gray.500'} fontSize={'sm'}>
-            {exercice.reps} répétitions
+            {exercice.reps} reps
           </Text>
         </HStack>
         <Text color={'gray.500'} fontSize={'sm'}>

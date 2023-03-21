@@ -37,7 +37,6 @@ export default function ProgramsExerciceModal({
   const sessionId = route.params.sessionId;
   const stepId = route.params.stepId;
 
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const { onCreateExercice } = useExercices();
 
   const [type, setType] = useState(ExerciceType.NORMAL);
@@ -62,7 +61,7 @@ export default function ProgramsExerciceModal({
         setType(step.type);
         setSets(step.setNumber);
         setRestTime(step.restTime);
-        const formattedExercices = step.exercices.map((stepExercice, index) => {
+        const formattedExercices = step.exercices.map((stepExercice) => {
           const globalExercice = exercices.find((e) => e.id === stepExercice.exerciceId);
           return {
             name: globalExercice?.name || '',
@@ -74,18 +73,6 @@ export default function ProgramsExerciceModal({
         setStepExercices(formattedExercices);
       }
     }
-
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-      setIsKeyboardVisible(true);
-    });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setIsKeyboardVisible(false);
-    });
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
   }, []);
 
   const submitNormalSet = async () => {

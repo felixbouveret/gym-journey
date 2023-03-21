@@ -17,7 +17,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.felixbvt.gymjourney"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "38f69a33-3988-4ee4-9ef2-5ea1f6775e60"
+      }
     }
   }
 }

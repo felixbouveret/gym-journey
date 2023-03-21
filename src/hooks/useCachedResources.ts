@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { setState as setExercicesState } from '@/store/Exercices';
 import { setState as setProgramsState } from '@/store/Programs';
+import { setState as setTrainingsState } from '@/store/Training';
 
 import useStorage from './useStorage';
 
@@ -20,13 +21,15 @@ export default function useCachedResources() {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
-        const [storagePrograms, storageExercices] = await Promise.all([
+        const [storagePrograms, storageExercices, storageTrainings] = await Promise.all([
           getStorageData('programs'),
-          getStorageData('exercices')
+          getStorageData('exercices'),
+          getStorageData('trainings')
         ]);
 
         if (storagePrograms) dispatch(setProgramsState(storagePrograms));
         if (storageExercices) dispatch(setExercicesState(storageExercices));
+        if (storageTrainings) dispatch(setTrainingsState(storageTrainings));
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
@@ -55,6 +58,12 @@ export default function useCachedResources() {
   useEffect(() => {
     setStorageData('exercices', exercices);
   }, [exercices]);
+
+  const { trainings } = useSelector((state: RootState) => state.trainings);
+
+  useEffect(() => {
+    setStorageData('trainings', trainings);
+  }, [trainings]);
 
   return isLoadingComplete;
 }
