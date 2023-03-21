@@ -10,7 +10,10 @@ import { setActiveTraining, Training } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
-export default function TrainingStepper({ route }: TrainingScreenProps<'TrainingStepper'>) {
+export default function TrainingStepper({
+  route,
+  navigation
+}: TrainingScreenProps<'TrainingStepper'>) {
   const dispatch = useDispatch();
   const { activeTraining } = useSelector((state: RootState) => state.trainings) as {
     activeTraining: Training;
@@ -18,9 +21,14 @@ export default function TrainingStepper({ route }: TrainingScreenProps<'Training
   const { onTrainingFinished } = useTraining();
 
   const { trainingId } = route.params;
+
   useEffect(() => {
     if (!trainingId) return;
     dispatch(setActiveTraining(trainingId));
+
+    navigation.setOptions({
+      headerTitle: activeTraining?.sessionName
+    });
   }, []);
 
   if (!activeTraining) return <></>;
