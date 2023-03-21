@@ -21,11 +21,12 @@ function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
   const onOptions = (setId: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Supprimer'],
+        options: ['Annuler', 'Supprimer'],
         cancelButtonIndex: 0
       },
       (buttonIndex) => {
-        if (buttonIndex === 0) return removeSet(step, setId);
+        if (buttonIndex === 1) return removeSet(step, setId);
+        if (buttonIndex === 0) return;
       }
     );
 

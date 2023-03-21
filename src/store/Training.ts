@@ -74,6 +74,16 @@ export const roomsStore = createSlice({
       }
     },
 
+    setActiveTraining: {
+      reducer(state, action: PayloadAction<UID_V4>) {
+        const training = state.trainings.find((t) => t.id === action.payload);
+        if (training) state.activeTraining = training;
+      },
+      prepare(id: UID_V4) {
+        return { payload: id };
+      }
+    },
+
     updateTrainingStep: {
       reducer(state, action: PayloadAction<{ stepId: UID_V4; step: ITrainingStep }>) {
         if (state.activeTraining) {
@@ -133,6 +143,7 @@ export const roomsStore = createSlice({
 
 export const {
   setState,
+  setActiveTraining,
   startTraining,
   updateTrainingStep,
   finishTraining,

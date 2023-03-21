@@ -1,19 +1,27 @@
 import { Button, HStack, VStack } from 'native-base';
+import { useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useTraining from '@/hooks/useTraining';
 import { TrainingScreenProps } from '@/navigation/navigators/TrainingNavigator';
 import { RootState } from '@/store';
-import { Training } from '@/store/Training';
+import { setActiveTraining, Training } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
-export default function TrainingStepper({}: TrainingScreenProps<'TrainingStepper'>) {
+export default function TrainingStepper({ route }: TrainingScreenProps<'TrainingStepper'>) {
+  const dispatch = useDispatch();
   const { activeTraining } = useSelector((state: RootState) => state.trainings) as {
     activeTraining: Training;
   };
   const { onTrainingFinished } = useTraining();
+
+  const { trainingId } = route.params;
+  useEffect(() => {
+    if (!trainingId) return;
+    dispatch(setActiveTraining(trainingId));
+  }, []);
 
   if (!activeTraining) return <></>;
 

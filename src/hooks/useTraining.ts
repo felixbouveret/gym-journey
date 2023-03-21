@@ -74,6 +74,7 @@ export default function useTraining() {
     lift: ITrainingLift
   ) => {
     dispatch(updateTrainingLift(stepId, setId, eIndex, lift));
+    dispatch(saveTraining());
   };
 
   const onTrainingStart = (training: Training) => {
