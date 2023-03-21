@@ -1,4 +1,5 @@
-import { Box, ScrollView, VStack } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import { Box, HStack, Icon, Pressable, ScrollView, Text, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -6,12 +7,14 @@ import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
+import { TrainingStateEnum } from '@/store/Training';
 import { ProgramsTabScreenProps } from '@/types';
 
 import ProgramBlock from './Components/ProgramBlock';
 
 export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps<'Programs'>) {
   const { programs } = useSelector((state: RootState) => state.programs);
+  const { trainings } = useSelector((state: RootState) => state.trainings);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
     usePrograms();
 
@@ -49,6 +52,10 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
     });
   };
 
+  const ongoingTraining = trainings.find(
+    (training) => training.state === TrainingStateEnum.IN_PROGRESS
+  );
+
   return (
     <VStack h="full" justifyContent={programs?.length ? '' : 'flex-end'}>
       <ScrollView>
@@ -60,6 +67,39 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
           p={4}
           space="4"
         >
+          {ongoingTraining && (
+            <Pressable
+              w="full"
+              p={4}
+              backgroundColor="white"
+              borderRadius="8"
+              shadow={4}
+              onPress={() =>
+                navigation.navigate('Training', {
+                  screen: 'TrainingStepper',
+                  params: { trainingId: ongoingTraining.id }
+                })
+              }
+            >
+              <HStack alignItems={'center'} justifyContent="space-between">
+                <VStack alignItems="flex-start">
+                  <Text fontSize="lg" fontWeight="bold" color="gray.700">
+                    Reprendre l'entrainement
+                  </Text>
+                  <Text fontSize="sm" color="gray.500">
+                    {ongoingTraining.sessionName}
+                  </Text>
+                </VStack>
+                <Icon
+                  size="sm"
+                  as={Ionicons}
+                  flexShrink={0}
+                  color="gray.700"
+                  name="chevron-forward"
+                />
+              </HStack>
+            </Pressable>
+          )}
           {programs.length
             ? programs.map((program, index) => (
                 <ProgramBlock
