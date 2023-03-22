@@ -51,7 +51,12 @@ export default function TrainingStepper({
         borderTopStyle="solid"
         borderTopWidth="1"
       >
-        <Button flex="1" onPress={() => onTrainingFinished(activeTraining.id)}>
+        <Button
+          flex="1"
+          onPress={() =>
+            onTrainingFinished(activeTraining.id, () => navigation.navigate('History'))
+          }
+        >
           Terminer
         </Button>
       </HStack>

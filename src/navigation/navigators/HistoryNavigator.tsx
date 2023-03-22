@@ -1,17 +1,29 @@
-import { Text, VStack } from 'native-base';
-import { FlatList } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { RootState } from '@/store';
+import HistoryList from '@/screens/History/HistoryList';
+import HistorySingle from '@/screens/History/HistorySingle';
 import { RootTabScreenProps } from '@/types';
+import { UID_V4 } from '@/types/Exercices.types';
+
+export type HistoryTabParamList = {
+  HistoryList: undefined;
+  HistorySingle: { id: UID_V4 };
+};
+
+export type HistoryScreenProps<Screen extends keyof HistoryTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<HistoryTabParamList, Screen>,
+  NativeStackScreenProps<HistoryTabParamList>
+>;
+
+const Stack = createNativeStackNavigator<HistoryTabParamList>();
 
 export default function HistoryNavigator({}: RootTabScreenProps<'History'>) {
-  const { trainings } = useSelector((state: RootState) => state.trainings);
-
   return (
-    <VStack w="full" h="full" p={4} justifyContent="center">
-      <Text>{trainings.length}</Text>
-      <FlatList data={trainings} renderItem={({ item }) => <Text>{item.sessionName}</Text>} />
-    </VStack>
+    <Stack.Navigator>
+      <Stack.Screen name="HistoryList" component={HistoryList} />
+      <Stack.Screen name="HistorySingle" component={HistorySingle} />
+    </Stack.Navigator>
   );
 }
