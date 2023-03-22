@@ -3,9 +3,10 @@ import { Box, Text, VStack } from 'native-base';
 interface InfoBlockProps {
   title?: string;
   description?: string;
+  children?: React.ReactNode;
 }
 
-export default function InfoBlock({ title, description }: InfoBlockProps) {
+export default function InfoBlock({ title, description, children }: InfoBlockProps) {
   return (
     <Box
       rounded={8}
@@ -22,6 +23,7 @@ export default function InfoBlock({ title, description }: InfoBlockProps) {
           </Text>
         )}
         {!!description && <Text color={'gray.500'}>{description}</Text>}
+        {children}
       </VStack>
     </Box>
   );

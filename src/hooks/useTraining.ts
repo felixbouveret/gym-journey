@@ -82,7 +82,7 @@ export default function useTraining() {
     dispatch(saveTraining());
   };
 
-  const onTrainingFinished = (trainingId: UID_V4) => {
+  const onTrainingFinished = (trainingId: UID_V4, callback: () => void) => {
     Alert.alert('Terminer la séance', '', [
       {
         text: 'Non annuler',
@@ -90,7 +90,10 @@ export default function useTraining() {
       },
       {
         text: 'Oui terminer',
-        onPress: () => finishTraining(trainingId)
+        onPress: () => {
+          dispatch(finishTraining(trainingId));
+          callback();
+        }
       }
     ]);
   };

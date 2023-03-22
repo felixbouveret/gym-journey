@@ -39,6 +39,7 @@ export interface Training {
   sessionId: UID_V4;
   sessionName: string;
   startedAt: string;
+  finishedAt?: string;
   state: TrainingStateEnum;
   steps: ITrainingStep[];
 }
@@ -132,7 +133,19 @@ export const roomsStore = createSlice({
     finishTraining: {
       reducer(state, action: PayloadAction<{ trainingId: UID_V4 }>) {
         const training = state.trainings.find((t) => t.id === action.payload.trainingId);
-        if (training) training.state = TrainingStateEnum.FINISHED;
+        if (training) {
+          training.state = TrainingStateEnum.FINISHED;
+          training.finishedAt = new Date().toISOString();
+        }
+      },
+      prepare(trainingId: UID_V4) {
+        return { payload: { trainingId } };
+      }
+    },
+
+    removeTraining: {
+      reducer(state, action: PayloadAction<{ trainingId: UID_V4 }>) {
+        state.trainings = state.trainings.filter((t) => t.id !== action.payload.trainingId);
       },
       prepare(trainingId: UID_V4) {
         return { payload: { trainingId } };
@@ -148,7 +161,8 @@ export const {
   updateTrainingStep,
   finishTraining,
   updateTrainingLift,
-  saveTraining
+  saveTraining,
+  removeTraining
 } = roomsStore.actions;
 
 export default roomsStore.reducer;
