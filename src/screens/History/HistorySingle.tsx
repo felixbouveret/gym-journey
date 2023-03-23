@@ -36,8 +36,8 @@ export default function HistorySingle({ navigation, route }: HistoryScreenProps<
           )}
         </InfoBlock>
         <VStack space="2">
-          {currentTraining.steps.map((step) => (
-            <VStack py={2} backgroundColor="white" rounded={8} space={2}>
+          {currentTraining.steps.map((step, stepIndex) => (
+            <VStack key={stepIndex} py={2} backgroundColor="white" rounded={8} space={2}>
               <HStack space={4} px={4}>
                 {step.exercices.map((exercice, index) => (
                   <Text key={index} fontSize={'md'} fontWeight="medium">
@@ -46,17 +46,18 @@ export default function HistorySingle({ navigation, route }: HistoryScreenProps<
                 ))}
               </HStack>
               <VStack space={1}>
-                {step.sets.map((set, index) => (
+                {step.sets.map((set, setIndex) => (
                   <HStack
+                    key={setIndex}
                     space={4}
                     px={4}
                     alignItems="center"
                     justifyContent={'space-between'}
-                    backgroundColor={index % 2 ? 'gray.50' : 'white'}
+                    backgroundColor={setIndex % 2 ? 'gray.50' : 'white'}
                   >
                     <Box>
                       <Text fontSize={'xs'} fontWeight="medium">
-                        {index + 1}
+                        {setIndex + 1}
                       </Text>
                     </Box>
                     {set.exercices.map(({ lift, exerciceId }, i) => (
