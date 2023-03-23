@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { Badge, Button, HStack, Icon, IconButton, Pressable, Text, VStack } from 'native-base';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
-import useTime from '@/hooks/useTime';
 import { Program, ProgramSession, ProgramStatus } from '@/store/Programs';
 
 interface ProgramBlockProps {
@@ -20,8 +19,6 @@ export default function ProgramBlock({
   onSessionPress,
   onEditPress
 }: ProgramBlockProps) {
-  const { getAverageTime } = useTime();
-
   const isDraft = program.status === ProgramStatus.DRAFT;
   const isArchived = program.status === ProgramStatus.ARCHIVED;
 
@@ -66,9 +63,6 @@ export default function ProgramBlock({
             alignItems="center"
           >
             <HStack space={2} justifyContent={'space-between'}>
-              <Badge>
-                <Text>{getAverageTime(session.steps)}"</Text>
-              </Badge>
               <Text fontSize={'md'} fontWeight="medium">
                 {session.name}
               </Text>

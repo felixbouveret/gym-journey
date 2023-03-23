@@ -1,23 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import {
-  Box,
-  Button,
-  Heading,
-  Icon,
-  KeyboardAvoidingView,
-  Pressable,
-  ScrollView,
-  VStack
-} from 'native-base';
+import { Box, Button, Heading, Icon, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import SelectBoxes from '@/components/SelectBoxes';
 import useExercices from '@/hooks/useExercices';
 import { RootState } from '@/store';
-import { addSessionStep, updateSessionStep } from '@/store/Programs';
+import { addSessionStep, ProgramSessionStep, updateSessionStep } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
@@ -102,7 +93,7 @@ export default function ProgramsExerciceModal({
       setNumber: sets,
       restTime: restTime,
       exercices: stepExercicesFormatted || []
-    };
+    } as ProgramSessionStep;
 
     if (!stepId) dispatch(addSessionStep(programId, sessionId, sessionStep));
     else dispatch(updateSessionStep(programId, sessionId, stepId, sessionStep));
@@ -133,67 +124,67 @@ export default function ProgramsExerciceModal({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={46}
     >
-      <Pressable onPress={Keyboard.dismiss}>
-        <VStack w="full" h="full" pb={46} space={8} alignItems="center" backgroundColor={'white'}>
-          <ScrollView w={'full'} overflow="visible">
-            <VStack w="full" p="4" space={8} alignItems="center">
-              <VStack w="full" space={2} alignItems="center" maxW={200}>
-                <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
-                <Heading textAlign={'center'}>Ajouter un nouvel exercice</Heading>
-              </VStack>
-              <VStack w="full" space={4}>
-                <SelectBoxes
-                  label="Type d'exercice"
-                  selectedValue={type}
-                  onChange={(e) => setType(e)}
-                  options={[
-                    {
-                      wording: 'Normal',
-                      value: ExerciceType.NORMAL
-                    },
-                    {
-                      wording: 'Superset',
-                      value: ExerciceType.SUPERSET
-                    }
-                  ]}
-                />
-                {type === ExerciceType.NORMAL ? (
-                  <NormalSet
-                    data={stepExercices}
-                    sets={sets}
-                    restTime={restTime}
-                    onDataChange={updateExercice}
-                    onSetsChange={(e) => setSets(e)}
-                    onRestTimeChange={(e) => setRestTime(e)}
-                  />
-                ) : (
-                  <SuperSet
-                    data={stepExercices}
-                    sets={sets}
-                    restTime={restTime}
-                    onDataChange={updateExercice}
-                    onSetsChange={(e) => setSets(e)}
-                    onRestTimeChange={(e) => setRestTime(e)}
-                  />
-                )}
-              </VStack>
+      <VStack w="full" h="full" pb={46} space={8} alignItems="center" backgroundColor={'white'}>
+        <ScrollView w={'full'} overflow="visible">
+          <VStack w="full" p="4" space={4} alignItems="center" pt={2}>
+            <VStack w="full" space={2} alignItems="center" maxW={250}>
+              <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
+              <Heading textAlign={'center'}>
+                {stepId ? "Modifier l'" : 'Ajouter un nouvel '}exercice
+              </Heading>
             </VStack>
-          </ScrollView>
-          <Box px={4} w="full">
-            <Button
-              w="full"
-              leftIcon={<Icon as={Ionicons} name={stepId ? 'pencil' : 'add'} size="md" />}
-              onPress={submit}
-              isDisabled={!isValid()}
-            >
-              {stepId ? 'Modifier' : 'Ajouter'}
-            </Button>
-          </Box>
+            <VStack w="full" space={4}>
+              <SelectBoxes
+                label="Type d'exercice"
+                selectedValue={type}
+                onChange={(e) => setType(e)}
+                options={[
+                  {
+                    wording: 'Normal',
+                    value: ExerciceType.NORMAL
+                  },
+                  {
+                    wording: 'Superset',
+                    value: ExerciceType.SUPERSET
+                  }
+                ]}
+              />
+              {type === ExerciceType.NORMAL ? (
+                <NormalSet
+                  data={stepExercices}
+                  sets={sets}
+                  restTime={restTime}
+                  onDataChange={updateExercice}
+                  onSetsChange={(e) => setSets(e)}
+                  onRestTimeChange={(e) => setRestTime(e)}
+                />
+              ) : (
+                <SuperSet
+                  data={stepExercices}
+                  sets={sets}
+                  restTime={restTime}
+                  onDataChange={updateExercice}
+                  onSetsChange={(e) => setSets(e)}
+                  onRestTimeChange={(e) => setRestTime(e)}
+                />
+              )}
+            </VStack>
+          </VStack>
+        </ScrollView>
+        <Box px={4} w="full">
+          <Button
+            w="full"
+            leftIcon={<Icon as={Ionicons} name={stepId ? 'pencil' : 'add'} size="md" />}
+            onPress={submit}
+            isDisabled={!isValid()}
+          >
+            {stepId ? 'Modifier' : 'Ajouter'}
+          </Button>
+        </Box>
 
-          {/* Use a light status bar on iOS to account for the black space above the modal */}
-          <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-        </VStack>
-      </Pressable>
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      </VStack>
     </KeyboardAvoidingView>
   );
 }

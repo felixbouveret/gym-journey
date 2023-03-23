@@ -71,7 +71,7 @@ export default function ProgramsCreationScreen({
             style={{ width: '100%', height: '100%', padding: 16 }}
             data={sessionSteps}
             renderItem={({ item, drag }) => (
-              <Box pb="4">
+              <Box pb="2">
                 <ScaleDecorator>
                   <SessionStep
                     item={item}

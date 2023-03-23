@@ -59,14 +59,7 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
   return (
     <VStack h="full" justifyContent={programs?.length ? '' : 'flex-end'}>
       <ScrollView>
-        <VStack
-          justifyContent={programs.length ? '' : 'flex-end'}
-          alignItems="center"
-          h="full"
-          w="full"
-          p={4}
-          space="4"
-        >
+        <VStack alignItems="center" h="full" w="full" p={4} space="4">
           {ongoingTraining && (
             <Pressable
               w="full"
