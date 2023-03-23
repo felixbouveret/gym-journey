@@ -40,6 +40,31 @@ export default function NormalSet(props: NormalSetProps) {
       <HStack space={2}>
         <FormControl flex={1}>
           <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
+            Tempo
+          </FormControl.Label>
+          <Input size={'xl'} keyboardType="decimal-pad" placeholder="1012" />
+        </FormControl>
+        <FormControl flex={1}>
+          <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
+            Repos
+          </FormControl.Label>
+          <Input
+            size={'xl'}
+            value={props.restTime}
+            placeholder="3"
+            keyboardType="decimal-pad"
+            onChangeText={props.onRestTimeChange}
+            InputRightElement={
+              <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+                min
+              </Text>
+            }
+          />
+        </FormControl>
+      </HStack>
+      <HStack space={2}>
+        <FormControl flex={1}>
+          <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
             Séries
           </FormControl.Label>
           <Input
@@ -75,31 +100,6 @@ export default function NormalSet(props: NormalSetProps) {
             InputRightElement={
               <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
                 kg
-              </Text>
-            }
-          />
-        </FormControl>
-      </HStack>
-      <HStack space={2}>
-        <FormControl flex={1}>
-          <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-            Tempo
-          </FormControl.Label>
-          <Input size={'xl'} keyboardType="decimal-pad" placeholder="1012" />
-        </FormControl>
-        <FormControl flex={1}>
-          <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-            Repos
-          </FormControl.Label>
-          <Input
-            size={'xl'}
-            value={props.restTime}
-            placeholder="3"
-            keyboardType="decimal-pad"
-            onChangeText={props.onRestTimeChange}
-            InputRightElement={
-              <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
-                min
               </Text>
             }
           />

@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControl, HStack, Input, VStack } from 'native-base';
+import { Button, Checkbox, FormControl, HStack, Input, Text, VStack } from 'native-base';
 
 interface SupersetFormData {
   name: string;
@@ -24,7 +24,7 @@ export default function SuperSet(props: SupersetProps) {
 
   return (
     <VStack flex={1} w="full" space="4">
-      <HStack space={4}>
+      <HStack space={2}>
         <FormControl flex={1}>
           <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
             Séries
@@ -38,13 +38,18 @@ export default function SuperSet(props: SupersetProps) {
         </FormControl>
         <FormControl flex={1}>
           <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-            Repos (m)
+            Repos
           </FormControl.Label>
           <Input
             size={'xl'}
             value={props.restTime}
             keyboardType="decimal-pad"
             onChangeText={props.onRestTimeChange}
+            InputRightElement={
+              <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+                min
+              </Text>
+            }
           />
         </FormControl>
       </HStack>
@@ -68,7 +73,7 @@ export default function SuperSet(props: SupersetProps) {
           >
             Exercice unilatéral
           </Checkbox>
-          <HStack space={4}>
+          <HStack space={2}>
             <FormControl flex={1}>
               <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
                 Répétitions
@@ -83,7 +88,7 @@ export default function SuperSet(props: SupersetProps) {
             </FormControl>
             <FormControl flex={1}>
               <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
-                Charge (kg)
+                Charge
               </FormControl.Label>
               <Input
                 backgroundColor={'white'}
@@ -91,6 +96,11 @@ export default function SuperSet(props: SupersetProps) {
                 value={set.weight}
                 keyboardType="decimal-pad"
                 onChangeText={(e) => setSingleFormData(index, 'weight', e)}
+                InputRightElement={
+                  <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+                    kg
+                  </Text>
+                }
               />
             </FormControl>
           </HStack>
