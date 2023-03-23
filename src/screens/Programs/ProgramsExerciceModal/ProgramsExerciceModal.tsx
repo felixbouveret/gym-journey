@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SelectBoxes from '@/components/SelectBoxes';
 import useExercices from '@/hooks/useExercices';
 import { RootState } from '@/store';
-import { addSessionStep, updateSessionStep } from '@/store/Programs';
+import { addSessionStep, ProgramSessionStep, updateSessionStep } from '@/store/Programs';
 import { ProgramsTabScreenProps } from '@/types';
 import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
@@ -93,7 +93,7 @@ export default function ProgramsExerciceModal({
       setNumber: sets,
       restTime: restTime,
       exercices: stepExercicesFormatted || []
-    };
+    } as ProgramSessionStep;
 
     if (!stepId) dispatch(addSessionStep(programId, sessionId, sessionStep));
     else dispatch(updateSessionStep(programId, sessionId, stepId, sessionStep));

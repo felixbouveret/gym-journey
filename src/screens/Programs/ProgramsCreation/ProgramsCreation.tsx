@@ -63,7 +63,7 @@ export default function ProgramsCreationScreen({
       <VStack flex="1">
         {!!currentProgram?.sessions.length && (
           <DraggableFlatList
-            style={{ width: '100%', paddingTop: 16 }}
+            style={{ width: '100%', paddingTop: 16, height: '100%' }}
             data={currentProgram.sessions}
             renderItem={({ item, drag, getIndex }) => (
               <Box p={4} pt={0} pb={getIndex() === currentProgram.sessions.length - 1 ? 8 : 4}>
