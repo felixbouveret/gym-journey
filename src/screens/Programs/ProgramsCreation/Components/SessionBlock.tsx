@@ -3,6 +3,7 @@ import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'nati
 import { ColorType } from 'native-base/lib/typescript/components/types';
 import { useSelector } from 'react-redux';
 
+import useTime from '@/hooks/useTime';
 import { RootState } from '@/store';
 import { ProgramSession, ProgramSessionStep, UID_V4 } from '@/store/Programs';
 import { ExerciceType } from '@/types/Exercices.types';
@@ -25,11 +26,7 @@ export default function SessionBlock({
   backgroundColor
 }: SessionBlockProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
-
-  const averageTime = session.steps.reduce(
-    (acc, step) => acc + (Number(step.restTime) + 1) * Number(step.setNumber),
-    0
-  );
+  const { getAverageTime } = useTime();
 
   const exercice = (step: ProgramSessionStep) => {
     if (step.type === ExerciceType.SUPERSET)
@@ -83,7 +80,7 @@ export default function SessionBlock({
                 {session.name}
               </Text>
               <Badge>
-                <Text>{averageTime}"</Text>
+                <Text>{getAverageTime(session.steps)}"</Text>
               </Badge>
             </HStack>
             {onOptionsPress && (
@@ -113,7 +110,11 @@ export default function SessionBlock({
             )}
           </VStack>
         </VStack>
-        {onEditPress && <Button onPress={() => onEditPress(session.id)}> Éditer la séance </Button>}
+        {onEditPress && (
+          <Button variant={'outline'} onPress={() => onEditPress(session.id)}>
+            Éditer la séance
+          </Button>
+        )}
       </VStack>
     </Pressable>
   );
