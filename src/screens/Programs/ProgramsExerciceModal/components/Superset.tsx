@@ -49,7 +49,7 @@ export default function SuperSet(props: SupersetProps) {
         </FormControl>
       </HStack>
       {props.data.map((set, index) => (
-        <VStack key={index} space="1" backgroundColor={'gray.100'} p="2" rounded={8}>
+        <VStack key={index} space="2" backgroundColor={'gray.100'} p="2" rounded={8}>
           <FormControl>
             <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
               Exercice {index + 1}
@@ -61,6 +61,13 @@ export default function SuperSet(props: SupersetProps) {
               onChangeText={(e) => setSingleFormData(index, 'name', e)}
             />
           </FormControl>
+          <Checkbox
+            value="isUnilateral"
+            isChecked={set.isUnilateral}
+            onChange={(e) => setSingleFormData(index, 'isUnilateral', e)}
+          >
+            Exercice unilatéral
+          </Checkbox>
           <HStack space={4}>
             <FormControl flex={1}>
               <FormControl.Label _text={{ color: 'gray.700', fontSize: 'sm', fontWeight: 600 }}>
@@ -87,13 +94,6 @@ export default function SuperSet(props: SupersetProps) {
               />
             </FormControl>
           </HStack>
-          <Checkbox
-            value="isUnilateral"
-            isChecked={set.isUnilateral}
-            onChange={(e) => setSingleFormData(index, 'isUnilateral', e)}
-          >
-            Exercice unilatéral
-          </Checkbox>
         </VStack>
       ))}
       <Button
