@@ -3,16 +3,14 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import {
-  CompositeNavigationProp,
-  CompositeScreenProps,
-  NavigatorScreenParams
-} from '@react-navigation/native';
-import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { TrainingTabParamList } from './screens/TrainingScreen';
-import { UID_V4 } from './store/Programs';
+import { ExercicesTabParamList } from './navigation/navigators/ExercicesNavigator';
+import { HistoryTabParamList } from './navigation/navigators/HistoryNavigator';
+import { ProgramsTabParamList } from './navigation/navigators/ProgramsNavigator';
+import { TrainingTabParamList } from './navigation/navigators/TrainingNavigator';
 
 declare global {
   namespace ReactNavigation {
@@ -35,46 +33,11 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 
 export type RootTabParamList = {
   ProgramsScreen: NavigatorScreenParams<ProgramsTabParamList> | undefined;
-  History: undefined;
+  History: NavigatorScreenParams<HistoryTabParamList> | undefined;
   Exercices: NavigatorScreenParams<ExercicesTabParamList> | undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
->;
-
-export type ProgramsTabParamList = {
-  Programs: undefined;
-  ProgramsCreation: { id: UID_V4; editing?: boolean };
-  ProgramsSession: { programId: UID_V4; sessionId: UID_V4; editing?: boolean };
-  ProgramsExerciceModal: { programId: UID_V4; sessionId: UID_V4; stepId?: UID_V4 };
-};
-
-export type ProgramsTabScreenProps<Screen extends keyof ProgramsTabParamList> =
-  CompositeScreenProps<
-    BottomTabScreenProps<ProgramsTabParamList, Screen>,
-    NativeStackScreenProps<RootStackParamList>
-  >;
-
-export type navigationProgramsProps = CompositeNavigationProp<
-  BottomTabNavigationProp<ProgramsTabParamList, 'Programs'>,
-  NativeStackNavigationProp<RootStackParamList>
->;
-
-export type ExercicesTabParamList = {
-  ExercicesList: undefined;
-  ExerciceSingle: { id: UID_V4 };
-  ExerciceModal: { id?: UID_V4 };
-};
-
-export type ExercicesTabScreenProps<Screen extends keyof ExercicesTabParamList> =
-  CompositeScreenProps<
-    BottomTabScreenProps<ExercicesTabParamList, Screen>,
-    NativeStackScreenProps<RootStackParamList>
-  >;
-
-export type navigationExercicesProps = CompositeNavigationProp<
-  BottomTabNavigationProp<ExercicesTabParamList, 'ExercicesList'>,
-  NativeStackNavigationProp<RootStackParamList>
 >;

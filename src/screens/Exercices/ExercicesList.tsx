@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Button, HStack, Icon, ScrollView, Text, VStack } from 'native-base';
+import { Badge, Box, Button, FlatList, HStack, Icon, Text, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import ExerciceContainer from '@/components/ExerciceContainer';
+import { ExercicesTabScreenProps } from '@/navigation/navigators/ExercicesNavigator';
 import { RootState } from '@/store';
 import { removeExercice } from '@/store/Exercices';
-import { ExercicesTabScreenProps } from '@/types';
-import { UID_V4 } from '@/types/Exercices.types';
+import { Exercice, UID_V4 } from '@/types/Exercices.types';
 
 export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'ExercicesList'>) {
   const dispatch = useDispatch();
@@ -28,33 +28,30 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
       }
     );
 
-  const exercicesList = exercices?.map((item, index) => (
-    <ExerciceContainer
-      key={index}
-      onPress={() => navigation.navigate('ExerciceSingle', { id: item.id })}
-      onOptions={() => onOptions(item.id)}
-      small
-    >
-      <HStack alignItems="center" justifyContent={'space-between'}>
-        <Text fontSize={'md'} fontWeight="medium">
-          {item.name}
-        </Text>
-        {item.isUnilateral && (
-          <Badge>
-            <Text>Unilatéral</Text>
-          </Badge>
-        )}
-      </HStack>
-    </ExerciceContainer>
-  ));
+  const exercicesList = ({ item }: { item: Exercice }) => (
+    <Box py={1} px={4}>
+      <ExerciceContainer
+        onPress={() => navigation.navigate('ExerciceSingle', { id: item.id })}
+        onOptions={() => onOptions(item.id)}
+        small
+      >
+        <HStack alignItems="center" justifyContent={'space-between'}>
+          <Text fontSize={'md'} fontWeight="medium">
+            {item.name}
+          </Text>
+          {item.isUnilateral && (
+            <Badge>
+              <Text>Unilatéral</Text>
+            </Badge>
+          )}
+        </HStack>
+      </ExerciceContainer>
+    </Box>
+  );
 
   return (
     <VStack h="full" justifyContent={exercices?.length ? '' : 'flex-end'}>
-      <ScrollView w="full" h="full">
-        <VStack h="full" space={2} p="4">
-          {!!exercices?.length && exercicesList}
-        </VStack>
-      </ScrollView>
+      <FlatList mt="1" w="full" h="full" data={exercices} renderItem={exercicesList} />
       <VStack p="4" pt={0} space={4}>
         {!exercices?.length ? (
           <BlockPlaceholder

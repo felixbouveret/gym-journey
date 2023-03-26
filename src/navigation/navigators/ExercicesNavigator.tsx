@@ -1,5 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, HStack, IconButton } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -8,8 +10,20 @@ import ExerciceModalScreen from '@/screens/Exercices/ExerciceModalScreen';
 import ExerciceSingle from '@/screens/Exercices/ExerciceSingle';
 import ExercicesList from '@/screens/Exercices/ExercicesList';
 import { removeExercice } from '@/store/Exercices';
-import { ExercicesTabParamList, RootTabScreenProps } from '@/types';
+import { RootTabScreenProps } from '@/types';
 import { UID_V4 } from '@/types/Exercices.types';
+
+export type ExercicesTabParamList = {
+  ExercicesList: undefined;
+  ExerciceSingle: { id: UID_V4 };
+  ExerciceModal: { id?: UID_V4 };
+};
+
+export type ExercicesTabScreenProps<Screen extends keyof ExercicesTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<ExercicesTabParamList, Screen>,
+    NativeStackScreenProps<ExercicesTabParamList>
+  >;
 
 const Stack = createNativeStackNavigator<ExercicesTabParamList>();
 

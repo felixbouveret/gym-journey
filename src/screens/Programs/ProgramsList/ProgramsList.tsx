@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
+import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
 import { RootState } from '@/store';
 import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
 import { TrainingStateEnum } from '@/store/Training';
-import { ProgramsTabScreenProps } from '@/types';
 
 import ProgramBlock from './Components/ProgramBlock';
 

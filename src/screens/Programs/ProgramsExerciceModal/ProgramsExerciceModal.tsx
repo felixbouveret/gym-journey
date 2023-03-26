@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SelectBoxes from '@/components/SelectBoxes';
 import useExercices from '@/hooks/useExercices';
+import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
 import { RootState } from '@/store';
 import { addSessionStep, ProgramSessionStep, updateSessionStep } from '@/store/Programs';
-import { ProgramsTabScreenProps } from '@/types';
 import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 import NormalSet from './components/NormalSet';
