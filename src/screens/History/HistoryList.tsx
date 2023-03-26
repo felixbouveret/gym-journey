@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { Badge, HStack, Icon, ScrollView, Text, VStack } from 'native-base';
+import { Badge, Box, FlatList, HStack, Icon, Text, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -8,7 +8,7 @@ import ExerciceContainer from '@/components/ExerciceContainer';
 import InfoBlock from '@/components/InfoBlock';
 import { HistoryScreenProps } from '@/navigation/navigators/HistoryNavigator';
 import { RootState } from '@/store';
-import { removeTraining, TrainingStateEnum } from '@/store/Training';
+import { removeTraining, Training, TrainingStateEnum } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
 export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryList'>) {
@@ -47,39 +47,37 @@ export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryL
       }
     );
 
-  const trainingsList = trainings?.map((item, index) => (
-    <ExerciceContainer key={index} small onOptions={() => onOptions(item.id)}>
-      <HStack alignItems="center" justifyContent={'space-between'}>
-        <VStack>
-          <Text fontSize={'xs'} fontWeight="medium">
-            {format(new Date(item.startedAt), 'dd/MM/yyyy')}
-          </Text>
-          <Text fontSize={'xs'} fontWeight="medium">
-            {getProgramName(item.programId)}
-          </Text>
-          <Text fontSize={'md'} fontWeight="medium">
-            {item.sessionName}
-          </Text>
-        </VStack>
+  const trainingsList = ({ item }: { item: Training }) => (
+    <Box px={4} py={1}>
+      <ExerciceContainer small onOptions={() => onOptions(item.id)}>
+        <HStack alignItems="center" justifyContent={'space-between'}>
+          <VStack>
+            <Text fontSize={'xs'} fontWeight="medium">
+              {format(new Date(item.startedAt), 'dd/MM/yyyy')}
+            </Text>
+            <Text fontSize={'xs'} fontWeight="medium">
+              {getProgramName(item.programId)}
+            </Text>
+            <Text fontSize={'md'} fontWeight="medium">
+              {item.sessionName}
+            </Text>
+          </VStack>
 
-        <Badge p={1} colorScheme={getIconState(item.state).colorScheme} borderRadius="6">
-          <Icon
-            p={0}
-            as={<Ionicons name={getIconState(item.state).name} />}
-            colorScheme={getIconState(item.state).color}
-          />
-        </Badge>
-      </HStack>
-    </ExerciceContainer>
-  ));
+          <Badge p={1} colorScheme={getIconState(item.state).colorScheme} borderRadius="6">
+            <Icon
+              p={0}
+              as={<Ionicons name={getIconState(item.state).name} />}
+              colorScheme={getIconState(item.state).color}
+            />
+          </Badge>
+        </HStack>
+      </ExerciceContainer>
+    </Box>
+  );
 
   return (
     <VStack h="full" justifyContent={trainings?.length ? '' : 'flex-end'}>
-      <ScrollView w="full" h="full">
-        <VStack h="full" space={2} p="4">
-          {!!trainings?.length && trainingsList}
-        </VStack>
-      </ScrollView>
+      <FlatList pt={3} w="full" h="full" data={trainings} renderItem={trainingsList} />
       <VStack p="4" pt={0} space={4}>
         {trainings?.length === 0 && (
           <InfoBlock

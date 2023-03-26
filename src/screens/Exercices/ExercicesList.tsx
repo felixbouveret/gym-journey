@@ -51,7 +51,7 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
 
   return (
     <VStack h="full" justifyContent={exercices?.length ? '' : 'flex-end'}>
-      <FlatList mt="1" w="full" h="full" data={exercices} renderItem={exercicesList} />
+      <FlatList pt="3" w="full" h="full" data={exercices} renderItem={exercicesList} />
       <VStack p="4" pt={0} space={4}>
         {!exercices?.length ? (
           <BlockPlaceholder
