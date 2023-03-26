@@ -19,9 +19,9 @@ import { Keyboard, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useExercices from '@/hooks/useExercices';
+import { ExercicesTabScreenProps } from '@/navigation/navigators/ExercicesNavigator';
 import { RootState } from '@/store';
 import { updateExercice } from '@/store/Exercices';
-import { ExercicesTabScreenProps } from '@/types';
 import { Exercice } from '@/types/Exercices.types';
 
 export default function ExerciceModalScreen({
