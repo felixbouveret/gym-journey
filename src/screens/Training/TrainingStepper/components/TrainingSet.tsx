@@ -10,13 +10,19 @@ import { UID_V4 } from '@/types/Exercices.types';
 interface TrainingSetProps {
   set: ITrainingSet;
   index: number;
+  stepIndex: number;
   onLiftUpdate: (exerciceIndex: number, value: ITrainingLift) => void;
   onOptions: (setId: UID_V4) => void;
 }
 
-function TrainingSet({ set, index, onLiftUpdate, onOptions }: TrainingSetProps) {
+function TrainingSet({ index, stepIndex, onLiftUpdate, onOptions }: TrainingSetProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
+
+  const set = useSelector(
+    (state: RootState) => state.trainings.activeTraining?.steps[stepIndex].sets[index],
+    (prev, next) => prev?.id !== next?.id
+  ) as ITrainingSet;
 
   const Lift = ({
     eIndex,
@@ -31,6 +37,7 @@ function TrainingSet({ set, index, onLiftUpdate, onOptions }: TrainingSetProps) 
   }) => {
     return (
       <HStack space={2}>
+        <Text>lift</Text>
         <Input
           flex="1"
           placeholder={repsPlaceholder}

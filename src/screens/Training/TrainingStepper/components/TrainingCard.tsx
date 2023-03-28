@@ -1,9 +1,11 @@
 import { Button, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
 import { memo } from 'react';
 import { ActionSheetIOS, Platform } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import Layout from '@/constants/Layout';
 import useTraining from '@/hooks/useTraining';
+import { RootState } from '@/store';
 import { ITrainingStep } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
@@ -12,11 +14,17 @@ import TrainingSet from './TrainingSet';
 
 interface TrainingCardProps {
   step: ITrainingStep;
+  index: number;
   onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
-function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
+function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
   const { onTrainingLiftUpdate, addSet, removeSet } = useTraining();
+
+  const step = useSelector(
+    (state: RootState) => state.trainings.activeTraining?.steps[index],
+    (prev, next) => prev?.sets.length === next?.sets.length
+  ) as ITrainingStep;
 
   const onOptions = (setId: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -48,11 +56,12 @@ function TrainingCard({ step, onExerciceSwitch }: TrainingCardProps) {
             <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
 
             <VStack space={2}>
-              {step.sets.map((set, index) => (
+              {step.sets.map((set, i) => (
                 <TrainingSet
-                  key={index}
+                  key={i}
                   set={set}
-                  index={index}
+                  stepIndex={index}
+                  index={i}
                   onLiftUpdate={(exerciceIndex, value) => {
                     onTrainingLiftUpdate(step.id, set.id, exerciceIndex, value);
                   }}

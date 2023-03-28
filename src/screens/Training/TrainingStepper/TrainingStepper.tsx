@@ -1,43 +1,40 @@
 import { Button, HStack, VStack } from 'native-base';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Swiper from 'react-native-swiper';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import useTraining from '@/hooks/useTraining';
 import { TrainingScreenProps } from '@/navigation/navigators/TrainingNavigator';
 import { RootState } from '@/store';
-import { setActiveTraining, Training } from '@/store/Training';
+import { Training } from '@/store/Training';
 
 import TrainingCard from './components/TrainingCard';
 
-export default function TrainingStepper({
-  route,
-  navigation
-}: TrainingScreenProps<'TrainingStepper'>) {
-  const dispatch = useDispatch();
-  const { activeTraining } = useSelector((state: RootState) => state.trainings) as {
+export default function TrainingStepper({ navigation }: TrainingScreenProps<'TrainingStepper'>) {
+  const { activeTraining } = useSelector(
+    (state: RootState) => state.trainings,
+    () => true
+  ) as {
     activeTraining: Training;
   };
+
   const { onTrainingFinished } = useTraining();
 
-  const { trainingId } = route.params;
-
   useEffect(() => {
-    if (!trainingId) return;
-    dispatch(setActiveTraining(trainingId));
-
     navigation.setOptions({
       headerTitle: activeTraining?.sessionName
     });
   }, []);
+
+  const steps = useMemo(() => activeTraining?.steps, [activeTraining?.steps]);
 
   if (!activeTraining) return <></>;
 
   return (
     <VStack h="full">
       <Swiper loop={false} loadMinimal>
-        {activeTraining.steps.map((step, index) => (
-          <TrainingCard key={index} step={step} onExerciceSwitch={() => null} />
+        {steps.map((step, index) => (
+          <TrainingCard key={index} index={index} step={step} onExerciceSwitch={() => null} />
         ))}
       </Swiper>
 

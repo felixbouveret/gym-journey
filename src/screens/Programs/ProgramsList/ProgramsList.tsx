@@ -1,18 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Box, HStack, Icon, Pressable, ScrollView, Text, VStack } from 'native-base';
 import { ActionSheetIOS } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { RootState } from '@/store';
 import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
-import { TrainingStateEnum } from '@/store/Training';
+import { setActiveTraining, TrainingStateEnum } from '@/store/Training';
 import { ProgramsTabScreenProps } from '@/types';
 
 import ProgramBlock from './Components/ProgramBlock';
 
 export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps<'Programs'>) {
+  const dispatch = useDispatch();
   const { programs } = useSelector((state: RootState) => state.programs);
   const { trainings } = useSelector((state: RootState) => state.trainings);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
@@ -67,12 +68,13 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
               backgroundColor="white"
               borderRadius="8"
               shadow={4}
-              onPress={() =>
+              onPress={() => {
+                dispatch(setActiveTraining(ongoingTraining.id));
                 navigation.navigate('Training', {
                   screen: 'TrainingStepper',
                   params: { trainingId: ongoingTraining.id }
-                })
-              }
+                });
+              }}
             >
               <HStack alignItems={'center'} justifyContent="space-between">
                 <VStack alignItems="flex-start">
