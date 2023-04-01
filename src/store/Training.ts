@@ -85,6 +85,17 @@ export const roomsStore = createSlice({
       }
     },
 
+    updateTraining: {
+      reducer(state, action: PayloadAction<{ training: Training }>) {
+        if (state.activeTraining) {
+          state.activeTraining = action.payload.training;
+        }
+      },
+      prepare(training: Training) {
+        return { payload: { training } };
+      }
+    },
+
     updateTrainingStep: {
       reducer(state, action: PayloadAction<{ stepId: UID_V4; step: ITrainingStep }>) {
         if (state.activeTraining) {
@@ -158,6 +169,7 @@ export const {
   setState,
   setActiveTraining,
   startTraining,
+  updateTraining,
   updateTrainingStep,
   finishTraining,
   updateTrainingLift,

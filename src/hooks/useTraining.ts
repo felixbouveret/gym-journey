@@ -113,9 +113,7 @@ export default function useTraining() {
       }))
     };
 
-    const newStep = { ...step, sets: [...sets, newSet] };
-
-    onTrainingStepUpdate(step.id, newStep);
+    return { ...step, sets: [...sets, newSet] };
   };
 
   const removeSet = (step: ITrainingStep, setId: UID_V4) => {

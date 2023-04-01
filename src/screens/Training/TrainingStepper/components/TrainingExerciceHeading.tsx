@@ -43,7 +43,15 @@ export default function TrainingExerciceHeading({
   };
 
   return (
-    <HStack w={'full'} justifyContent="space-between" alignItems={'center'} space={2}>
+    <HStack
+      w={'full'}
+      justifyContent="space-between"
+      alignItems={'center'}
+      space={2}
+      borderBottomColor={'gray.100'}
+      borderBottomWidth="1"
+      py={4}
+    >
       <IconButton
         size="sm"
         variant={'solid'}

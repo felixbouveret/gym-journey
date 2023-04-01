@@ -1,15 +1,15 @@
-import { Button, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
-import { memo } from 'react';
-import { ActionSheetIOS, Platform } from 'react-native';
+import { ScrollView, TextArea, VStack } from 'native-base';
+import { memo, useMemo } from 'react';
+import { ActionSheetIOS } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import Layout from '@/constants/Layout';
 import useTraining from '@/hooks/useTraining';
 import { RootState } from '@/store';
 import { ITrainingStep } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
 import TrainingExerciceHeading from './TrainingExerciceHeading';
+import TrainingNewSetCta from './TrainingNewSetCta';
 import TrainingSet from './TrainingSet';
 
 interface TrainingCardProps {
@@ -26,6 +26,8 @@ function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
     (prev, next) => prev?.sets.length === next?.sets.length
   ) as ITrainingStep;
 
+  const sets = useMemo(() => step.sets, [step.sets]);
+
   const onOptions = (setId: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -39,43 +41,38 @@ function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
     );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={100}
-    >
-      <VStack
-        w={Layout.window.width - 32}
-        maxH={Layout.window.height - 250}
-        m={4}
-        backgroundColor="white"
-        rounded={8}
-        shadow={2}
-      >
-        <ScrollView>
-          <VStack p={4} space={4} h="full">
-            <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
+    <VStack py={0} h="full">
+      <TrainingExerciceHeading step={step} onExerciceSwitch={onExerciceSwitch} />
+      <ScrollView p={4}>
+        <TextArea
+          size={'xl'}
+          autoCompleteType="off"
+          h={'100px'}
+          placeholder="Note d'exercice"
+          backgroundColor={'amber.100'}
+          color={'amber.800'}
+          placeholderTextColor={'amber.300'}
+          borderWidth={0}
+          p={4}
+          mt={4}
+        />
 
-            <VStack space={2}>
-              {step.sets.map((set, i) => (
-                <TrainingSet
-                  key={i}
-                  set={set}
-                  stepIndex={index}
-                  index={i}
-                  onLiftUpdate={(exerciceIndex, value) => {
-                    onTrainingLiftUpdate(step.id, set.id, exerciceIndex, value);
-                  }}
-                  onOptions={onOptions}
-                />
-              ))}
-            </VStack>
-            <Button variant="outline" onPress={() => addSet(step)}>
-              Ajouter un set
-            </Button>
-          </VStack>
-        </ScrollView>
-      </VStack>
-    </KeyboardAvoidingView>
+        <VStack space={2} mt={8}>
+          {sets.map((set, i) => (
+            <TrainingSet
+              key={i}
+              stepIndex={index}
+              index={i}
+              onLiftUpdate={(exerciceIndex, value) => {
+                onTrainingLiftUpdate(step.id, set.id, exerciceIndex, value);
+              }}
+              onOptions={onOptions}
+            />
+          ))}
+        </VStack>
+        <TrainingNewSetCta onPress={() => addSet(step)} />
+      </ScrollView>
+    </VStack>
   );
 }
 
