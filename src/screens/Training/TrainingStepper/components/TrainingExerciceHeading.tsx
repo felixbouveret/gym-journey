@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { HStack, Icon, IconButton, Text, VStack } from 'native-base';
+import { HStack, Icon, Text, VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
@@ -23,7 +23,7 @@ export default function TrainingExerciceHeading({
     if (step.type === ExerciceType.SUPERSET)
       return (
         <VStack alignItems={'center'}>
-          <Text fontSize={'md'} fontWeight="medium">
+          <Text fontSize={'2xl'} fontWeight="medium">
             {step.type}
           </Text>
           <HStack space={4}>
@@ -36,7 +36,7 @@ export default function TrainingExerciceHeading({
         </VStack>
       );
     return (
-      <Text fontSize={'md'} fontWeight="medium">
+      <Text fontSize={'2xl'} fontWeight="medium">
         {getExerciceName(step.exercices[0])}
       </Text>
     );
@@ -45,22 +45,13 @@ export default function TrainingExerciceHeading({
   return (
     <HStack
       w={'full'}
-      justifyContent="space-between"
+      justifyContent="center"
       alignItems={'center'}
       space={2}
       borderBottomColor={'gray.100'}
       borderBottomWidth="1"
       py={4}
     >
-      <IconButton
-        size="sm"
-        variant={'solid'}
-        _icon={{
-          as: Ionicons,
-          name: 'albums-outline'
-        }}
-        backgroundColor={'white'}
-      />
       <VStack alignItems={'center'}>
         {title()}
         <HStack justifyContent={'center'} space="2" alignItems={'center'}>
@@ -68,16 +59,6 @@ export default function TrainingExerciceHeading({
           <Text fontSize={'xs'}>{step.restTime} min</Text>
         </HStack>
       </VStack>
-      <IconButton
-        size="sm"
-        variant={'solid'}
-        _icon={{
-          as: Ionicons,
-          name: 'swap-horizontal-outline'
-        }}
-        backgroundColor={'white'}
-        onPress={() => onExerciceSwitch(step.id)}
-      />
     </HStack>
   );
 }

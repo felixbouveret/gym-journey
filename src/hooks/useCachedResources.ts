@@ -47,23 +47,23 @@ export default function useCachedResources() {
     loadResourcesAndDataAsync();
   }, []);
 
-  const { programs } = useSelector((state: RootState) => state.programs);
+  const {
+    exercices: { exercices },
+    programs: { programs },
+    trainings: { trainings }
+  } = useSelector((state: RootState) => state);
 
   useEffect(() => {
-    setStorageData('programs', programs);
-  }, [programs]);
-
-  const { exercices } = useSelector((state: RootState) => state.exercices);
+    setStorageData('trainings', trainings);
+  }, [trainings]);
 
   useEffect(() => {
     setStorageData('exercices', exercices);
   }, [exercices]);
 
-  const { trainings } = useSelector((state: RootState) => state.trainings);
-
   useEffect(() => {
-    setStorageData('trainings', trainings);
-  }, [trainings]);
+    setStorageData('programs', programs);
+  }, [programs]);
 
   return isLoadingComplete;
 }

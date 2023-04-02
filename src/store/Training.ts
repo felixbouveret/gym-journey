@@ -133,6 +133,28 @@ export const roomsStore = createSlice({
       }
     },
 
+    updateTrainingSet: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          stepId: UID_V4;
+          setId: UID_V4;
+          set: ITrainingSet;
+        }>
+      ) {
+        if (state.activeTraining) {
+          const steps = state.activeTraining.steps;
+          const stepIndex = steps.findIndex((s) => s.id === action.payload.stepId);
+          const setIndex = steps[stepIndex].sets.findIndex((s) => s.id === action.payload.setId);
+
+          steps[stepIndex].sets[setIndex] = action.payload.set;
+        }
+      },
+      prepare(stepId: UID_V4, setId: UID_V4, set: ITrainingSet) {
+        return { payload: { stepId, setId, set } };
+      }
+    },
+
     saveTraining(state) {
       if (state.trainings.find((t) => t.id === state.activeTraining?.id))
         state.trainings = state.trainings.map((t) =>
@@ -174,7 +196,8 @@ export const {
   finishTraining,
   updateTrainingLift,
   saveTraining,
-  removeTraining
+  removeTraining,
+  updateTrainingSet
 } = roomsStore.actions;
 
 export default roomsStore.reducer;

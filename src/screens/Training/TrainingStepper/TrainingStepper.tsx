@@ -1,5 +1,5 @@
 import { Button, HStack, KeyboardAvoidingView, VStack } from 'native-base';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useSelector } from 'react-redux';
@@ -12,14 +12,14 @@ import { Training } from '@/store/Training';
 import TrainingCard from './components/TrainingCard';
 
 export default function TrainingStepper({ navigation }: TrainingScreenProps<'TrainingStepper'>) {
-  const { activeTraining } = useSelector(
-    (state: RootState) => state.trainings,
-    () => true
-  ) as {
-    activeTraining: Training;
-  };
-
   const { onTrainingFinished } = useTraining();
+  const activeTraining = useSelector(
+    (state: RootState) => state.trainings.activeTraining,
+    () => true
+  ) as Training;
+  const [stepsState, _] = useState(activeTraining.steps);
+
+  const steps = useMemo(() => stepsState, [stepsState]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -27,9 +27,7 @@ export default function TrainingStepper({ navigation }: TrainingScreenProps<'Tra
     });
   }, []);
 
-  const steps = useMemo(() => activeTraining?.steps, [activeTraining?.steps]);
-
-  if (!activeTraining) return <></>;
+  if (!stepsState) return <></>;
 
   return (
     <VStack h="full" backgroundColor={'white'}>

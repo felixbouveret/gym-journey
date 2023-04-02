@@ -1,10 +1,8 @@
 import { ScrollView, TextArea, VStack } from 'native-base';
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { ActionSheetIOS } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import useTraining from '@/hooks/useTraining';
-import { RootState } from '@/store';
 import { ITrainingStep } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
@@ -18,15 +16,12 @@ interface TrainingCardProps {
   onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
-function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
-  const { onTrainingLiftUpdate, addSet, removeSet } = useTraining();
+function TrainingCard({ index, step, onExerciceSwitch }: TrainingCardProps) {
+  const { addSet, onTrainingStepUpdate } = useTraining();
 
-  const step = useSelector(
-    (state: RootState) => state.trainings.activeTraining?.steps[index],
-    (prev, next) => prev?.sets.length === next?.sets.length
-  ) as ITrainingStep;
+  const [stepState, setStepState] = useState(step);
 
-  const sets = useMemo(() => step.sets, [step.sets]);
+  const sets = useMemo(() => stepState.sets, [stepState.sets]);
 
   const onOptions = (setId: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -35,10 +30,25 @@ function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
         cancelButtonIndex: 0
       },
       (buttonIndex) => {
-        if (buttonIndex === 1) return removeSet(step, setId);
+        if (buttonIndex === 1) return onRemoveSet(setId);
         if (buttonIndex === 0) return;
       }
     );
+
+  const onAddSet = useCallback(() => {
+    const newSet = addSet(stepState);
+    setStepState((prevState) => ({ ...prevState, sets: [...prevState.sets, newSet] }));
+    onTrainingStepUpdate(step.id, stepState);
+  }, [sets]);
+
+  const onRemoveSet = useCallback(
+    (setId: UID_V4) => {
+      const newSets = sets.filter((set) => set.id !== setId);
+      setStepState((prevState) => ({ ...prevState, sets: newSets }));
+      onTrainingStepUpdate(step.id, stepState);
+    },
+    [sets]
+  );
 
   return (
     <VStack py={0} h="full">
@@ -56,21 +66,12 @@ function TrainingCard({ index, onExerciceSwitch }: TrainingCardProps) {
           p={4}
           mt={4}
         />
-
         <VStack space={2} mt={8}>
           {sets.map((set, i) => (
-            <TrainingSet
-              key={i}
-              stepIndex={index}
-              index={i}
-              onLiftUpdate={(exerciceIndex, value) => {
-                onTrainingLiftUpdate(step.id, set.id, exerciceIndex, value);
-              }}
-              onOptions={onOptions}
-            />
+            <TrainingSet key={i} set={set} stepId={step.id} setIndex={i} onOptions={onOptions} />
           ))}
         </VStack>
-        <TrainingNewSetCta onPress={() => addSet(step)} />
+        <TrainingNewSetCta onPress={onAddSet} />
       </ScrollView>
     </VStack>
   );
