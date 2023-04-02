@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { debounce } from 'lodash';
 
 export default function useStorage() {
   const getStorageData = async (path: string) => {
@@ -8,7 +7,7 @@ export default function useStorage() {
   };
 
   const setStorageData = async (path: string, data: unknown) => {
-    debounce(async () => await AsyncStorage.setItem(path, JSON.stringify(data)), 1000);
+    AsyncStorage.setItem(path, JSON.stringify(data));
   };
 
   const cleanStorage = async () => {

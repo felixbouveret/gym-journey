@@ -1,6 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -53,8 +54,9 @@ export default function useCachedResources() {
     trainings: { trainings }
   } = useSelector((state: RootState) => state);
 
+  const debouncedSaveTraining = debounce(() => setStorageData('trainings', trainings), 1000);
   useEffect(() => {
-    setStorageData('trainings', trainings);
+    debouncedSaveTraining();
   }, [trainings]);
 
   useEffect(() => {

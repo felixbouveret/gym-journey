@@ -43,12 +43,13 @@ const LiftInput = ({
 
 interface TrainingSetProps {
   stepId: UID_V4;
+  stepIndex: number;
   setIndex: number;
   set: ITrainingSet;
   onOptions: (setId: UID_V4) => void;
 }
 
-function TrainingSet({ stepId, set, setIndex, onOptions }: TrainingSetProps) {
+function TrainingSet({ stepId, set, setIndex, stepIndex, onOptions }: TrainingSetProps) {
   const { exercices } = useSelector(
     (state: RootState) => state.exercices,
     () => true

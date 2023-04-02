@@ -8,13 +8,9 @@ import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
 
 interface TrainingExerciceHeadingProps {
   step: ITrainingStep;
-  onExerciceSwitch: (stepId: UID_V4) => void;
 }
 
-export default function TrainingExerciceHeading({
-  step,
-  onExerciceSwitch
-}: TrainingExerciceHeadingProps) {
+export default function TrainingExerciceHeading({ step }: TrainingExerciceHeadingProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
 
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
