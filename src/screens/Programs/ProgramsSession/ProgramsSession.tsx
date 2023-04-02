@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SessionStep from '@/components/SessionStep';
 import usePrograms from '@/hooks/usePrograms';
+import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
 import { RootState } from '@/store';
 import { setSessionSteps } from '@/store/Programs';
-import { ProgramsTabScreenProps } from '@/types';
 import { UID_V4 } from '@/types/Exercices.types';
 
 export default function ProgramsCreationScreen({

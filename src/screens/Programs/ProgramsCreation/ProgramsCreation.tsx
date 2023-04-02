@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
+import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
 import { RootState } from '@/store';
 import { setSessions, UID_V4 } from '@/store/Programs';
-import { ProgramsTabScreenProps } from '@/types';
 
 import SessionBlock from './Components/SessionBlock';
 

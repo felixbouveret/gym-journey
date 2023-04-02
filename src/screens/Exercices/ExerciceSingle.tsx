@@ -3,19 +3,20 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import InfoBlock from '@/components/InfoBlock';
+import { ExercicesTabScreenProps } from '@/navigation/navigators/ExercicesNavigator';
 import { RootState } from '@/store';
-import { ExercicesTabScreenProps } from '@/types';
+import { Exercice } from '@/types/Exercices.types';
 
 export default function ExerciceSingle({
   navigation,
   route
 }: ExercicesTabScreenProps<'ExerciceSingle'>) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
-  const currentExercice = exercices.find((exercice) => exercice.id === route.params.id);
+  const currentExercice = exercices.find((exercice) => exercice.id === route.params.id) as Exercice;
 
   useEffect(() => {
     navigation.setOptions({
-      title: currentExercice?.name,
+      title: currentExercice.name,
       headerBackTitle: 'Retour'
     });
   }, []);
