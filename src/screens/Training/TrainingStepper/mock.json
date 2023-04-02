@@ -1,0 +1,374 @@
+{
+  "id": "46d5a84d-307b-42e9-8f86-28aeddb1d438",
+  "programId": "992dec31-1fd1-43d2-b121-db4e3298c4e1",
+  "sessionId": "bd775c7f-6d85-4752-9f1c-d6acecbc02db",
+  "sessionName": "Push",
+  "startedAt": "2023-04-01T18:45:00.977Z",
+  "state": "IN_PROGRESS",
+  "steps": [
+    {
+      "id": "5f3fcd71-b973-4550-8c36-e36fcb10dd9d",
+      "exercices": ["82755400-f6f4-4645-9555-f86c9d4131e0"],
+      "type": "Normal",
+      "restTime": "2",
+      "sets": [
+        {
+          "id": "0f52ac9f-7186-45ea-9203-2bd2ab48e3fa",
+          "exercices": [
+            {
+              "id": "5b20a9bf-3436-4d33-8e14-c6d67acbc4b6",
+              "exerciceId": "82755400-f6f4-4645-9555-f86c9d4131e0",
+              "weight": "18",
+              "reps": "12",
+              "lift": { "weight": "18", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "92e9406d-c44f-417f-ac20-a693700146bf",
+          "exercices": [
+            {
+              "id": "2afa9107-7e1f-4085-92fa-f715ae8ee1d5",
+              "exerciceId": "82755400-f6f4-4645-9555-f86c9d4131e0",
+              "weight": "18",
+              "reps": "12",
+              "lift": { "weight": "18", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "462c161c-a1bc-4271-b67e-25d13d7fc622",
+          "exercices": [
+            {
+              "id": "14b94665-1960-488e-9595-f5f2dae10600",
+              "exerciceId": "82755400-f6f4-4645-9555-f86c9d4131e0",
+              "weight": "18",
+              "reps": "12",
+              "lift": { "weight": "18", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "c50ef308-bf40-4ee2-a817-ea0a70c82d91",
+          "exercices": [
+            {
+              "id": "f8304cd9-8f0a-4f1f-a0e2-11067a300bc9",
+              "exerciceId": "82755400-f6f4-4645-9555-f86c9d4131e0",
+              "weight": "18",
+              "reps": "12",
+              "lift": { "weight": "18", "reps": "12" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "33308115-511e-42fa-ad55-32f619fe7c4f",
+      "exercices": ["07def7c3-934f-4c9a-a0db-78c66dcc8630"],
+      "type": "Normal",
+      "restTime": "2",
+      "sets": [
+        {
+          "id": "e40138e5-f4a0-41fa-948e-570576a0e95b",
+          "exercices": [
+            {
+              "id": "dbcb1131-5d91-45ac-9e78-2c0b045f303c",
+              "exerciceId": "07def7c3-934f-4c9a-a0db-78c66dcc8630",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "80a7afe2-0146-4878-8c9d-1d2212963b4c",
+          "exercices": [
+            {
+              "id": "8c5c38c0-a746-4497-86a1-d38816d739c3",
+              "exerciceId": "07def7c3-934f-4c9a-a0db-78c66dcc8630",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "be533ba9-bbc8-4200-86c3-349eef3da78a",
+          "exercices": [
+            {
+              "id": "7b6cc972-a871-4cdc-8158-eb5f5c717461",
+              "exerciceId": "07def7c3-934f-4c9a-a0db-78c66dcc8630",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "aaf1b318-eca1-4a84-b787-06744c2aadb1",
+          "exercices": [
+            {
+              "id": "e86305e7-894c-43f9-b365-18a0499fb905",
+              "exerciceId": "07def7c3-934f-4c9a-a0db-78c66dcc8630",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6d97e936-b661-4cb1-a836-0e8e55f40df2",
+      "exercices": ["ba37550e-f66d-4b96-94ea-9a3ffcd5d37f"],
+      "type": "Normal",
+      "restTime": "2",
+      "sets": [
+        {
+          "id": "cda92365-57cc-4a49-9b09-06afa6c64834",
+          "exercices": [
+            {
+              "id": "325a8e19-4d6b-4959-ab10-71fe883aeb49",
+              "exerciceId": "ba37550e-f66d-4b96-94ea-9a3ffcd5d37f",
+              "weight": "15",
+              "reps": "10",
+              "lift": { "weight": "15", "reps": "10" }
+            }
+          ]
+        },
+        {
+          "id": "9f23f87e-05d7-4b82-9edc-c64fd12afad0",
+          "exercices": [
+            {
+              "id": "ac449491-239f-4118-8468-00c9893e0b92",
+              "exerciceId": "ba37550e-f66d-4b96-94ea-9a3ffcd5d37f",
+              "weight": "15",
+              "reps": "10",
+              "lift": { "weight": "15", "reps": "10" }
+            }
+          ]
+        },
+        {
+          "id": "680c61ad-bab3-4d17-8f40-fa5f9377b84b",
+          "exercices": [
+            {
+              "id": "d54db8d2-53dd-4ebd-9664-ba3a11be7a7c",
+              "exerciceId": "ba37550e-f66d-4b96-94ea-9a3ffcd5d37f",
+              "weight": "15",
+              "reps": "10",
+              "lift": { "weight": "15", "reps": "10" }
+            }
+          ]
+        },
+        {
+          "id": "d5f45be6-999d-477e-b0d1-dab4b7f1f3b4",
+          "exercices": [
+            {
+              "id": "3883b20a-bf0f-4851-8227-2d8f2c5f17e5",
+              "exerciceId": "ba37550e-f66d-4b96-94ea-9a3ffcd5d37f",
+              "weight": "15",
+              "reps": "10",
+              "lift": { "weight": "15", "reps": "10" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4cf2edb5-ed9d-4c6b-9f14-ba69e6e421be",
+      "exercices": ["913d62ad-5fec-48e6-9e3f-5ce984008064"],
+      "type": "Normal",
+      "restTime": "2",
+      "sets": [
+        {
+          "id": "48f61ed6-53d4-49ba-8bff-765d9a9caabd",
+          "exercices": [
+            {
+              "id": "b7118e6a-1af5-4946-b51a-2803020ea9b0",
+              "exerciceId": "913d62ad-5fec-48e6-9e3f-5ce984008064",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "6a1a243a-f67c-4a13-886f-3cbaf4b85f06",
+          "exercices": [
+            {
+              "id": "ab51e1ca-f4b0-4aef-bfa2-0a60fd9ef090",
+              "exerciceId": "913d62ad-5fec-48e6-9e3f-5ce984008064",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "053fdd66-80ce-45e9-9e1d-dda720fa63f1",
+          "exercices": [
+            {
+              "id": "c192a482-366b-4203-948b-cd7c4d2fb3d3",
+              "exerciceId": "913d62ad-5fec-48e6-9e3f-5ce984008064",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "fde29b5a-c65b-4797-bae8-572c5e9d0455",
+          "exercices": [
+            {
+              "id": "9a73765f-7ab8-487b-b7c6-d3d60ceba2b5",
+              "exerciceId": "913d62ad-5fec-48e6-9e3f-5ce984008064",
+              "weight": "10",
+              "reps": "12",
+              "lift": { "weight": "10", "reps": "12" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e201082f-4e91-4f14-a3ad-4f4cfded0b0c",
+      "exercices": ["8a46c2f3-e1b5-462b-b3bd-e13479bc2b47"],
+      "type": "Normal",
+      "restTime": "2",
+      "sets": [
+        {
+          "id": "09bcfb40-8c6e-4659-a96a-b152cd728aad",
+          "exercices": [
+            {
+              "id": "82a28b7e-cedb-4879-a03c-b9475a984e44",
+              "exerciceId": "8a46c2f3-e1b5-462b-b3bd-e13479bc2b47",
+              "weight": "0",
+              "reps": "12",
+              "lift": { "weight": "0", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "2bf428a8-0170-4d0a-a21e-01b9af721be1",
+          "exercices": [
+            {
+              "id": "8cf6b32d-736b-4d7a-973e-3c4bb608f404",
+              "exerciceId": "8a46c2f3-e1b5-462b-b3bd-e13479bc2b47",
+              "weight": "0",
+              "reps": "12",
+              "lift": { "weight": "0", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "12cd8acb-070e-487c-a7a2-e3147eef8b10",
+          "exercices": [
+            {
+              "id": "8e8f9017-ee8c-47bd-8372-2cac669e47de",
+              "exerciceId": "8a46c2f3-e1b5-462b-b3bd-e13479bc2b47",
+              "weight": "0",
+              "reps": "12",
+              "lift": { "weight": "0", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "4b5e0827-1299-4da0-a3ee-cd7473a1347b",
+          "exercices": [
+            {
+              "id": "5d76cfb2-6298-431d-b0b5-e7b3fead4206",
+              "exerciceId": "8a46c2f3-e1b5-462b-b3bd-e13479bc2b47",
+              "weight": "0",
+              "reps": "12",
+              "lift": { "weight": "0", "reps": "12" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca686e0b-eb31-4b19-8ce0-c6dbd1ba9717",
+      "exercices": ["3f655110-4a0a-4102-bc75-5c0d9590d655", "907ac9f9-488c-44a1-b0d5-6f72b5211d2a"],
+      "type": "Superset",
+      "restTime": "3",
+      "sets": [
+        {
+          "id": "d3c7c82c-0a06-4c8b-a50b-3933811af428",
+          "exercices": [
+            {
+              "id": "e62eb1a9-bf3f-4f8d-898b-3d7f60f445f5",
+              "exerciceId": "3f655110-4a0a-4102-bc75-5c0d9590d655",
+              "weight": "9",
+              "reps": "12",
+              "lift": { "weight": "9", "reps": "12" }
+            },
+            {
+              "id": "6f325dc9-b3c5-4c77-a328-650ccec6fc84",
+              "exerciceId": "907ac9f9-488c-44a1-b0d5-6f72b5211d2a",
+              "weight": "15",
+              "reps": "12",
+              "lift": { "weight": "15", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "e69cb35f-68f9-4daf-978b-cef98e66134b",
+          "exercices": [
+            {
+              "id": "bb62dcd5-1f4c-4a35-b822-f1f9d3670827",
+              "exerciceId": "3f655110-4a0a-4102-bc75-5c0d9590d655",
+              "weight": "9",
+              "reps": "12",
+              "lift": { "weight": "9", "reps": "12" }
+            },
+            {
+              "id": "e9164713-e0dc-4df7-a834-76acf16d3447",
+              "exerciceId": "907ac9f9-488c-44a1-b0d5-6f72b5211d2a",
+              "weight": "15",
+              "reps": "12",
+              "lift": { "weight": "15", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "d6bd5e35-3fee-417b-a351-f601f3d33e19",
+          "exercices": [
+            {
+              "id": "20ffa4ca-55f8-454c-a307-1086dca7cf4f",
+              "exerciceId": "3f655110-4a0a-4102-bc75-5c0d9590d655",
+              "weight": "9",
+              "reps": "12",
+              "lift": { "weight": "9", "reps": "12" }
+            },
+            {
+              "id": "4789beeb-35dd-48ce-bdd3-2945f542eb24",
+              "exerciceId": "907ac9f9-488c-44a1-b0d5-6f72b5211d2a",
+              "weight": "15",
+              "reps": "12",
+              "lift": { "weight": "15", "reps": "12" }
+            }
+          ]
+        },
+        {
+          "id": "51e5e3d1-e61e-4310-8785-db53706f95a1",
+          "exercices": [
+            {
+              "id": "35618672-c9b4-4d68-815d-cd12471c3e3a",
+              "exerciceId": "3f655110-4a0a-4102-bc75-5c0d9590d655",
+              "weight": "9",
+              "reps": "12",
+              "lift": { "weight": "9", "reps": "12" }
+            },
+            {
+              "id": "fe32f7fe-813b-48ed-8bb4-f5d37c9f2f9c",
+              "exerciceId": "907ac9f9-488c-44a1-b0d5-6f72b5211d2a",
+              "weight": "15",
+              "reps": "12",
+              "lift": { "weight": "15", "reps": "12" }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

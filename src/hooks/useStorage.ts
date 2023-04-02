@@ -7,11 +7,16 @@ export default function useStorage() {
   };
 
   const setStorageData = async (path: string, data: unknown) => {
-    await AsyncStorage.setItem(path, JSON.stringify(data));
+    AsyncStorage.setItem(path, JSON.stringify(data));
+  };
+
+  const cleanStorage = async () => {
+    await AsyncStorage.clear();
   };
 
   return {
     getStorageData,
-    setStorageData
+    setStorageData,
+    cleanStorage
   };
 }

@@ -1,69 +1,79 @@
 import { Ionicons } from '@expo/vector-icons';
+import { debounce } from 'lodash';
 import { Box, HStack, IconButton, Input, Text, VStack } from 'native-base';
-import { memo } from 'react';
-import { useSelector } from 'react-redux';
+import { memo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
-import { ITrainingLift, ITrainingSet } from '@/store/Training';
+import { ITrainingSet, saveTraining, updateTrainingSet } from '@/store/Training';
 import { UID_V4 } from '@/types/Exercices.types';
 
+const LiftInput = ({
+  placeholder,
+  value,
+  name,
+  onChange,
+  onEndEditing
+}: {
+  placeholder: string;
+  value: string;
+  name: string;
+  onChange: (e: any) => void;
+  onEndEditing?: (e: any) => void;
+}) => {
+  return (
+    <Input
+      flex="1"
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      onEndEditing={onEndEditing}
+      backgroundColor={'white'}
+      size={'lg'}
+      selectTextOnFocus
+      keyboardType="decimal-pad"
+      InputRightElement={
+        <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
+          {name}
+        </Text>
+      }
+    />
+  );
+};
+
 interface TrainingSetProps {
+  stepId: UID_V4;
+  stepIndex: number;
+  setIndex: number;
   set: ITrainingSet;
-  index: number;
-  onLiftUpdate: (exerciceIndex: number, value: ITrainingLift) => void;
   onOptions: (setId: UID_V4) => void;
 }
 
-function TrainingSet({ set, index, onLiftUpdate, onOptions }: TrainingSetProps) {
-  const { exercices } = useSelector((state: RootState) => state.exercices);
+function TrainingSet({ stepId, set, setIndex, stepIndex, onOptions }: TrainingSetProps) {
+  const { exercices } = useSelector(
+    (state: RootState) => state.exercices,
+    () => true
+  );
   const getExerciceName = (exerciceId: UID_V4) => exercices.find((e) => e.id === exerciceId)?.name;
 
-  const Lift = ({
-    eIndex,
-    lift,
-    weightPlaceholder,
-    repsPlaceholder
-  }: {
-    eIndex: number;
-    lift: ITrainingLift;
-    weightPlaceholder: string;
-    repsPlaceholder: string;
-  }) => {
-    return (
-      <HStack space={2}>
-        <Input
-          flex="1"
-          placeholder={repsPlaceholder}
-          value={lift.reps}
-          onChange={(e) => onLiftUpdate(eIndex, { reps: e.nativeEvent.text, weight: lift.weight })}
-          backgroundColor={'white'}
-          size={'lg'}
-          selectTextOnFocus
-          keyboardType="decimal-pad"
-          InputRightElement={
-            <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
-              Reps
-            </Text>
-          }
-        />
-        <Input
-          flex="1"
-          placeholder={weightPlaceholder}
-          value={lift.weight}
-          onChange={(e) => onLiftUpdate(eIndex, { reps: lift.reps, weight: e.nativeEvent.text })}
-          backgroundColor={'white'}
-          size={'lg'}
-          selectTextOnFocus
-          keyboardType="decimal-pad"
-          InputRightElement={
-            <Text p={2} fontSize={'2xs'} textAlign={'right'} color="gray.400">
-              Kg
-            </Text>
-          }
-        />
-      </HStack>
-    );
+  const [setState, setSetState] = useState<ITrainingSet>(set);
+
+  const onLiftChange = (exerciceIndex: number, lift: { reps: string; weight: string }) => {
+    setSetState((prevState) => ({
+      ...prevState,
+      exercices: prevState.exercices.map((e, i) => (i === exerciceIndex ? { ...e, lift } : e))
+    }));
   };
+
+  const dispatch = useDispatch();
+  const updateSet = (exerciceIndex: number, lift: { reps: string; weight: string }) => {
+    if (Object.entries(set.exercices[exerciceIndex].lift).every(([k, v]) => lift[k] === v)) return;
+    dispatch(updateTrainingSet(stepId, set.id, setState));
+
+    dispatch(saveTraining());
+  };
+
+  const debounceUpdate = debounce(updateSet, 500);
 
   return (
     <HStack rounded="8" space={2}>
@@ -75,22 +85,38 @@ function TrainingSet({ set, index, onLiftUpdate, onOptions }: TrainingSetProps) 
         rounded={8}
       >
         <Text fontSize={'xs'} color={'gray.500'}>
-          {index + 1}
+          {setIndex + 1}
         </Text>
       </Box>
       <HStack space={2} flex="1">
         <VStack flex={1} space="1">
-          {set.exercices.map(({ lift, exerciceId, weight, reps }, i) => (
+          {setState.exercices.map(({ lift, exerciceId, weight, reps }, i) => (
             <VStack key={i}>
               {set.exercices.length > 1 && (
                 <Text fontSize={'2xs'}>{getExerciceName(exerciceId)}</Text>
               )}
-              {Lift({
-                eIndex: i,
-                lift,
-                weightPlaceholder: weight,
-                repsPlaceholder: reps
-              })}
+              <HStack space={2}>
+                <LiftInput
+                  placeholder={reps}
+                  value={lift.reps}
+                  name="Reps"
+                  onChange={(e) =>
+                    onLiftChange(i, { reps: e.nativeEvent.text, weight: lift.weight })
+                  }
+                  onEndEditing={(e) =>
+                    debounceUpdate(i, { weight: lift.weight, reps: e.nativeEvent.text })
+                  }
+                />
+                <LiftInput
+                  placeholder={weight}
+                  value={lift.weight}
+                  name="Kg"
+                  onChange={(e) => onLiftChange(i, { reps: lift.reps, weight: e.nativeEvent.text })}
+                  onEndEditing={(e) =>
+                    debounceUpdate(i, { weight: e.nativeEvent.text, reps: lift.reps })
+                  }
+                />
+              </HStack>
             </VStack>
           ))}
         </VStack>

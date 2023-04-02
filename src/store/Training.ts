@@ -85,6 +85,17 @@ export const roomsStore = createSlice({
       }
     },
 
+    updateTraining: {
+      reducer(state, action: PayloadAction<{ training: Training }>) {
+        if (state.activeTraining) {
+          state.activeTraining = action.payload.training;
+        }
+      },
+      prepare(training: Training) {
+        return { payload: { training } };
+      }
+    },
+
     updateTrainingStep: {
       reducer(state, action: PayloadAction<{ stepId: UID_V4; step: ITrainingStep }>) {
         if (state.activeTraining) {
@@ -119,6 +130,28 @@ export const roomsStore = createSlice({
       },
       prepare(stepId: UID_V4, setId: UID_V4, exerciceIndex: number, lift: ITrainingLift) {
         return { payload: { stepId, setId, exerciceIndex, lift } };
+      }
+    },
+
+    updateTrainingSet: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          stepId: UID_V4;
+          setId: UID_V4;
+          set: ITrainingSet;
+        }>
+      ) {
+        if (state.activeTraining) {
+          const steps = state.activeTraining.steps;
+          const stepIndex = steps.findIndex((s) => s.id === action.payload.stepId);
+          const setIndex = steps[stepIndex].sets.findIndex((s) => s.id === action.payload.setId);
+
+          steps[stepIndex].sets[setIndex] = action.payload.set;
+        }
+      },
+      prepare(stepId: UID_V4, setId: UID_V4, set: ITrainingSet) {
+        return { payload: { stepId, setId, set } };
       }
     },
 
@@ -158,11 +191,13 @@ export const {
   setState,
   setActiveTraining,
   startTraining,
+  updateTraining,
   updateTrainingStep,
   finishTraining,
   updateTrainingLift,
   saveTraining,
-  removeTraining
+  removeTraining,
+  updateTrainingSet
 } = roomsStore.actions;
 
 export default roomsStore.reducer;

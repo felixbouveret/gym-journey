@@ -1,6 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -47,23 +48,24 @@ export default function useCachedResources() {
     loadResourcesAndDataAsync();
   }, []);
 
-  const { programs } = useSelector((state: RootState) => state.programs);
+  const {
+    exercices: { exercices },
+    programs: { programs },
+    trainings: { trainings }
+  } = useSelector((state: RootState) => state);
 
+  const debouncedSaveTraining = debounce(() => setStorageData('trainings', trainings), 1000);
   useEffect(() => {
-    setStorageData('programs', programs);
-  }, [programs]);
-
-  const { exercices } = useSelector((state: RootState) => state.exercices);
+    debouncedSaveTraining();
+  }, [trainings]);
 
   useEffect(() => {
     setStorageData('exercices', exercices);
   }, [exercices]);
 
-  const { trainings } = useSelector((state: RootState) => state.trainings);
-
   useEffect(() => {
-    setStorageData('trainings', trainings);
-  }, [trainings]);
+    setStorageData('programs', programs);
+  }, [programs]);
 
   return isLoadingComplete;
 }

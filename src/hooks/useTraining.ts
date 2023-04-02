@@ -74,7 +74,6 @@ export default function useTraining() {
     lift: ITrainingLift
   ) => {
     dispatch(updateTrainingLift(stepId, setId, eIndex, lift));
-    dispatch(saveTraining());
   };
 
   const onTrainingStart = (training: Training) => {
@@ -113,9 +112,7 @@ export default function useTraining() {
       }))
     };
 
-    const newStep = { ...step, sets: [...sets, newSet] };
-
-    onTrainingStepUpdate(step.id, newStep);
+    return newSet;
   };
 
   const removeSet = (step: ITrainingStep, setId: UID_V4) => {
