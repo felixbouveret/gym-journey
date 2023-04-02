@@ -1,4 +1,4 @@
-import { ScrollView, TextArea, VStack } from 'native-base';
+import { ScrollView, VStack } from 'native-base';
 import { useEffect, useMemo, useState } from 'react';
 import { ActionSheetIOS } from 'react-native';
 
@@ -52,7 +52,7 @@ export default function TrainingCard({ step, index }: TrainingCardProps) {
     <VStack py={0} h="full">
       <TrainingExerciceHeading step={step} />
       <ScrollView p={4}>
-        <TextArea
+        {/* <TextArea
           size={'xl'}
           autoCompleteType="off"
           h={'100px'}
@@ -63,8 +63,8 @@ export default function TrainingCard({ step, index }: TrainingCardProps) {
           borderWidth={0}
           p={4}
           mt={4}
-        />
-        <VStack space={2} mt={8}>
+        /> */}
+        <VStack space={2}>
           {sets.map((set, i) => (
             <TrainingSet
               key={i}

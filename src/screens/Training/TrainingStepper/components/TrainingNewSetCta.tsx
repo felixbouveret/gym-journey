@@ -7,7 +7,7 @@ interface TrainingNewSetCtaProps {
 
 export default function TrainingNewSetCta({ onPress }: TrainingNewSetCtaProps) {
   return (
-    <Pressable variant="outline" w={'full'} onPress={onPress} mt={2} mb={20}>
+    <Pressable variant="outline" w={'full'} onPress={onPress} mt={2} mb={40}>
       <HStack space={2} w={'full'} h={8}>
         <Box w={'24px'} h={'full'} backgroundColor={'gray.50'} rounded={8} />
         <Box
