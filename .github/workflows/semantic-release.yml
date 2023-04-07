@@ -2,6 +2,8 @@ name: Semantic Release
 on: [push]
 jobs:
   Explore-GitHub-Actions:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
