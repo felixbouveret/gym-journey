@@ -2,6 +2,8 @@ name: Semantic Release
 on: [push]
 jobs:
   Semantic-Release:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
