@@ -2,6 +2,7 @@ name: Semantic Release
 on: [push]
 jobs:
   Semantic-Release:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
