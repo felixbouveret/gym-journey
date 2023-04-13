@@ -9,8 +9,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "prepare": "husky install",
-    "lint": "eslint --ext '.ts,.tsx' src/",
-    "semantic-release": "semantic-release"
+    "lint": "eslint --ext '.ts,.tsx' src/"
   },
   "jest": {
     "preset": "jest-expo"
@@ -68,15 +67,15 @@
     "react-native-uuid": "^2.0.1",
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.1",
-    "sentry-expo": "~6.0.0",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^9.0.0"
+    "sentry-expo": "~6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.0",
     "@types/lodash": "^4.14.192",
     "@types/react": "^18.0.28",
     "@types/react-native": "~0.67.6",
