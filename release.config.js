@@ -14,7 +14,7 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        publishCmd: 'node ./script/release/index.js "${nextRelease.version}"'
+        prepareCmd: 'node ./script/release/index.js "${nextRelease.version}"'
       }
     ],
     [
