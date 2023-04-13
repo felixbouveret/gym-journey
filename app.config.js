@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: 'Gym Journey',
     slug: 'gym-journey',
-    version: '1.0.1',
+    version: '1.1.5',
     orientation: 'portrait',
     icon: './src/assets/images/icon.png',
     scheme: 'myapp',
