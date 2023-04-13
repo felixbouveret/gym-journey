@@ -5,16 +5,16 @@ module.exports = {
     '@semantic-release/release-notes-generator',
     '@semantic-release/github',
     [
-      '@semantic-release/exec',
-      {
-        successCmd: 'node ./script/release/index.js "${nextRelease.version}"'
-      }
-    ],
-    [
       '@semantic-release/npm',
       {
         assets: ['package.json', 'app.config.js'],
         npmPublish: false
+      }
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        successCmd: 'node ./script/release/index.js "${nextRelease.version}"'
       }
     ],
     { '@semantic-release/changelog': { changelogFile: 'CHANGELOG.md' } },
