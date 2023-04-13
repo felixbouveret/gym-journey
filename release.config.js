@@ -1,9 +1,10 @@
 module.exports = {
   branches: ['master'],
+  ci: false,
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    '@semantic-release/github',
+    { '@semantic-release/changelog': { changelogFile: 'CHANGELOG.md' } },
     [
       '@semantic-release/npm',
       {
@@ -17,13 +18,13 @@ module.exports = {
         successCmd: 'node ./script/release/index.js "${nextRelease.version}"'
       }
     ],
-    { '@semantic-release/changelog': { changelogFile: 'CHANGELOG.md' } },
     [
       '@semantic-release/git',
       {
         assets: ['CHANGELOG.md', 'package.json', 'app.config.js'],
         message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
       }
-    ]
+    ],
+    '@semantic-release/github'
   ]
 };
