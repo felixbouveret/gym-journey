@@ -73,6 +73,7 @@
     "@babel/core": "^7.12.9",
     "@react-native-community/eslint-config": "^2.0.0",
     "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/lodash": "^4.14.192",
     "@types/react": "^18.0.28",
     "@types/react-native": "~0.67.6",
