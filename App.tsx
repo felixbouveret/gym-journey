@@ -3,11 +3,18 @@ import { StatusBar } from 'expo-status-bar';
 import { extendTheme, NativeBaseProvider } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 
 import useCachedResources from '@/hooks/useCachedResources';
 import Navigation from '@/navigation';
 
 import store from './src/store';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  debug: !!process.env.APP_IS_DEV
+});
 
 function CacheCheckComponent() {
   const isLoadingComplete = useCachedResources();
@@ -48,10 +55,11 @@ function CacheCheckComponent() {
   }
 }
 
-export default function App() {
+function App() {
   return (
     <Provider store={store}>
       <CacheCheckComponent />
     </Provider>
   );
 }
+export default Sentry.Native.wrap(App);
