@@ -1,3 +1,10 @@
+## [1.1.16](https://github.com/felixbouveret/gym-journey/compare/v1.1.15...v1.1.16) (2023-04-13)
+
+
+### Bug Fixes
+
+* test ([9c1e0e0](https://github.com/felixbouveret/gym-journey/commit/9c1e0e07ca858ddfea97a3ad1ddf57b101a6db3b))
+
 ## [1.1.15](https://github.com/felixbouveret/gym-journey/compare/v1.1.14...v1.1.15) (2023-04-13)
 
 
