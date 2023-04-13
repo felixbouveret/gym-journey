@@ -4,6 +4,7 @@
   },
   "build": {
     "development": {
+      "node": "18.12.1",
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -11,12 +12,14 @@
       }
     },
     "preview": {
+      "node": "18.12.1",
       "distribution": "internal",
       "ios": {
         "resourceClass": "m1-medium"
       }
     },
     "production": {
+      "node": "18.12.1",
       "ios": {
         "resourceClass": "m1-medium"
       }
