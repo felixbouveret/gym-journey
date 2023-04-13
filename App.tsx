@@ -19,8 +19,6 @@ Sentry.init({
 function CacheCheckComponent() {
   const isLoadingComplete = useCachedResources();
 
-  Sentry.Native.captureException(new Error('test'));
-
   const theme = extendTheme({
     components: {
       Button: {
