@@ -11,6 +11,12 @@ module.exports = {
         npmPublish: false
       }
     ],
+    [
+      '@semantic-release/exec',
+      {
+        successCmd: 'node ./script/release/index.js "${nextRelease.version}"'
+      }
+    ],
     { '@semantic-release/changelog': { changelogFile: 'CHANGELOG.md' } },
     [
       '@semantic-release/git',
