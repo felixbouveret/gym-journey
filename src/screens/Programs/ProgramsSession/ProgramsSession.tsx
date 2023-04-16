@@ -1,32 +1,40 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Box, Button, Icon, VStack } from 'native-base';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionSheetIOS } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { getProgramSession } from '@/api/BackPackAPI';
 import SessionStep from '@/components/SessionStep';
 import usePrograms from '@/hooks/usePrograms';
 import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
-import { RootState } from '@/store';
 import { setSessionSteps } from '@/store/Programs';
-import { UID_V4 } from '@/types/Exercices.types';
+import { UID_V4 } from '@/types/global.types';
+import { ProgramSession } from '@/types/Programs.types';
 
 export default function ProgramsCreationScreen({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsSession'>) {
   const dispatch = useDispatch();
-  const { programs } = useSelector((state: RootState) => state.programs);
   const { onRemoveSessionStep } = usePrograms();
+  const [session, setSession] = useState<ProgramSession | undefined>(undefined);
 
-  const currentProgram = programs.find((program) => program.id === route.params.programId);
-  const currentSession = currentProgram?.sessions.find(
-    (session) => session.id === route.params.sessionId
-  );
+  useEffect(() => {
+    const apiCall = async () => {
+      try {
+        const response = await getProgramSession(route.params.sessionId);
+        setSession(response.programs);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    apiCall();
+  }, []);
 
-  const sessionSteps = currentSession?.steps || [];
+  const sessionSteps = session?.steps || [];
 
   const onOptions = (id: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -54,17 +62,12 @@ export default function ProgramsCreationScreen({
 
   useEffect(() => {
     navigation.setOptions({
-      title: currentSession?.name
+      title: session?.name
     });
-  }, [currentSession?.name]);
+  }, [session?.name]);
 
   return (
-    <VStack
-      justifyContent={currentSession?.steps.length ? '' : 'flex-end'}
-      h="full"
-      w="full"
-      pt="0"
-    >
+    <VStack justifyContent={session?.steps.length ? '' : 'flex-end'} h="full" w="full" pt="0">
       <VStack flex="1" w="full" space={4}>
         {!!sessionSteps.length && (
           <DraggableFlatList

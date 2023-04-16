@@ -1,4 +1,4 @@
-export type UID_V4 = string | number[];
+import { UID_V4 } from './global.types';
 
 export enum ExerciceEquipment {
   NONE = 'None',

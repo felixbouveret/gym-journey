@@ -1,16 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Box, Button, Icon, VStack } from 'native-base';
-import { useEffect } from 'react';
-import { ActionSheetIOS } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActionSheetIOS, Alert } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { createProgramSession, getProgramSessions } from '@/api/BackPackAPI';
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
-import { RootState } from '@/store';
-import { setSessions, UID_V4 } from '@/store/Programs';
+import { UID_V4 } from '@/types/global.types';
+import { ProgramSession } from '@/types/Programs.types';
 
 import SessionBlock from './Components/SessionBlock';
 
@@ -20,17 +21,26 @@ export default function ProgramsCreationScreen({
 }: ProgramsTabScreenProps<'ProgramsCreation'>) {
   const dispatch = useDispatch();
 
-  const { programs } = useSelector((state: RootState) => state.programs);
+  const [programName, setProgramName] = useState<string>('');
+  const [sessions, setSessions] = useState<ProgramSession[] | undefined>(undefined);
 
-  const currentProgram = programs.find((program) => program.id === route.params.id);
+  const { onDeleteSession, onUpdateSession } = usePrograms();
 
-  const { onCreateSession, onDeleteSession, onUpdateSession } = usePrograms();
+  useEffect(() => {
+    const apiCall = async () => {
+      const response = await getProgramSessions(route.params.id);
+
+      setProgramName('response.name');
+      setSessions(response.program_sessions);
+    };
+    apiCall();
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
-      title: currentProgram?.name
+      title: programName
     });
-  }, [currentProgram?.name]);
+  }, [programName]);
 
   const onProgramOptionsPress = (id: UID_V4) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -58,15 +68,45 @@ export default function ProgramsCreationScreen({
     });
   };
 
+  const createSession = async () => {
+    Alert.prompt('Nouvelle séance', 'Nom de la séance', [
+      {
+        text: 'Annuler',
+        style: 'cancel'
+      },
+      {
+        text: 'Créer',
+        onPress: async (name) => {
+          const sessionName = name ? name.trim() : 'Séance sans nom';
+          try {
+            setSessions((prev) => [
+              ...(prev || []),
+              {
+                id: '' as UID_V4,
+                program_id: route.params.id as UID_V4,
+                name: sessionName,
+                exercices_number: 0,
+                steps: []
+              }
+            ]);
+            const newSessionId = await createProgramSession(route.params.id, sessionName);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      }
+    ]);
+  };
+
   return (
     <VStack h="full" w="full">
       <VStack flex="1">
-        {!!currentProgram?.sessions.length && (
+        {!!sessions?.length && (
           <DraggableFlatList
             style={{ width: '100%', paddingTop: 16, height: '100%' }}
-            data={currentProgram.sessions}
+            data={sessions}
             renderItem={({ item, drag, getIndex }) => (
-              <Box p={4} pt={0} pb={getIndex() === currentProgram.sessions.length - 1 ? 8 : 4}>
+              <Box p={4} pt={0} pb={getIndex() === sessions.length - 1 ? 8 : 4}>
                 <ScaleDecorator>
                   <SessionBlock
                     session={item}
@@ -87,9 +127,9 @@ export default function ProgramsCreationScreen({
         )}
       </VStack>
       <VStack p={4} pt="0" space={4}>
-        {!currentProgram?.sessions.length ? (
+        {!sessions?.length ? (
           <BlockPlaceholder
-            onPress={() => onCreateSession(route.params.id, goToSession)}
+            onPress={() => createSession()}
             title="Créez vos séances."
             description="Listez toutes les séances de votre programme ici pour pouvoir les utiliser plus tard lors de vos entrainements."
             cta="Ajouter une séance"
@@ -98,7 +138,7 @@ export default function ProgramsCreationScreen({
           <Button
             w="full"
             leftIcon={<Icon as={Ionicons} name="add" size="md" />}
-            onPress={() => onCreateSession(route.params.id, goToSession)}
+            onPress={() => createSession()}
           >
             Ajouter une séance
           </Button>

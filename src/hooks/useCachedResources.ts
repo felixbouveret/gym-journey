@@ -23,7 +23,7 @@ export default function useCachedResources() {
       try {
         SplashScreen.preventAutoHideAsync();
         const [storagePrograms, storageExercices, storageTrainings] = await Promise.all([
-          getStorageData('programs'),
+          getStorageData('programs_list'),
           getStorageData('exercices'),
           getStorageData('trainings')
         ]);
@@ -64,7 +64,7 @@ export default function useCachedResources() {
   }, [exercices]);
 
   useEffect(() => {
-    setStorageData('programs', programs);
+    setStorageData('programs_list', programs);
   }, [programs]);
 
   return isLoadingComplete;

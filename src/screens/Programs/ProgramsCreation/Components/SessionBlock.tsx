@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Badge, Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
+import { Button, HStack, IconButton, Pressable, Text, VStack } from 'native-base';
 import { ColorType } from 'native-base/lib/typescript/components/types';
 import { useSelector } from 'react-redux';
 
-import useTime from '@/hooks/useTime';
 import { RootState } from '@/store';
-import { ProgramSession, ProgramSessionStep, UID_V4 } from '@/store/Programs';
 import { ExerciceType } from '@/types/Exercices.types';
+import { UID_V4 } from '@/types/global.types';
+import { ProgramSession, ProgramSessionStep } from '@/types/Programs.types';
 
 interface SessionBlockProps {
   session: ProgramSession;
@@ -26,7 +26,6 @@ export default function SessionBlock({
   backgroundColor
 }: SessionBlockProps) {
   const { exercices } = useSelector((state: RootState) => state.exercices);
-  const { getAverageTime } = useTime();
 
   const exercice = (step: ProgramSessionStep) => {
     if (step.type === ExerciceType.SUPERSET)
@@ -79,9 +78,6 @@ export default function SessionBlock({
               <Text fontSize={'xl'} fontWeight="medium">
                 {session.name}
               </Text>
-              <Badge>
-                <Text>{getAverageTime(session.steps)}"</Text>
-              </Badge>
             </HStack>
             {onOptionsPress && (
               <IconButton
@@ -97,7 +93,7 @@ export default function SessionBlock({
             )}
           </HStack>
           <VStack>
-            {session.steps.length ? (
+            {session.exercices_number ? (
               session.steps.map((step, sIndex) => (
                 <HStack justifyContent={'space-between'} key={sIndex}>
                   {exercice(step)}

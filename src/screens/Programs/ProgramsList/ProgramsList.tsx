@@ -1,23 +1,43 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Box, HStack, Icon, Pressable, ScrollView, Text, VStack } from 'native-base';
-import { ActionSheetIOS } from 'react-native';
+import { Box, HStack, Icon, Pressable, Text, VStack } from 'native-base';
+import { useEffect, useState } from 'react';
+import { ActionSheetIOS, ScrollView } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { getAllPrograms } from '@/api/BackPackAPI';
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import usePrograms from '@/hooks/usePrograms';
 import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
 import { RootState } from '@/store';
-import { ProgramSession, ProgramStatus, UID_V4 } from '@/store/Programs';
 import { setActiveTraining, TrainingStateEnum } from '@/store/Training';
+import { UID_V4 } from '@/types/global.types';
+import { Program, ProgramSession, ProgramStatus } from '@/types/Programs.types';
 
 import ProgramBlock from './Components/ProgramBlock';
 
 export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps<'Programs'>) {
   const dispatch = useDispatch();
-  const { programs } = useSelector((state: RootState) => state.programs);
   const { trainings } = useSelector((state: RootState) => state.trainings);
   const { onCreateProgram, onDeleteProgram, onUpdateProgram, onArchiveProgram, onRestorProgram } =
     usePrograms();
+
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const apiCall = async () => {
+      try {
+        setRefreshing(true);
+        const response = await getAllPrograms();
+        setPrograms(response.programs);
+        setRefreshing(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    apiCall();
+  }, []);
 
   const onProgramOptionsPress = (id: UID_V4, status: ProgramStatus) =>
     ActionSheetIOS.showActionSheetWithOptions(
@@ -57,9 +77,20 @@ export default function ProgramsListStack({ navigation }: ProgramsTabScreenProps
     (training) => training.state === TrainingStateEnum.IN_PROGRESS
   );
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const response = await getAllPrograms();
+      setPrograms(response.programs);
+    } catch (error) {
+      console.error(error);
+    }
+    setRefreshing(false);
+  };
+
   return (
     <VStack h="full" justifyContent={programs?.length ? '' : 'flex-end'}>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <VStack alignItems="center" h="full" w="full" p={4} space="4">
           {ongoingTraining && (
             <Pressable

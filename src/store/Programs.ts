@@ -1,41 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import uuid from 'react-native-uuid';
 
-import { ExerciceType } from '@/types/Exercices.types';
+import { UID_V4 } from '@/types/global.types';
+import { Program, ProgramSession, ProgramSessionStep, ProgramStatus } from '@/types/Programs.types';
 
-export enum ProgramStatus {
-  ACTIVE = 'active',
-  ARCHIVED = 'archived',
-  DRAFT = 'draft'
-}
-export type UID_V4 = string | number[];
-export interface StepExercice {
-  exerciceId: UID_V4;
-  weight: string;
-  reps: string;
-}
-export interface ProgramSessionStep {
-  id: UID_V4;
-  exercices: StepExercice[];
-  setNumber: string;
-  restTime: string;
-  type: ExerciceType;
-}
-export interface ProgramSession {
-  id: UID_V4;
-  name: string;
-  steps: ProgramSessionStep[];
-}
-export interface Program {
-  id: UID_V4;
-  name: string;
-  status: ProgramStatus;
-  sessions: ProgramSession[];
-}
+type SliceState = { programs: Program[]; activeProgram: Program | null };
 
-type SliceState = { programs: Program[] };
-
-const initialState: SliceState = { programs: [] };
+const initialState: SliceState = { programs: [], activeProgram: null };
 
 export const roomsStore = createSlice({
   name: 'programs',
@@ -57,7 +28,7 @@ export const roomsStore = createSlice({
         state.programs.push({
           id: action.payload.id,
           name: action.payload.name,
-          sessions: [],
+          program_session: [],
           status: ProgramStatus.DRAFT
         });
       },
@@ -122,7 +93,7 @@ export const roomsStore = createSlice({
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
         if (program) {
-          program.sessions.push({
+          program.program_session.push({
             id: action.payload.sessionId,
             name: action.payload.name,
             steps: []
@@ -138,7 +109,9 @@ export const roomsStore = createSlice({
       reducer(state, action: PayloadAction<{ programId: UID_V4; sessionId: UID_V4 }>) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
         if (program)
-          program.sessions = program.sessions.filter((s) => s.id !== action.payload.sessionId);
+          program.program_session = program.program_session.filter(
+            (s) => s.id !== action.payload.sessionId
+          );
       },
       prepare(programId: UID_V4, sessionId: UID_V4) {
         return { payload: { programId, sessionId } };
@@ -151,7 +124,7 @@ export const roomsStore = createSlice({
         action: PayloadAction<{ programId: UID_V4; sessionId: UID_V4; newName: string }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const session = program?.program_session.find((s) => s.id === action.payload.sessionId);
         if (session) session.name = action.payload.newName;
       },
       prepare(programId: UID_V4, sessionId: UID_V4, newName: string) {
@@ -168,7 +141,7 @@ export const roomsStore = createSlice({
         }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        if (program) program.sessions = action.payload.sessions;
+        if (program) program.program_session = action.payload.sessions;
       },
       prepare(programId: UID_V4, sessions: ProgramSession[]) {
         return { payload: { programId, sessions } };
@@ -185,7 +158,7 @@ export const roomsStore = createSlice({
         }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const session = program?.program_session.find((s) => s.id === action.payload.sessionId);
         const stepId = uuid.v4();
         if (session) session.steps.push({ id: stepId, ...action.payload.step });
       },
@@ -206,7 +179,7 @@ export const roomsStore = createSlice({
       ) {
         //update a session step
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const session = program?.program_session.find((s) => s.id === action.payload.sessionId);
         const stepIndex = session?.steps.findIndex((s) => s.id === action.payload.stepId);
 
         if (stepIndex !== undefined && stepIndex !== -1 && !!session)
@@ -232,7 +205,7 @@ export const roomsStore = createSlice({
         }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const session = program?.program_session.find((s) => s.id === action.payload.sessionId);
         const stepIndex = session?.steps.findIndex((s) => s.id === action.payload.stepId);
 
         if (stepIndex !== undefined && stepIndex !== -1 && !!session)
@@ -253,7 +226,7 @@ export const roomsStore = createSlice({
         }>
       ) {
         const program = state.programs.find((p) => p.id === action.payload.programId);
-        const session = program?.sessions.find((s) => s.id === action.payload.sessionId);
+        const session = program?.program_session.find((s) => s.id === action.payload.sessionId);
         if (session) session.steps = action.payload.steps;
       },
       prepare(programId: UID_V4, sessionId: UID_V4, steps: ProgramSessionStep[]) {
