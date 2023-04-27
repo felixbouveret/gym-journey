@@ -11,7 +11,7 @@ export const getProgramByID = async (id: string) => {
 };
 
 export const getProgramSessions = async (id: string) => {
-  const response = await BaseAPI.get(`/program_session/${id}`);
+  const response = await BaseAPI.get(`/program_sessions/${id}`);
   return response.data;
 };
 
@@ -20,10 +20,10 @@ export const createProgramSession = async (id: string, name: string) => {
     program_id: id,
     name
   });
-  return response.data;
+  return response.data.program_session_id;
 };
 
 export const getProgramSession = async (id: string) => {
-  const response = await BaseAPI.post(`/program_session/${id}`);
+  const response = await BaseAPI.get(`/program_session/${id}`);
   return response.data;
 };

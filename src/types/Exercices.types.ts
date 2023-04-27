@@ -11,7 +11,7 @@ export enum ExerciceEquipment {
 }
 
 export enum ExerciceType {
-  NORMAL = 'Normal',
+  NORMAL = 'normal',
   SUPERSET = 'Superset',
   DROPSET = 'Dropset'
 }

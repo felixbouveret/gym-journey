@@ -10,13 +10,12 @@ import ProgramsExerciceModal from '@/screens/Programs/ProgramsExerciceModal';
 import ProgramsList from '@/screens/Programs/ProgramsList';
 import ProgramsSession from '@/screens/Programs/ProgramsSession';
 import { RootStackParamList, RootTabScreenProps } from '@/types';
-import { UID_V4 } from '@/types/Exercices.types';
 
 export type ProgramsTabParamList = {
   Programs: undefined;
-  ProgramsCreation: { id: UID_V4; editing?: boolean };
-  ProgramsSession: { programId: UID_V4; sessionId: UID_V4; editing?: boolean };
-  ProgramsExerciceModal: { programId: UID_V4; sessionId: UID_V4; stepId?: UID_V4 };
+  ProgramsCreation: { id: string; editing?: boolean; name: string };
+  ProgramsSession: { programId: string; sessionId: string; sessionName: string; editing?: boolean };
+  ProgramsExerciceModal: { programId: string; sessionId: string; stepId?: string };
 };
 
 export type ProgramsTabScreenProps<Screen extends keyof ProgramsTabParamList> =

@@ -2,16 +2,15 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Box, Button, Icon, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
-import { ActionSheetIOS, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import { useDispatch } from 'react-redux';
 
 import { createProgramSession, getProgramSessions } from '@/api/BackPackAPI';
 import BlockPlaceholder from '@/components/BlockPlaceholder';
+import useActionSheet from '@/hooks/useActionSheet';
 import usePrograms from '@/hooks/usePrograms';
 import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
-import { UID_V4 } from '@/types/global.types';
-import { ProgramSession } from '@/types/Programs.types';
+import { ProgramSessionSimplified } from '@/types/Programs.types';
 
 import SessionBlock from './Components/SessionBlock';
 
@@ -19,77 +18,59 @@ export default function ProgramsCreationScreen({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsCreation'>) {
-  const dispatch = useDispatch();
-
-  const [programName, setProgramName] = useState<string>('');
-  const [sessions, setSessions] = useState<ProgramSession[] | undefined>(undefined);
+  const [sessions, setSessions] = useState<ProgramSessionSimplified[]>([]);
 
   const { onDeleteSession, onUpdateSession } = usePrograms();
+  const { displayActionSheet } = useActionSheet();
+
+  const apiCall = async () => {
+    const response = await getProgramSessions(route.params.id);
+
+    setSessions(response.program_sessions);
+  };
 
   useEffect(() => {
-    const apiCall = async () => {
-      const response = await getProgramSessions(route.params.id);
-
-      setProgramName('response.name');
-      setSessions(response.program_sessions);
-    };
     apiCall();
+    navigation.setOptions({
+      title: route.params.name
+    });
   }, []);
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: programName
-    });
-  }, [programName]);
-
-  const onProgramOptionsPress = (id: UID_V4) =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Annuler', 'Modifier', 'Renommer', 'Supprimer'],
-        destructiveButtonIndex: 3,
-        cancelButtonIndex: 0
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) return;
-        if (buttonIndex === 1)
-          return navigation.navigate('ProgramsSession', {
-            programId: route.params.id,
-            sessionId: id
-          });
-        if (buttonIndex === 2) return onUpdateSession(route.params.id, id);
-        if (buttonIndex === 3) return onDeleteSession(route.params.id, id);
-      }
-    );
-
-  const goToSession = (id: UID_V4) => {
+  const goToSession = (sessionId: string, sessionName?: string) => {
     navigation.navigate('ProgramsSession', {
       programId: route.params.id,
-      sessionId: id
+      sessionId,
+      sessionName:
+        sessionName || (sessions.find((session) => session.id === sessionId)?.name as string)
     });
   };
 
+  const onProgramOptionsPress = (sessionId: string) =>
+    displayActionSheet([
+      { name: 'Annuler', isCancel: true, fcn: null },
+      {
+        name: 'Modifier',
+        fcn: () => goToSession(sessionId)
+      },
+      { name: 'Renommer', fcn: () => onUpdateSession(route.params.id, sessionId) },
+      {
+        name: 'Supprimer',
+        isDestructive: true,
+        fcn: () => onDeleteSession(route.params.id, sessionId)
+      }
+    ]);
+
   const createSession = async () => {
     Alert.prompt('Nouvelle séance', 'Nom de la séance', [
-      {
-        text: 'Annuler',
-        style: 'cancel'
-      },
+      { text: 'Annuler', style: 'cancel' },
       {
         text: 'Créer',
         onPress: async (name) => {
           const sessionName = name ? name.trim() : 'Séance sans nom';
           try {
-            setSessions((prev) => [
-              ...(prev || []),
-              {
-                id: '' as UID_V4,
-                program_id: route.params.id as UID_V4,
-                name: sessionName,
-                exercices_number: 0,
-                steps: []
-              }
-            ]);
             const newSessionId = await createProgramSession(route.params.id, sessionName);
+            await apiCall();
+            goToSession(newSessionId, sessionName);
           } catch (e) {
             console.log(e);
           }
@@ -101,30 +82,27 @@ export default function ProgramsCreationScreen({
   return (
     <VStack h="full" w="full">
       <VStack flex="1">
-        {!!sessions?.length && (
-          <DraggableFlatList
-            style={{ width: '100%', paddingTop: 16, height: '100%' }}
-            data={sessions}
-            renderItem={({ item, drag, getIndex }) => (
-              <Box p={4} pt={0} pb={getIndex() === sessions.length - 1 ? 8 : 4}>
-                <ScaleDecorator>
-                  <SessionBlock
-                    session={item}
-                    onOptionsPress={onProgramOptionsPress}
-                    onPress={(id) => goToSession(id)}
-                    onEditPress={(id) => goToSession(id)}
-                    onLongPress={() => {
-                      drag();
-                      Haptics.impactAsync();
-                    }}
-                  />
-                </ScaleDecorator>
-              </Box>
-            )}
-            keyExtractor={(item) => item.id as string}
-            onDragEnd={({ data }) => dispatch(setSessions(route.params.id, data))}
-          />
-        )}
+        <DraggableFlatList
+          style={{ width: '100%', paddingTop: 16, height: '100%' }}
+          data={sessions}
+          renderItem={({ item, drag, getIndex }) => (
+            <Box p={4} pt={0} pb={getIndex() === sessions.length - 1 ? 8 : 4}>
+              <ScaleDecorator>
+                <SessionBlock
+                  session={item}
+                  onOptionsPress={() => onProgramOptionsPress(item.id)}
+                  onPress={() => goToSession(item.id)}
+                  onEditPress={() => goToSession(item.id)}
+                  onLongPress={() => {
+                    drag();
+                    Haptics.impactAsync();
+                  }}
+                />
+              </ScaleDecorator>
+            </Box>
+          )}
+          keyExtractor={(item) => item.id as string}
+        />
       </VStack>
       <VStack p={4} pt="0" space={4}>
         {!sessions?.length ? (

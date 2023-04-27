@@ -7,10 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '@/store';
 import { setState as setExercicesState } from '@/store/Exercices';
-import { setState as setProgramsState } from '@/store/Programs';
-import { setState as setTrainingsState } from '@/store/Training';
+import { setPrograms } from '@/store/Programs';
+import { setSessions } from '@/store/Sessions';
+import { setState as setTrainingsState, Training } from '@/store/Training';
+import { Exercice } from '@/types/Exercices.types';
+import { ProgramSession, ProgramSimplified } from '@/types/Programs.types';
 
-import useStorage from './useStorage';
+import useStorage, { StoragePath } from './useStorage';
 
 export default function useCachedResources() {
   const dispatch = useDispatch();
@@ -22,15 +25,19 @@ export default function useCachedResources() {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
-        const [storagePrograms, storageExercices, storageTrainings] = await Promise.all([
-          getStorageData('programs_list'),
-          getStorageData('exercices'),
-          getStorageData('trainings')
-        ]);
+        const [storagePrograms, storageExercices, storageTrainings, storedSessions] =
+          await Promise.all([
+            getStorageData<ProgramSimplified[]>(StoragePath.PROGRAMS),
+            getStorageData<Exercice[]>(StoragePath.EXERCICES_OLD),
+            getStorageData<Training[]>(StoragePath.TRAININGS_OLD),
+            getStorageData<ProgramSession[]>(StoragePath.SESSIONS)
+          ]);
 
-        if (storagePrograms) dispatch(setProgramsState(storagePrograms));
+        if (storagePrograms) dispatch(setPrograms(storagePrograms));
+        if (storagePrograms) dispatch(setPrograms(storagePrograms));
         if (storageExercices) dispatch(setExercicesState(storageExercices));
         if (storageTrainings) dispatch(setTrainingsState(storageTrainings));
+        if (storedSessions) dispatch(setSessions(storedSessions));
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
@@ -50,8 +57,9 @@ export default function useCachedResources() {
 
   const {
     exercices: { exercices },
-    programs: { programs },
-    trainings: { trainings }
+    programs: { programsList },
+    trainings: { trainings },
+    sessions: { sessionsList }
   } = useSelector((state: RootState) => state);
 
   const debouncedSaveTraining = debounce(() => setStorageData('trainings', trainings), 1000);
@@ -64,8 +72,12 @@ export default function useCachedResources() {
   }, [exercices]);
 
   useEffect(() => {
-    setStorageData('programs_list', programs);
-  }, [programs]);
+    setStorageData(StoragePath.PROGRAMS, programsList);
+  }, [programsList]);
+
+  useEffect(() => {
+    setStorageData(StoragePath.SESSIONS, sessionsList);
+  }, [sessionsList]);
 
   return isLoadingComplete;
 }

@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import exercicesReducer from './Exercices';
 import programsReducer from './Programs';
+import sessionsReducer from './Sessions';
 import trainingReducer from './Training';
 
 const store = configureStore({
   reducer: {
     programs: programsReducer,
     exercices: exercicesReducer,
-    trainings: trainingReducer
+    trainings: trainingReducer,
+    sessions: sessionsReducer
   }
 });
 

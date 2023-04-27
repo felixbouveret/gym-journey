@@ -1,5 +1,4 @@
 import { ExerciceType } from './Exercices.types';
-import { UID_V4 } from './global.types';
 
 export enum ProgramStatus {
   ACTIVE = 'active',
@@ -7,27 +6,41 @@ export enum ProgramStatus {
   DRAFT = 'draft'
 }
 export interface StepExercice {
-  exerciceId: UID_V4;
-  weight: string;
-  reps: string;
+  name: string;
+  weigth: number;
+  reps: number;
 }
 export interface ProgramSessionStep {
-  id: UID_V4;
-  exercices: StepExercice[];
-  setNumber: string;
-  restTime: string;
-  type: ExerciceType;
+  id: string;
+  set_number: number;
+  rest_time: number;
+  step_type: ExerciceType;
+  program_sessions_step: StepExercice[];
 }
 export interface ProgramSession {
-  id: UID_V4;
-  name: string;
-  exercices_number: number;
   steps: ProgramSessionStep[];
 }
-export interface Program {
-  id: UID_V4;
+export interface ProgramSessionSimplified {
+  id: string;
   name: string;
+  program_id: string;
+  program_session_details: {
+    exercice_name: string;
+    set_number: number;
+    reps: number;
+    weight: number;
+  }[];
+  total_rest_time: 0;
+  created_at: string;
+}
+export interface ProgramSimplified {
+  created_at: string;
+  id: string;
+  name: string;
+  program_sessions: {
+    exercices_number: number;
+    name: string;
+    program_session_id: string;
+  }[];
   status: ProgramStatus;
-  program_sessions: ProgramSession[];
-  created_at?: string;
 }

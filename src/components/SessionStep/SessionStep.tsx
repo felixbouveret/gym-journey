@@ -1,31 +1,27 @@
-import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
+import { ExerciceType } from '@/types/Exercices.types';
+import { ProgramSessionStep } from '@/types/Programs.types';
 
 import ExerciceContainer from '../ExerciceContainer';
 import NormalSet from './components/NormalSet';
 import SuperSet from './components/SuperSet';
 
 interface SessionStepProps {
-  item: {
-    type: ExerciceType;
-    setNumber: string;
-    restTime: string;
-    exercices: {
-      exerciceId: UID_V4;
-      reps: string;
-      weight: string;
-    }[];
-  };
+  step: ProgramSessionStep;
   onOptions?: () => void;
   onLongPress?: () => void;
 }
 
-export default function SessionStep({ onOptions, onLongPress, item }: SessionStepProps) {
+export default function SessionStep({ onOptions, onLongPress, step }: SessionStepProps) {
   return (
     <ExerciceContainer
       onLongPress={onLongPress ? () => onLongPress?.() : undefined}
       onOptions={onOptions ? () => onOptions?.() : undefined}
     >
-      {item.type === ExerciceType.NORMAL ? <NormalSet item={item} /> : <SuperSet item={item} />}
+      {step.step_type === ExerciceType.NORMAL ? (
+        <NormalSet step={step} />
+      ) : (
+        <SuperSet step={step} />
+      )}
     </ExerciceContainer>
   );
 }

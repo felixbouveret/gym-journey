@@ -1,30 +1,19 @@
 import { Badge, HStack, Text, VStack } from 'native-base';
-import { useSelector } from 'react-redux';
 
-import { RootState } from '@/store';
-import { UID_V4 } from '@/types/Exercices.types';
+import { ProgramSessionStep } from '@/types/Programs.types';
 
 interface SuperSetProps {
-  item: {
-    setNumber: string;
-    restTime: string;
-    exercices: {
-      exerciceId: UID_V4;
-      reps: string;
-      weight: string;
-    }[];
-  };
+  step: ProgramSessionStep;
 }
 
-export default function SuperSet({ item }: SuperSetProps) {
-  const { exercices } = useSelector((state: RootState) => state.exercices);
+export default function SuperSet({ step }: SuperSetProps) {
   return (
     <VStack flex="1" space="2">
       <HStack alignItems="center" justifyContent={'space-between'}>
         <Badge>Superset</Badge>
       </HStack>
 
-      {item.exercices.map((exercice, index) => (
+      {step.program_sessions_step.map((exercice, index) => (
         <VStack flex="1" space="2" key={index}>
           <HStack alignItems="center" justifyContent={'space-between'} space="2">
             <Text
@@ -34,23 +23,23 @@ export default function SuperSet({ item }: SuperSetProps) {
               numberOfLines={1}
               flex="1"
             >
-              {exercices.find((exerciceItem) => exerciceItem.id === exercice.exerciceId)?.name}
+              {exercice.name}
             </Text>
             <HStack alignItems="center" justifyContent={'space-between'} space="1">
               <Text color={'gray.500'} fontSize={'sm'}>
                 {exercice.reps} x
               </Text>
-              <Text fontSize={'lg'}>{exercice.weight} kg</Text>
+              <Text fontSize={'lg'}>{exercice.weigth} kg</Text>
             </HStack>
           </HStack>
         </VStack>
       ))}
       <HStack alignItems="center" justifyContent={'space-between'}>
         <Text color={'gray.500'} fontSize={'sm'}>
-          {item.setNumber} sets
+          {step.set_number} sets
         </Text>
         <Text color={'gray.500'} fontSize={'sm'}>
-          {item.restTime} min
+          {step.rest_time} min
         </Text>
       </HStack>
     </VStack>
