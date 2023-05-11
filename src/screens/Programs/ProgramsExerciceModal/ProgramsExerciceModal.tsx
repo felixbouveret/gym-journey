@@ -3,14 +3,12 @@ import { StatusBar } from 'expo-status-bar';
 import { Box, Button, Heading, Icon, KeyboardAvoidingView, ScrollView, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
+import { createSessionStepAndExercice } from '@/api/BackPackAPI';
+import { StepWithNewExercicePayload } from '@/api/types';
 import SelectBoxes from '@/components/SelectBoxes';
-import useExercices from '@/hooks/useExercices';
 import { ProgramsTabScreenProps } from '@/navigation/navigators/ProgramsNavigator';
-import { RootState } from '@/store';
-import { addSessionStep, ProgramSessionStep, updateSessionStep } from '@/store/Programs';
-import { ExerciceType, UID_V4 } from '@/types/Exercices.types';
+import { ExerciceType } from '@/types/Exercices.types';
 
 import NormalSet from './components/NormalSet';
 import SuperSet from './components/Superset';
@@ -19,97 +17,50 @@ export default function ProgramsExerciceModal({
   navigation,
   route
 }: ProgramsTabScreenProps<'ProgramsExerciceModal'>) {
-  const dispatch = useDispatch();
-
-  const { exercices } = useSelector((state: RootState) => state.exercices);
-  const { programs } = useSelector((state: RootState) => state.programs);
-
-  const programId = route.params.programId;
   const sessionId = route.params.sessionId;
-  const stepId = route.params.stepId;
-
-  const { onCreateExercice } = useExercices();
+  const step = route.params.step;
 
   const [type, setType] = useState(ExerciceType.NORMAL);
+  const [isEditing, setIsEditing] = useState(false);
   const [stepExercices, setStepExercices] = useState([
     {
       name: '',
+      description: 'none',
       weight: '',
-      reps: '',
-      isUnilateral: false
+      reps: ''
     }
   ]);
   const [sets, setSets] = useState('');
   const [restTime, setRestTime] = useState('');
 
   useEffect(() => {
-    if (stepId) {
-      const program = programs.find((p) => p.id === programId);
-      const session = program?.sessions.find((s) => s.id === sessionId);
-      const step = session?.steps.find((s) => s.id === stepId);
-
-      if (step) {
-        setType(step.type);
-        setSets(step.setNumber);
-        setRestTime(step.restTime);
-        const formattedExercices = step.exercices.map((stepExercice) => {
-          const globalExercice = exercices.find((e) => e.id === stepExercice.exerciceId);
-          return {
-            name: globalExercice?.name || '',
-            isUnilateral: globalExercice?.isUnilateral || false,
-            weight: stepExercice.weight,
-            reps: stepExercice.reps
-          };
-        });
-        setStepExercices(formattedExercices);
-      }
+    if (step) {
+      setIsEditing(true);
     }
   }, []);
 
-  const submitNormalSet = async () => {
+  const submitSet = async () => {
     if (stepExercices.length <= 0) return;
-    const stepExercicesFormatted = await Promise.all(
-      stepExercices.map(async (e, index) => {
-        if (type === ExerciceType.NORMAL && index > 0) return;
-        let exerciceId: UID_V4;
-        const globalExercice = exercices.find((ex) => ex.name === e.name);
-        if (!globalExercice) {
-          exerciceId = await onCreateExercice({
-            name: e.name,
-            isUnilateral: e.isUnilateral
-          });
-        } else exerciceId = globalExercice.id;
-
-        return {
-          exerciceId: exerciceId,
-          weight: e.weight,
-          reps: e.reps
-        };
-      })
-    );
-
-    const sessionStep = {
-      type,
-      setNumber: sets,
-      restTime: restTime,
-      exercices: stepExercicesFormatted || []
-    } as ProgramSessionStep;
-
-    if (!stepId) dispatch(addSessionStep(programId, sessionId, sessionStep));
-    else dispatch(updateSessionStep(programId, sessionId, stepId, sessionStep));
+    // TODO : check for api payload
+    const payload: StepWithNewExercicePayload = {
+      program_session_id: sessionId,
+      step_type: type,
+      set_number: parseInt(sets, 10),
+      rest_time: parseInt(restTime, 10),
+      exercices: stepExercices
+    };
+    await createSessionStepAndExercice(payload);
   };
 
   const submit = async () => {
-    await submitNormalSet();
+    await submitSet();
     navigation.goBack();
   };
 
   const isValid = () => {
-    if (type === ExerciceType.NORMAL) {
-      return Object.entries(stepExercices[0]).every(([k, value]) =>
-        k === 'isUnilateral' ? true : !!value
-      );
-    }
+    if (type === ExerciceType.NORMAL)
+      return Object.entries(stepExercices[0]).every(([k, value]) => !!value);
+
     return true;
   };
 
@@ -130,7 +81,7 @@ export default function ProgramsExerciceModal({
             <VStack w="full" space={2} alignItems="center" maxW={250}>
               <Icon as={Ionicons} name="barbell" size={'4xl'} color="gray.700" />
               <Heading textAlign={'center'}>
-                {stepId ? "Modifier l'" : 'Ajouter un nouvel '}exercice
+                {isEditing ? "Modifier l'" : 'Ajouter un nouvel '}exercice
               </Heading>
             </VStack>
             <VStack w="full" space={4}>
@@ -174,11 +125,11 @@ export default function ProgramsExerciceModal({
         <Box px={4} w="full">
           <Button
             w="full"
-            leftIcon={<Icon as={Ionicons} name={stepId ? 'pencil' : 'add'} size="md" />}
+            leftIcon={<Icon as={Ionicons} name={isEditing ? 'pencil' : 'add'} size="md" />}
             onPress={submit}
             isDisabled={!isValid()}
           >
-            {stepId ? 'Modifier' : 'Ajouter'}
+            {isEditing ? 'Modifier' : 'Ajouter'}
           </Button>
         </Box>
 

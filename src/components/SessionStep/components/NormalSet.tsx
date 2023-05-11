@@ -7,14 +7,14 @@ interface NormalSetProps {
 }
 
 export default function NormalSet({ step }: NormalSetProps) {
-  const exercice = step.program_sessions_step[0];
+  const exercice = step.exercices[0];
   return (
     <VStack flex="1" space="2">
       <HStack alignItems="center" justifyContent={'space-between'} space="2">
         <Text fontSize={'lg'} fontWeight="medium" lineBreakMode="head" numberOfLines={1} flex="1">
           {exercice.name}
         </Text>
-        <Text fontSize={'lg'}>{exercice.weigth} kg</Text>
+        <Text fontSize={'lg'}>{exercice.weight} kg</Text>
       </HStack>
       <HStack space={8} justifyContent={'space-between'}>
         <HStack space={4} justifyContent={'space-between'}>

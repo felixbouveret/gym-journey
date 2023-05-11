@@ -13,7 +13,7 @@ export default function SuperSet({ step }: SuperSetProps) {
         <Badge>Superset</Badge>
       </HStack>
 
-      {step.program_sessions_step.map((exercice, index) => (
+      {step.exercices.map((exercice, index) => (
         <VStack flex="1" space="2" key={index}>
           <HStack alignItems="center" justifyContent={'space-between'} space="2">
             <Text
@@ -29,7 +29,7 @@ export default function SuperSet({ step }: SuperSetProps) {
               <Text color={'gray.500'} fontSize={'sm'}>
                 {exercice.reps} x
               </Text>
-              <Text fontSize={'lg'}>{exercice.weigth} kg</Text>
+              <Text fontSize={'lg'}>{exercice.weight} kg</Text>
             </HStack>
           </HStack>
         </VStack>

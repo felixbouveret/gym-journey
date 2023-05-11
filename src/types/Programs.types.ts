@@ -7,7 +7,7 @@ export enum ProgramStatus {
 }
 export interface StepExercice {
   name: string;
-  weigth: number;
+  weight: number;
   reps: number;
 }
 export interface ProgramSessionStep {
@@ -15,7 +15,7 @@ export interface ProgramSessionStep {
   set_number: number;
   rest_time: number;
   step_type: ExerciceType;
-  program_sessions_step: StepExercice[];
+  exercices: StepExercice[];
 }
 export interface ProgramSession {
   steps: ProgramSessionStep[];
