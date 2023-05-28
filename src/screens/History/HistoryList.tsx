@@ -16,6 +16,8 @@ export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryL
   const { trainings } = useSelector((state: RootState) => state.trainings);
   const { programs } = useSelector((state: RootState) => state.programs);
 
+  const traingsReverse = [...trainings]?.reverse();
+
   const getProgramName = (id: UID_V4) => programs.find((item) => item.id === id)?.name;
 
   const getIconState = (
@@ -49,7 +51,11 @@ export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryL
 
   const trainingsList = ({ item }: { item: Training }) => (
     <Box px={4} py={1}>
-      <ExerciceContainer small onOptions={() => onOptions(item.id)}>
+      <ExerciceContainer
+        small
+        onOptions={() => onOptions(item.id)}
+        onPress={() => navigation.navigate('HistorySingle', { id: item.id })}
+      >
         <HStack alignItems="center" justifyContent={'space-between'}>
           <VStack>
             <Text fontSize={'xs'} fontWeight="medium">
@@ -77,15 +83,15 @@ export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryL
 
   return (
     <VStack h="full" justifyContent={trainings?.length ? '' : 'flex-end'}>
-      <FlatList pt={3} w="full" h="full" data={trainings} renderItem={trainingsList} />
-      <VStack p="4" pt={0} space={4}>
-        {trainings?.length === 0 && (
+      <FlatList pt={3} w="full" h="full" data={traingsReverse} renderItem={trainingsList} />
+      {trainings?.length === 0 && (
+        <Box p="4" pt={0}>
           <InfoBlock
             title="Pas de séances enregistrées"
             description="Commencez une séance pour enregistrer votre progression"
           />
-        )}
-      </VStack>
+        </Box>
+      )}
     </VStack>
   );
 }
