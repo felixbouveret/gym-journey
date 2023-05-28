@@ -1,5 +1,3 @@
-import { UID_V4 } from './global.types';
-
 export enum ExerciceEquipment {
   NONE = 'None',
   BARBELL = 'Barbell',
@@ -17,11 +15,9 @@ export enum ExerciceType {
 }
 
 export interface Exercice {
-  id: UID_V4;
+  id: string;
   name: string;
   description?: string;
-  isUnilateral: boolean;
-  equipment?: ExerciceEquipment;
 }
 
 export interface NormalSetFormData {

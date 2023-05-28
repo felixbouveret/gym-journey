@@ -1,20 +1,27 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Badge, Box, Button, FlatList, HStack, Icon, Text, VStack } from 'native-base';
+import { useEffect, useState } from 'react';
 import { ActionSheetIOS } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
+import { getExercices } from '@/api/BackPackAPI';
 import BlockPlaceholder from '@/components/BlockPlaceholder';
 import ExerciceContainer from '@/components/ExerciceContainer';
 import { ExercicesTabScreenProps } from '@/navigation/navigators/ExercicesNavigator';
-import { RootState } from '@/store';
-import { removeExercice } from '@/store/Exercices';
-import { Exercice, UID_V4 } from '@/types/Exercices.types';
+import { Exercice } from '@/types/Exercices.types';
 
 export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'ExercicesList'>) {
-  const dispatch = useDispatch();
-  const { exercices } = useSelector((state: RootState) => state.exercices);
+  const [exercices, setExercices] = useState<Exercice[]>([]);
 
-  const onOptions = (id: UID_V4) =>
+  const onLoad = async () => {
+    const exo = await getExercices();
+    setExercices(exo);
+  };
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  const onOptions = (id: string) =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Annuler', 'Modifier', 'Supprimer'],
@@ -24,7 +31,7 @@ export default function ExercicesList({ navigation }: ExercicesTabScreenProps<'E
       (buttonIndex) => {
         if (buttonIndex === 0) return;
         if (buttonIndex === 1) return navigation.navigate('ExerciceModal', { id });
-        if (buttonIndex === 2) return dispatch(removeExercice(id));
+        if (buttonIndex === 2) return;
       }
     );
 

@@ -1,3 +1,5 @@
+import { Exercice } from '@/types/Exercices.types';
+
 import BaseAPI from './BaseAPI';
 import { StepWithExistingExercicePayload, StepWithNewExercicePayload } from './types';
 
@@ -35,4 +37,9 @@ export const createSessionStepWithExerciceId = async (payload: StepWithExistingE
 
 export const createSessionStepAndExercice = async (payload: StepWithNewExercicePayload) => {
   await BaseAPI.post(`/program_session_step_and_exercice`, payload);
+};
+
+export const getExercices = async (): Promise<Exercice[]> => {
+  const response = await BaseAPI.get<Exercice[]>(`/exercices`);
+  return response.data.exercices;
 };
