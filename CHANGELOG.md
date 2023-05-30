@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/felixbouveret/gym-journey/compare/v1.2.0...v1.2.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* agenda view ([0ea1eba](https://github.com/felixbouveret/gym-journey/commit/0ea1eba58faab9c8a26f5e4e16db56e69cca2e2a))
+* remove console ([4626790](https://github.com/felixbouveret/gym-journey/commit/46267905c49b4d0d4ca1e660585536afd1e27d23))
+
 # [1.2.0](https://github.com/felixbouveret/gym-journey/compare/v1.1.17...v1.2.0) (2023-05-30)
 
 
