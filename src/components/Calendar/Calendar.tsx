@@ -88,6 +88,7 @@ const App = (props: {
     }
 
     const trainingDays = addTrainingDays(days);
+
     setItems(trainingDays);
   };
 
@@ -173,8 +174,6 @@ const App = (props: {
       renderItem={trainingBlock}
       showClosingKnob={true}
       maxDate={agendaInnerDateFormat(new Date())}
-      initialDate={agendaInnerDateFormat(addDays(new Date(), -3))}
-      hideExtraDays={true}
       firstDay={1}
       renderEmptyDate={() => {
         return (
