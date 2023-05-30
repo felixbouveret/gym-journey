@@ -20,7 +20,7 @@ export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryL
 
   return (
     <VStack h="full" justifyContent={trainings?.length ? '' : 'flex-end'}>
-      {trainings?.length && (
+      {!!trainings?.length && (
         <Calendar
           items={trainings}
           onReservationPress={(id) => navigation.navigate('HistorySingle', { id })}

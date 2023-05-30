@@ -78,7 +78,7 @@ const App = (props: {
 
   const loadMonth = (day: DateData) => {
     let days = {};
-    for (let i = -15; i < 85; i++) {
+    for (let i = -15; i < 15; i++) {
       const date = addDays(day.timestamp, i);
       if (isAfter(date, addDays(new Date(), 1))) break;
       days = {
@@ -88,6 +88,8 @@ const App = (props: {
     }
 
     const trainingDays = addTrainingDays(days);
+    console.log(trainingDays);
+
     setItems(trainingDays);
   };
 
@@ -173,8 +175,6 @@ const App = (props: {
       renderItem={trainingBlock}
       showClosingKnob={true}
       maxDate={agendaInnerDateFormat(new Date())}
-      initialDate={agendaInnerDateFormat(addDays(new Date(), -3))}
-      hideExtraDays={true}
       firstDay={1}
       renderEmptyDate={() => {
         return (
