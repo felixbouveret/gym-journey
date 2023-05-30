@@ -1,4 +1,5 @@
 import { Box, VStack } from 'native-base';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Calendar from '@/components/Calendar';
@@ -10,6 +11,12 @@ import { setActiveTraining } from '@/store/Training';
 export default function HistoryList({ navigation }: HistoryScreenProps<'HistoryList'>) {
   const dispatch = useDispatch();
   const { trainings } = useSelector((state: RootState) => state.trainings);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Historique des séances'
+    });
+  }, []);
 
   return (
     <VStack h="full" justifyContent={trainings?.length ? '' : 'flex-end'}>

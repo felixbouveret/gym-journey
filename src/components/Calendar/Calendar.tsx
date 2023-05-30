@@ -16,39 +16,9 @@ import useTraining from '@/hooks/useTraining';
 import { RootState } from '@/store';
 import { Training, TrainingStateEnum } from '@/store/Training';
 
-LocaleConfig.locales.fr = {
-  monthNames: [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Décembre'
-  ],
-  monthNamesShort: [
-    'Janv.',
-    'Févr.',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'Août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.'
-  ],
-  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-  dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-  today: "Aujourd'hui"
-};
+import FrLocales from './Locales';
+
+LocaleConfig.locales.fr = FrLocales;
 
 LocaleConfig.defaultLocale = 'fr';
 
@@ -67,10 +37,11 @@ const App = (props: {
   onReservationPress: (id: string) => void;
   onUnfinishedTrainingPress: (id: string) => void;
 }) => {
-  const [items, setItems] = useState<AgendaSchedule>({});
-  const [update, setUpdate] = useState(false);
   const { programs } = useSelector((state: RootState) => state.programs);
   const { onTrainingFinished } = useTraining();
+
+  const [items, setItems] = useState<AgendaSchedule>({});
+  const [update, setUpdate] = useState(false);
 
   const getProgramName = (id: string) => programs.find((item) => item.id === id)?.name;
 
@@ -134,14 +105,13 @@ const App = (props: {
         return { name: 'alert-circle-outline', colorScheme: 'danger', color: 'danger.1000' };
     }
   };
-  const rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => r1.name !== r2.name;
 
   const onTrainingPress = (id: string, state: TrainingStateEnum) => {
     if (state === TrainingStateEnum.FINISHED) props.onReservationPress(id);
     else
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['Annuler', 'Marquer comme terminé', 'Repprendre'],
+          options: ['Annuler', 'Marquer comme terminé', 'Reprendre'],
           cancelButtonIndex: 0
         },
         (buttonIndex) => {
@@ -156,47 +126,45 @@ const App = (props: {
       );
   };
 
-  const trainingBlock = (reservation: CustomAgendaEntry) => {
-    return (
-      <TouchableOpacity onPress={() => onTrainingPress(reservation.id, reservation.state)}>
-        <HStack
+  const trainingBlock = (reservation: CustomAgendaEntry) => (
+    <TouchableOpacity onPress={() => onTrainingPress(reservation.id, reservation.state)}>
+      <HStack
+        alignItems={'center'}
+        borderRadius={8}
+        flex={1}
+        p={2}
+        mt={4}
+        mr={4}
+        space={2}
+        backgroundColor={'white'}
+        h={reservation.height + 'px'}
+      >
+        <Box
+          backgroundColor={'blue.100'}
+          borderRadius={'full'}
           alignItems={'center'}
-          borderRadius={8}
-          flex={1}
-          p={2}
-          mt={4}
-          mr={4}
-          space={2}
-          backgroundColor={'white'}
-          h={reservation.height + 'px'}
+          justifyContent={'center'}
+          w={'24px'}
+          h={'24px'}
         >
-          <Box
-            backgroundColor={'blue.100'}
-            borderRadius={'full'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            w={'24px'}
-            h={'24px'}
-          >
-            <Icon as={Ionicons} name="barbell" size={'xs'} color="blue.400" />
-          </Box>
-          <VStack flex={1}>
-            <Text fontSize={'xs'}>{displayDateFormat(new Date(reservation.startedAt))}</Text>
-            <Text>
-              {getProgramName(reservation.programId)} - {reservation?.name}
-            </Text>
-          </VStack>
-          <Badge p={1} colorScheme={getIconState(reservation.state).colorScheme} borderRadius="6">
-            <Icon
-              p={0}
-              as={<Ionicons name={getIconState(reservation.state).name} />}
-              colorScheme={getIconState(reservation.state).color}
-            />
-          </Badge>
-        </HStack>
-      </TouchableOpacity>
-    );
-  };
+          <Icon as={Ionicons} name="barbell" size={'xs'} color="blue.400" />
+        </Box>
+        <VStack flex={1}>
+          <Text fontSize={'xs'}>{displayDateFormat(new Date(reservation.startedAt))}</Text>
+          <Text>
+            {getProgramName(reservation.programId)} - {reservation?.name}
+          </Text>
+        </VStack>
+        <Badge p={1} colorScheme={getIconState(reservation.state).colorScheme} borderRadius="6">
+          <Icon
+            p={0}
+            as={<Ionicons name={getIconState(reservation.state).name} />}
+            colorScheme={getIconState(reservation.state).color}
+          />
+        </Badge>
+      </HStack>
+    </TouchableOpacity>
+  );
 
   return (
     <Agenda
@@ -204,7 +172,6 @@ const App = (props: {
       loadItemsForMonth={loadMonth}
       renderItem={trainingBlock}
       showClosingKnob={true}
-      rowHasChanged={rowHasChanged}
       maxDate={agendaInnerDateFormat(new Date())}
       initialDate={agendaInnerDateFormat(addDays(new Date(), -3))}
       hideExtraDays={true}
