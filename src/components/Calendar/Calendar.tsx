@@ -78,7 +78,7 @@ const App = (props: {
 
   const loadMonth = (day: DateData) => {
     let days = {};
-    for (let i = -15; i < 15; i++) {
+    for (let i = -15; i < 85; i++) {
       const date = addDays(day.timestamp, i);
       if (isAfter(date, addDays(new Date(), 1))) break;
       days = {
@@ -88,7 +88,6 @@ const App = (props: {
     }
 
     const trainingDays = addTrainingDays(days);
-    console.log(trainingDays);
 
     setItems(trainingDays);
   };
