@@ -119,7 +119,7 @@ const App = (props: {
           if (buttonIndex === 1) return onTrainingFinished(id, () => null);
           if (buttonIndex === 2)
             return async () => {
-              await props.onUnfinishedTrainingPress(id);
+              props.onUnfinishedTrainingPress(id);
               setUpdate(!update);
             };
         }
