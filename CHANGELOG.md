@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/felixbouveret/gym-journey/compare/v1.1.17...v1.2.0) (2023-05-30)
+
+
+### Features
+
+* trigger release ([55edf8f](https://github.com/felixbouveret/gym-journey/commit/55edf8fafcce86d33374d349d3704e2b7a4df4ff))
+
 ## [1.1.17](https://github.com/felixbouveret/gym-journey/compare/v1.1.16...v1.1.17) (2023-04-13)
 
 
