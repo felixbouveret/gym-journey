@@ -17,7 +17,7 @@ export default function ExerciceContainer({
   small
 }: ExerciceContainerProps) {
   return (
-    <Pressable onLongPress={() => onLongPress?.()} onPress={() => onPress?.()}>
+    <Pressable onLongPress={() => onLongPress?.()} onPress={() => onPress?.()} w="full">
       <HStack
         space="4"
         p={small ? 2 : 4}
