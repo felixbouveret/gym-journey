@@ -4,6 +4,7 @@ module.exports = {
     slug: 'gym-journey',
     version: '1.2.0',
     orientation: 'portrait',
+    CFBundleDevelopmentRegion: 'fr',
     icon: './src/assets/images/icon.png',
     scheme: 'myapp',
     userInterfaceStyle: 'automatic',
